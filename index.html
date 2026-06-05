@@ -3,222 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imagem & Ação Virtual Pro - Mímica Ultimate</title>
+    <title>Arcade Board Games Pro</title>
     <style>
         :root {
-            --bg-dark: #070a13;
-            --bg-card: #111a2e;
-            --bg-input: #090f1c;
-            --primary: #8b5cf6;
-            --primary-hover: #7c3aed;
-            --secondary: #f43f5e;
-            --secondary-hover: #e11d48;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --text-main: #f8fafc;
-            --text-muted: #64748b;
+            --bg-dark: #070a13; --bg-card: #111a2e; --bg-input: #090f1c;
+            --primary: #3b82f6; --primary-hover: #2563eb;
+            --ia-color: #8b5cf6; --war-color: #ef4444;
+            --success: #10b981; --warning: #f59e0b;
+            --text-main: #f8fafc; --text-muted: #64748b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 20px; }
         
-        header { width: 100%; background: linear-gradient(135deg, var(--primary), #4c1d95); padding: 18px; text-align: center; font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        header { width: 100%; background: linear-gradient(135deg, var(--bg-card), #1e293b); padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .logo { font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-icon { background: transparent; border: none; font-size: 24px; cursor: pointer; color: #fff; transition: transform 0.2s; }
+        .btn-icon:hover { transform: scale(1.1) rotate(45deg); }
+
         .container { width: 100%; max-width: 540px; padding: 15px; flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
         
         .screen { display: none; flex-direction: column; gap: 15px; }
-        .screen.active { display: flex; animation: viewFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        @keyframes viewFadeIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .screen.active { display: flex; animation: viewFadeIn 0.3s ease-out; }
+        @keyframes viewFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         .card { background-color: var(--bg-card); padding: 22px; border-radius: 16px; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.05); }
-        h2 { font-size: 22px; text-align: center; margin-bottom: 8px; color: #fff; font-weight: 800; letter-spacing: -0.5px; }
-        p { color: #94a3b8; line-height: 1.6; font-size: 14px; text-align: center; }
+        h2 { font-size: 22px; text-align: center; margin-bottom: 8px; font-weight: 800; }
+        p { color: var(--text-muted); line-height: 1.5; font-size: 14px; text-align: center; }
         
-        input, select { width: 100%; padding: 14px; margin-top: 5px; border-radius: 10px; border: 2px solid #1e293b; background: var(--bg-input); color: #fff; font-size: 15px; transition: all 0.3s ease; }
-        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
+        input, select { width: 100%; padding: 14px; margin-top: 5px; border-radius: 10px; border: 2px solid #1e293b; background: var(--bg-input); color: #fff; font-size: 15px; transition: 0.3s; }
+        input:focus { outline: none; border-color: var(--primary); }
         
-        button { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        button:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
-        button:active { transform: scale(0.95); }
-        .btn-primary { background-color: var(--primary); color: white; }
-        .btn-primary:hover { background-color: var(--primary-hover); }
-        .btn-secondary { background-color: var(--secondary); color: white; }
-        .btn-secondary:hover { background-color: var(--secondary-hover); }
-        .btn-success { background-color: var(--success); color: white; }
-        .btn-danger { background-color: #ef4444; color: white; }
-        
-        /* Regras Estilizadas */
-        .rules-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid var(--primary); }
-        .rules-item { font-size: 14px; margin-bottom: 8px; display: flex; gap: 8px; color: #cbd5e1; }
+        button { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.2s; color: white; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        button:active { transform: scale(0.97); }
+        .btn-primary { background-color: var(--primary); }
+        .btn-success { background-color: var(--success); }
+        .btn-danger { background-color: #ef4444; }
 
-        /* Customizador de Personagem */
-        .avatar-creator { display: grid; grid-template-columns: 1fr 2fr; gap: 15px; margin: 10px 0; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.02); }
-        .avatar-preview-box { display: flex; align-items: center; justify-content: center; font-size: 45px; border-radius: 50%; width: 90px; height: 90px; margin: auto; border: 4px solid var(--primary); box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .custom-options { display: flex; flex-direction: column; gap: 8px; }
-        .opt-row { display: flex; gap: 8px; flex-wrap: wrap; }
-        .color-dot { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s; }
-        .color-dot:hover { transform: scale(1.1); }
-        .color-dot.active { border-color: #fff; transform: scale(1.2); box-shadow: 0 0 10px currentColor; }
-        .emoji-item { font-size: 22px; padding: 6px; cursor: pointer; border-radius: 8px; background: #0f172a; transition: all 0.2s; }
-        .emoji-item:hover { background: #1e293b; transform: translateY(-2px); }
-        .emoji-item.active { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+        /* Hub de Jogos */
+        .games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+        .game-card { background: #1e293b; border-radius: 12px; padding: 20px 10px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+        .game-card:hover:not(.disabled) { transform: translateY(-5px); border-color: var(--primary); }
+        .game-card.disabled { opacity: 0.5; cursor: not-allowed; }
+        .game-icon { font-size: 40px; margin-bottom: 10px; }
+        
+        /* Modais */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-overlay.active { display: flex; }
+        .settings-row { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; }
 
-        /* Temas e Componentes */
-        .theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-        .theme-btn { background: #1e293b; color: #fff; border: 2px solid transparent; text-align: left; justify-content: flex-start; padding: 14px; font-size: 14px; }
-        .theme-btn.active { border-color: var(--primary); background: rgba(139, 92, 246, 0.15); transform: scale(1.02); }
+        /* Elementos de Jogo Gerais */
+        .player-badge { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bg-input); border-radius: 10px; border: 1px solid #1e293b; }
+        .player-badge.active-turn { border-color: var(--success); box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
         
-        .timer { font-size: 52px; text-align: center; font-weight: 900; color: var(--secondary); font-variant-numeric: tabular-nums; text-shadow: 0 0 15px rgba(244, 63, 94, 0.5); }
-        .timer.urgent { animation: pulse 1s infinite; color: #ef4444; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        
-        .player-badge { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bg-input); border-radius: 10px; border: 1px solid #1e293b; transition: background 0.2s; }
-        .player-badge.active-turn { border-color: var(--primary); background: rgba(139, 92, 246, 0.1); }
-        .mini-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-        
-        .chat-area { background: var(--bg-input); height: 180px; overflow-y: auto; border-radius: 10px; padding: 12px; font-size: 14px; border: 1px solid #1e293b; display: flex; flex-direction: column; gap: 8px; scroll-behavior: smooth; }
-        .chat-msg { padding: 6px 10px; border-radius: 8px; background: #1e293b; animation: slideIn 0.2s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-        .chat-msg.correct { background: rgba(16, 185, 129, 0.2); color: #34d399; font-weight: bold; border-left: 3px solid #10b981; }
-        
-        .config-group { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.05); }
-
-        .big-mime-icon { font-size: 80px; animation: bounce 2s infinite; display: inline-block; margin: 10px 0; }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-20px); } 60% { transform: translateY(-10px); } }
+        /* War Specific */
+        .dice-container { display: flex; gap: 10px; justify-content: center; margin: 15px 0; }
+        .dice { width: 50px; height: 50px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: bold; color: white; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+        .dice.red { background: #dc2626; }
+        .dice.yellow { background: #eab308; color: #000; }
     </style>
 </head>
 <body>
 
-    <header>🎭 Imagem & Ação Virtual</header>
+    <!-- Elemento de Áudio Oculto (Música de Fundo) -->
+    <audio id="bg-music" loop>
+        <source src="https://vgmsite.com/soundtracks/wii-shop-channel-music/qjljjscq/Wii%20Shop%20Channel%20Music.mp3" type="audio/mpeg">
+    </audio>
+
+    <header>
+        <div class="logo">🎲 JogoMesa<span style="color:var(--primary)">.io</span></div>
+        <button class="btn-icon" onclick="toggleSettings()">⚙️</button>
+    </header>
+
+    <!-- Modal de Configurações -->
+    <div class="modal-overlay" id="modal-settings">
+        <div class="card" style="width: 90%; max-width: 400px;">
+            <h2>⚙️ Configurações</h2>
+            <div class="settings-row">
+                <span>🎵 Música de Fundo</span>
+                <input type="checkbox" id="toggle-music" onchange="AudioSystem.toggleMusic(this.checked)" style="width: 24px; height: 24px;">
+            </div>
+            <div class="settings-row">
+                <span>🔊 Efeitos Sonoros (SFX)</span>
+                <input type="checkbox" id="toggle-sfx" checked onchange="AudioSystem.sfxEnabled = this.checked" style="width: 24px; height: 24px;">
+            </div>
+            <button class="btn-primary" onclick="toggleSettings(); playClick()">Salvar e Fechar</button>
+        </div>
+    </div>
 
     <div class="container">
         
-        <div id="screen-terms" class="screen active card">
-            <h2>📜 Regras da Mímica</h2>
-            <div class="rules-box">
-                <div class="rules-item"><span>🤷‍♂️</span> <strong>Silêncio Absoluto:</strong> Nenhum som, zumbido ou som labial é permitido durante a atuação.</div>
-                <div class="rules-item"><span>🙅‍♀️</span> <strong>Sem Apontar:</strong> É proibido apontar para objetos na sala que sejam a resposta.</div>
-                <div class="rules-item"><span>⏱️</span> <strong>Adivinhação Online:</strong> Os outros jogadores verão as dicas apenas pela sua atuação física e devem digitar rápido no chat de seus celulares!</div>
-            </div>
-            <button class="btn-primary" onclick="showScreen('screen-customizer'); playClick()">Criar Personagem</button>
+        <!-- Tela 1: Perfil Global -->
+        <div id="screen-profile" class="screen active card">
+            <h2>Crie sua Identidade Global</h2>
+            <p>Este nome será usado em todos os jogos do site.</p>
+            <div style="font-size: 60px; text-align: center; margin: 10px 0;">🧑‍🚀</div>
+            <input type="text" id="global-player-name" placeholder="Digite seu Nickname..." maxlength="15">
+            <button class="btn-primary" style="margin-top: 15px;" onclick="saveProfile(); playClick()">Entrar no Arcade</button>
         </div>
 
-        <div id="screen-customizer" class="screen card">
-            <h2>Crie sua Identidade</h2>
-            <div class="avatar-creator">
-                <div class="avatar-preview-box" id="avatar-preview" style="background-color: #8b5cf6;">🦊</div>
-                <div class="custom-options">
-                    <label style="font-size: 12px; color: var(--text-muted);">Cor de Fundo:</label>
-                    <div class="opt-row" id="color-selectors"></div>
-                    <label style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Seu Avatar:</label>
-                    <div class="opt-row" id="emoji-selectors"></div>
+        <!-- Tela 2: Hub de Jogos -->
+        <div id="screen-hub" class="screen card">
+            <h2>Escolha um Jogo</h2>
+            <p>Selecione uma mesa virtual para jogar com seus amigos.</p>
+            
+            <div class="games-grid">
+                <div class="game-card" onclick="selectGame('ia'); playClick()" style="border-bottom: 4px solid var(--ia-color);">
+                    <div class="game-icon">🎭</div>
+                    <h3 style="font-size: 16px;">Imagem & Ação</h3>
+                    <span style="font-size: 12px; color: var(--ia-color);">Mímica Virtual</span>
+                </div>
+                
+                <div class="game-card" onclick="selectGame('war'); playClick()" style="border-bottom: 4px solid var(--war-color);">
+                    <div class="game-icon">⚔️</div>
+                    <h3 style="font-size: 16px;">War Express</h3>
+                    <span style="font-size: 12px; color: var(--war-color);">Batalha de Dados</span>
+                </div>
+
+                <div class="game-card disabled">
+                    <div class="game-icon">🃏</div>
+                    <h3 style="font-size: 16px;">Baralho</h3>
+                    <span style="font-size: 12px; color: gray;">Em Breve</span>
+                </div>
+
+                <div class="game-card disabled">
+                    <div class="game-icon">🁣</div>
+                    <h3 style="font-size: 16px;">Dominó</h3>
+                    <span style="font-size: 12px; color: gray;">Em Breve</span>
                 </div>
             </div>
-            <label>Seu Nome / Nickname:</label>
-            <input type="text" id="global-player-name" placeholder="Ex: JogadorMestre" maxlength="15">
-            <button class="btn-primary" style="margin-top: 10px;" onclick="saveCharacterAndGo(); playClick()">Entrar no Jogo</button>
         </div>
 
-        <div id="screen-mode" class="screen card">
-            <h2>Modo de Jogo</h2>
-            <p>Conecte todos os amigos na mesma sala para uma experiência sincronizada!</p>
-            <button class="btn-primary" onclick="selectEngineMode('multiplayer'); playClick()">🌐 Entrar no Saguão Online</button>
-        </div>
-
+        <!-- Tela 3: Lobby Sincronizado -->
         <div id="screen-multiplayer" class="screen card">
-            <h2>Lobby de Conexão</h2>
-            <input type="text" id="room-code-input" placeholder="Código da Sala (Ex: SALA1)" style="text-transform:uppercase; font-weight:800; text-align:center; letter-spacing:2px; font-size: 20px;">
+            <h2 id="lobby-game-title">Lobby</h2>
+            <p>Todos os jogadores devem inserir o mesmo código.</p>
+            
+            <input type="text" id="room-code-input" placeholder="Código da Sala (Ex: SALA1)" style="text-transform:uppercase; font-weight:800; text-align:center; font-size: 20px;">
+            
             <div style="display:flex; gap:10px; margin-top: 15px;">
-                <button class="btn-secondary" onclick="executeRoomAction('join'); playClick()">Entrar na Sala</button>
+                <button class="btn-primary" style="background:#1e293b" onclick="executeRoomAction('join'); playClick()">Entrar</button>
                 <button class="btn-success" onclick="executeRoomAction('create'); playClick()">Criar Sala</button>
             </div>
 
             <div id="mp-active-lobby" style="display:none; flex-direction:column; gap:12px; margin-top:20px; border-top:1px solid #1e293b; padding-top:20px;">
                 <h3>Sala: <span id="lobby-code-title" style="color:var(--primary); font-size: 24px;">---</span></h3>
-                
-                <div class="config-group" id="host-config-panel" style="display:none;">
-                    <label style="font-size:13px; color:var(--text-muted)">Meta de Pontuação da Vitória:</label>
-                    <select id="config-max-score" onchange="pushConfigChange(); playClick()">
-                        <option value="30">30 Pontos (Partida Rápida)</option>
-                        <option value="60">60 Pontos (Partida Média)</option>
-                        <option value="100">100 Pontos (Maratona)</option>
-                    </select>
-                </div>
-
                 <div id="lobby-players-box" style="display:flex; flex-direction:column; gap:8px;"></div>
-                <button class="btn-primary" id="start-mp-game-btn" style="display:none; margin-top:15px; font-size: 18px;" onclick="launchMultiplayerRound(); playClick()">Lançar Rodada!</button>
+                <button class="btn-primary" id="start-mp-game-btn" style="display:none; margin-top:10px;" onclick="launchGame(); playClick()">Iniciar Partida!</button>
+                <button class="btn-danger" style="background:transparent; border:1px solid #ef4444; color:#ef4444;" onclick="showScreen('screen-hub'); playClick()">Voltar ao Hub</button>
             </div>
         </div>
 
-        <div id="screen-pass" class="screen card" style="text-align: center;">
-            <h3 style="color:var(--primary); font-size: 14px; letter-spacing: 2px;">SUA VEZ DE ATUAR</h3>
-            <div id="pass-instruction-text" style="font-size: 28px; margin: 15px 0; font-weight: 900; color: #fff;">ESCOLHA O TEMA</div>
-            
-            <p style="text-align: left; margin-top: 10px;">Os outros jogadores já estão prontos em seus celulares. Escolha o tema da palavra que você vai encenar:</p>
-            <div class="theme-grid" id="theme-button-container"></div>
-
-            <button class="btn-success" style="margin-top:20px; font-size: 18px;" onclick="pickActionCategory(); playClick()">Revelar Palavra e Iniciar ⏱️</button>
-        </div>
-
-        <div id="screen-play" class="screen card">
-            <div style="display:flex; justify-content:space-between; align-items:center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px;">
-                <div id="active-actor-card"></div>
-                <div class="timer" id="game-timer">60</div>
-            </div>
-
-            <div id="mimica-wrapper" class="card" style="display:none; background:#0f172a; text-align:center; margin-top: 15px; border: 2px solid var(--primary);">
-                <p style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">Sua Palavra é:</p>
-                <div id="secret-word-display" style="font-size: 38px; margin: 15px 0; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2);">---</div>
-                <span class="big-mime-icon">🤷‍♂️</span>
-                <p><strong>Faça a mímica para a sala!</strong><br>Acompanhe se alguém acertar no chat abaixo.</p>
-                <button class="btn-danger" id="btn-skip-word" style="margin-top:20px;" onclick="skipWordOnline()">Pular Palavra (Passar Vez)</button>
-            </div>
-
-            <div id="mp-guess-zone" style="display:none; flex-direction:column; gap:10px; margin-top: 15px;">
-                <p style="text-align: center; font-weight: 600; color: var(--secondary);">Olhe para o jogador e digite seu palpite!</p>
-                <div class="chat-area" id="chat-stream"></div>
-                <div style="display:flex; gap:8px;">
-                    <input type="text" id="mp-chute-input" placeholder="Digite seu chute aqui..." style="margin:0; font-size: 16px;">
-                    <button class="btn-secondary" style="width:auto; margin:0; padding: 0 20px;" onclick="submitChuteOnline(); playClick()">Enviar</button>
+        <!-- ============================================== -->
+        <!-- TELAS ESPECÍFICAS: IMAGEM & AÇÃO               -->
+        <!-- ============================================== -->
+        <div id="game-ui-ia" style="display:none; width:100%; flex-direction:column; gap:15px;">
+            <div class="card" id="ia-turn-announcer" style="text-align: center;">
+                <h3 style="color:var(--ia-color);">Vez do Jogador</h3>
+                <h2 id="ia-current-player-name" style="font-size: 28px; margin: 10px 0;">---</h2>
+                <div id="ia-host-controls" style="display:none;">
+                    <p>Você é o mestre. Gere uma palavra para atuar!</p>
+                    <button class="btn-success" onclick="iaPickWord(); playClick()">Sortear Palavra</button>
                 </div>
             </div>
 
-            <button class="btn-danger" id="host-abort-btn" style="display:none; background:#475569; margin-top:15px;" onclick="forceEndMatch(); playClick()">Encerrar Partida (Host)</button>
+            <div class="card" id="ia-play-area" style="display:none; text-align: center; border: 2px solid var(--ia-color);">
+                <p id="ia-word-display" style="font-size: 32px; font-weight: 900; margin: 10px 0;">***</p>
+                <p style="font-size: 12px; color: var(--text-muted);">(Faça Mímica para a sala!)</p>
+                <div style="font-size: 30px; font-weight: bold; color: var(--warning); margin: 15px 0;" id="ia-timer">60s</div>
+                
+                <div id="ia-guess-area" style="margin-top: 15px;">
+                    <input type="text" id="ia-guess-input" placeholder="Seu palpite aqui...">
+                    <button class="btn-primary" style="margin-top: 5px;" onclick="iaSubmitGuess(); playClick()">Chutar</button>
+                </div>
+                <button class="btn-danger" id="ia-pass-btn" style="margin-top: 15px; display:none;" onclick="iaEndTurn(); playClick()">Passar a Vez (Pular)</button>
+            </div>
+            
+            <div class="card">
+                <h3>Chat & Acertos</h3>
+                <div id="ia-chat" style="height: 120px; overflow-y:auto; background:var(--bg-input); padding:10px; border-radius:8px; font-size:13px; margin-top:10px;"></div>
+            </div>
         </div>
 
-        <div id="screen-podium" class="screen card" style="text-align: center;">
-            <h2 style="font-size: 32px; color: var(--warning);">🏆 FIM DE JOGO!</h2>
-            <p>Confira o pódio da rodada:</p>
-            <div id="podium-results-box" style="display:flex; flex-direction:column; gap:10px; margin:20px 0;"></div>
-            <button class="btn-primary" onclick="showScreen('screen-mode'); playClick()">Voltar para o Menu</button>
+        <!-- ============================================== -->
+        <!-- TELAS ESPECÍFICAS: WAR EXPRESS                 -->
+        <!-- ============================================== -->
+        <div id="game-ui-war" style="display:none; width:100%; flex-direction:column; gap:15px;">
+            <div class="card" style="border: 2px solid var(--war-color); text-align: center;">
+                <h2 style="color:var(--war-color);">🗺️ Batalha de Fronteira</h2>
+                <p>Role os dados para conquistar Pontos de Território (PTs).</p>
+                
+                <div style="margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px;">
+                    <h3>Atacante: <span id="war-attacker-name" style="color:var(--war-color)">---</span></h3>
+                    <div class="dice-container" id="war-attack-dice">
+                        <div class="dice red">?</div><div class="dice red">?</div><div class="dice red">?</div>
+                    </div>
+                </div>
+
+                <div id="war-action-controls" style="display:none;">
+                    <button class="btn-danger" onclick="warRollDice(); playClick()">🎲 Rolar Dados de Ataque</button>
+                    <button class="btn-primary" style="margin-top:10px;" onclick="warPassTurn(); playClick()">Passar a Vez (Fim de Turno)</button>
+                </div>
+                <p id="war-wait-msg" style="color: var(--warning); font-weight: bold;">Aguarde sua vez de atacar...</p>
+            </div>
         </div>
 
     </div>
 
+    <!-- FIREBASE IMPORT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Nota: As chaves do Firebase mantidas conforme fornecidas pelo usuário para garantir o funcionamento imediato do jogo.
         const firebaseConfig = {
             apiKey: "AIzaSyD7VGTWjDCIoKqiHN8CCSkgmpUohQQ649I",
             authDomain: "imagemeacao-45f6a.firebaseapp.com",
             projectId: "imagemeacao-45f6a",
             storageBucket: "imagemeacao-45f6a.firebasestorage.app",
             messagingSenderId: "1000542594280",
-            appId: "1:1000542594280:web:0003166b2c8bde0af5555d",
-            measurementId: "G-H9CKR52H17"
+            appId: "1:1000542594280:web:0003166b2c8bde0af5555d"
         };
 
         const app = initializeApp(firebaseConfig);
         window.db = getFirestore(app);
 
         window.FB = {
-            async createRoom(code, player) {
+            async createRoom(code, player, gameType) {
                 await setDoc(doc(window.db, "rooms", code), {
-                    code: code, host: player.name, gameState: "lobby",
-                    currentArtist: player.name, word: "",
-                    endTime: 0, guesses: [], players: [player],
-                    config: { maxScore: 30 }
+                    code: code, gameType: gameType, host: player.name, 
+                    gameState: "lobby", currentTurn: player.name, 
+                    players: [player], chat: [],
+                    gameData: {} // Dados específicos do jogo
                 });
             },
             async updateRoom(code, payload) {
@@ -231,394 +246,274 @@
             syncRoom(code, callback) {
                 return onSnapshot(doc(window.db, "rooms", code), (snap) => {
                     if(snap.exists()) callback(snap.data());
-                }, (error) => {
-                    console.error("Erro na sincronização:", error);
                 });
             }
         };
     </script>
 
+    <!-- LÓGICA PRINCIPAL DO ARCADE -->
     <script>
-        // --- EFEITOS SONOROS MELHORADOS ---
-        const AudioFX = {
+        // --- SISTEMA DE ÁUDIO ---
+        const AudioSystem = {
+            sfxEnabled: true,
+            bgMusic: document.getElementById('bg-music'),
             ctx: null,
-            init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
-            playTone(freq, type, duration, vol=0.08) {
+            init() { 
+                if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); 
+                if(this.ctx.state === 'suspended') this.ctx.resume(); // Fix para bloqueio de áudio do Chrome
+            },
+            toggleMusic(state) {
+                this.bgMusic.volume = 0.2;
+                if(state) { this.bgMusic.play().catch(e => console.log("Interação necessária antes de tocar.")); } 
+                else { this.bgMusic.pause(); }
+            },
+            playTone(freq, type, duration) {
+                if(!this.sfxEnabled) return;
                 try {
                     this.init();
                     let osc = this.ctx.createOscillator();
                     let gain = this.ctx.createGain();
                     osc.type = type; osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.00001, this.ctx.currentTime + duration);
                     osc.connect(gain); gain.connect(this.ctx.destination);
                     osc.start(); osc.stop(this.ctx.currentTime + duration);
                 } catch(e){}
             },
-            tick() { this.playTone(800, 'sine', 0.05, 0.05); },
-            click() { this.playTone(400, 'sine', 0.05, 0.03); },
-            chatMsg() { this.playTone(1200, 'sine', 0.1, 0.02); },
-            win() { this.playTone(523, 'triangle', 0.1); setTimeout(()=>this.playTone(659, 'triangle', 0.1), 100); setTimeout(()=>this.playTone(783, 'triangle', 0.3), 200); },
-            lose() { this.playTone(200, 'sawtooth', 0.4, 0.1); },
-            turn() { this.playTone(440, 'square', 0.1, 0.05); setTimeout(()=>this.playTone(880, 'square', 0.2, 0.05), 100); }
+            click() { this.playTone(600, 'sine', 0.05); },
+            win() { this.playTone(523, 'triangle', 0.1); setTimeout(()=>this.playTone(659, 'triangle', 0.2), 100); },
+            dice() { this.playTone(200, 'sawtooth', 0.05); setTimeout(()=>this.playTone(250, 'sawtooth', 0.05), 50); }
         };
 
-        function playClick() { AudioFX.click(); }
+        function playClick() { AudioSystem.click(); }
+        function toggleSettings() { 
+            const mod = document.getElementById('modal-settings');
+            mod.classList.toggle('active');
+            AudioSystem.init(); // Inicia o contexto de áudio no primeiro clique do usuário
+        }
 
-        // --- DICIONÁRIO DE PALAVRAS EXPANDIDO ---
-        const gameThemes = {
-            animais: { label: "🐶 Animais", words: ["Girafa", "Cachorro", "Aranha", "Leão", "Jacaré", "Elefante", "Tubarão", "Gato", "Cobra", "Urso", "Pinguim", "Sapo"] },
-            objetos: { label: "📦 Objetos", words: ["Liquidificador", "Guitarra", "Celular", "Relógio", "Notebook", "Martelo", "Chave", "Cadeira", "Garfo", "Espelho", "Mochila"] },
-            acoes: { label: "🏃‍♂️ Ações", words: ["Futebol", "Nadar", "Escovar os dentes", "Dançar", "Cozinhar", "Andar de Skate", "Cantar", "Correr", "Dormir", "Lutar Boxe"] },
-            artesanato: { label: "🏺 Artes & Arquitetura", words: ["Argila", "Cerâmica", "Cobogó", "Bebedouro de Gato", "Fachada Histórica", "Vaso", "Olaria", "Escultura", "Pintura"] },
-            geek: { label: "🎬 Pop / Geek", words: ["Batman", "Harry Potter", "Mickey Mouse", "Super Mario", "Minecraft", "Papai Noel", "Astronauta", "Pikachu", "Homer Simpson"] }
-        };
-        
-        let activeSelectedThemeKey = "animais";
-        let charColor = "#8b5cf6";
-        let charEmoji = "🦊";
-        let localProfile = { name: "", score: 0, color: "", emoji: "" };
-        let cronometroLocal = null;
-
+        // --- ESTADO GLOBAL ---
+        let localPlayer = { name: "", score: 0 };
+        let activeGameType = ""; // 'ia' ou 'war'
         let roomCode = "";
-        let currentRoomData = null;
+        let roomData = null;
         let unsubFirestore = null;
-        let lastChatLength = 0;
+        let clockInterval = null;
 
-        const cores = ["#8b5cf6", "#f43f5e", "#3b82f6", "#10b981", "#f59e0b", "#ec4899", "#06b6d4"];
-        const emojis = ["🦊", "🐱", "🐶", "🐸", "🤖", "🥷", "👽", "👻", "🦁", "🤡", "🤠"];
-        
-        // Setup UI
-        document.getElementById('color-selectors').innerHTML = cores.map(c => `<div class="color-dot" style="background:${c}" onclick="setCharColor('${c}', this); playClick()"></div>`).join('');
-        document.getElementById('color-selectors').children[0].classList.add('active');
-        
-        document.getElementById('emoji-selectors').innerHTML = emojis.map(e => `<span class="emoji-item" onclick="setCharEmoji('${e}', this); playClick()">${e}</span>`).join('');
-        document.getElementById('emoji-selectors').children[0].classList.add('active');
-
-        document.getElementById('theme-button-container').innerHTML = Object.keys(gameThemes).map(key => `
-            <button class="theme-btn ${key === activeSelectedThemeKey ? 'active' : ''}" id="btn-theme-${key}" onclick="setGameThemeKey('${key}'); playClick()">
-                ${gameThemes[key].label}
-            </button>
-        `).join('');
-
-        function setCharColor(c, el) {
-            charColor = c;
-            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById('avatar-preview').style.backgroundColor = c;
-            document.getElementById('avatar-preview').style.boxShadow = `0 0 20px ${c}`;
-        }
-        function setCharEmoji(e, el) {
-            charEmoji = e;
-            document.querySelectorAll('.emoji-item').forEach(em => em.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById('avatar-preview').innerText = e;
-        }
-        function setGameThemeKey(key) {
-            activeSelectedThemeKey = key;
-            document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn-theme-${key}`).classList.add('active');
-        }
-
+        // --- NAVEGAÇÃO BÁSICA ---
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            // Esconder UIs de jogo se sair do lobby
+            if(id !== 'screen-multiplayer') {
+                document.getElementById('game-ui-ia').style.display = 'none';
+                document.getElementById('game-ui-war').style.display = 'none';
+            }
         }
 
-        function saveCharacterAndGo() {
-            const name = document.getElementById('global-player-name').value.trim().replace(/[^a-zA-Z0-9]/g, "");
-            if(!name) { alert("Insira um nome válido (apenas letras e números)!"); return; }
-            localProfile = { name: name, score: 0, color: charColor, emoji: charEmoji };
-            showScreen('screen-mode');
+        function saveProfile() {
+            const name = document.getElementById('global-player-name').value.trim().toUpperCase();
+            if(!name) return alert("Digite um nome!");
+            localPlayer.name = name;
+            showScreen('screen-hub');
         }
 
-        function selectEngineMode(mode) {
+        function selectGame(type) {
+            activeGameType = type;
+            document.getElementById('lobby-game-title').innerText = type === 'ia' ? "Lobby: Imagem & Ação" : "Lobby: War Express";
+            document.getElementById('mp-active-lobby').style.display = 'none';
+            document.getElementById('room-code-input').value = "";
             showScreen('screen-multiplayer');
         }
 
-        // --- SISTEMA MULTIPLAYER SINCROMIZADO ---
-        async function executeRoomAction(type) {
-            const inputField = document.getElementById('room-code-input');
-            const code = inputField.value.toUpperCase().trim().replace(/[^A-Z0-9]/g, "");
-            if(!code) { alert("Insira um código de sala válido!"); return; }
+        // --- LÓGICA DE SALA FIREBASE ---
+        async function executeRoomAction(action) {
+            const code = document.getElementById('room-code-input').value.toUpperCase().trim();
+            if(!code) return alert("Insira um código!");
             roomCode = code;
 
             try {
-                if(type === 'create') {
-                    await window.FB.createRoom(roomCode, localProfile);
+                if(action === 'create') {
+                    await window.FB.createRoom(roomCode, localPlayer, activeGameType);
                 } else {
-                    if(window.FB) {
-                        const roomData = await window.FB.checkRoomExists(roomCode);
-                        if(roomData) {
-                            let currentPlayers = roomData.players || [];
-                            
-                            if(!currentPlayers.some(p => p.name.toLowerCase() === localProfile.name.toLowerCase())) {
-                                if(roomData.gameState !== 'lobby') {
-                                    alert("Esta partida já começou! Aguarde até que ela termine.");
-                                    return;
-                                }
-                                currentPlayers.push(localProfile);
-                                await window.FB.updateRoom(roomCode, { players: currentPlayers });
-                            }
-                        } else { 
-                            alert("Sala não encontrada! Verifique o código digitado."); 
-                            return; 
-                        }
+                    const existing = await window.FB.checkRoomExists(roomCode);
+                    if(!existing) return alert("Sala não encontrada!");
+                    if(existing.gameType !== activeGameType) return alert("Esta sala está jogando outro jogo!");
+                    
+                    let players = existing.players || [];
+                    if(!players.some(p => p.name === localPlayer.name)) {
+                        players.push(localPlayer);
+                        await window.FB.updateRoom(roomCode, { players: players });
                     }
                 }
 
                 document.getElementById('lobby-code-title').innerText = roomCode;
                 document.getElementById('mp-active-lobby').style.display = "flex";
 
-                if(window.FB) {
-                    if(unsubFirestore) unsubFirestore();
-                    unsubFirestore = window.FB.syncRoom(roomCode, (data) => {
-                        handleRoomSync(data);
-                    });
-                }
-            } catch (error) {
-                alert("Erro de Conexão Firebase: " + error.message);
-            }
+                if(unsubFirestore) unsubFirestore();
+                unsubFirestore = window.FB.syncRoom(roomCode, (data) => handleSync(data));
+
+            } catch(e) { alert("Erro de conexão: " + e.message); }
         }
 
-        function handleRoomSync(data) {
+        function handleSync(data) {
             if(!data) return;
-            currentRoomData = data;
+            roomData = data;
             
-            const lobbyBox = document.getElementById('lobby-players-box');
-            lobbyBox.innerHTML = data.players.map(p => `
-                <div class="player-badge ${p.name === data.currentArtist && data.gameState !== 'lobby' ? 'active-turn' : ''}">
-                    <div class="mini-avatar" style="background:${p.color}">${p.emoji}</div>
-                    <span style="flex-grow:1">${p.name} ${p.name === data.currentArtist && data.gameState !== 'lobby' ? '🎬 (Atuando)' : ''}</span>
-                    <strong style="font-size:18px; color:var(--success)">${p.score} pts</strong>
+            // Render Players
+            const isMyTurn = data.currentTurn === localPlayer.name;
+            const isHost = data.host === localPlayer.name;
+            
+            document.getElementById('lobby-players-box').innerHTML = data.players.map(p => `
+                <div class="player-badge ${p.name === data.currentTurn && data.gameState !== 'lobby' ? 'active-turn' : ''}">
+                    <strong>${p.name}</strong> 
+                    <span style="margin-left:auto; color:var(--success)">${p.score} pts</span>
                 </div>
             `).join('');
 
-            const isHost = (data.host === localProfile.name);
-            document.getElementById('host-config-panel').style.display = isHost ? "block" : "none";
-            document.getElementById('host-abort-btn').style.display = isHost ? "block" : "none";
-            
-            if(isHost && data.gameState === 'lobby') {
-                document.getElementById('start-mp-game-btn').style.display = "block";
-            } else {
-                document.getElementById('start-mp-game-btn').style.display = "none";
-            }
+            document.getElementById('start-mp-game-btn').style.display = (isHost && data.gameState === 'lobby') ? "block" : "none";
 
-            const amIArtist = (data.currentArtist === localProfile.name);
-
-            // MUDANÇA DE TURNO
-            if(data.gameState === 'turn_change') {
-                clearInterval(cronometroLocal);
-                if(amIArtist) {
-                    AudioFX.turn();
-                    showScreen('screen-pass');
-                } else {
-                    document.getElementById('pass-instruction-text').innerText = `Aguarde, ${data.currentArtist.toUpperCase()} está escolhendo a palavra...`;
-                    document.getElementById('theme-button-container').style.display = 'none';
-                    document.querySelector('#screen-pass .btn-success').style.display = 'none';
-                    showScreen('screen-pass');
-                }
-            } 
-            // JOGANDO
-            else if(data.gameState === 'playing') {
-                showScreen('screen-play');
+            // Roteamento de Interface baseada no Jogo e Estado
+            if(data.gameState === 'playing') {
+                document.getElementById('mp-active-lobby').style.display = 'none';
                 
-                const artistObj = data.players.find(p => p.name === data.currentArtist) || localProfile;
-                renderActorCard('active-actor-card', artistObj);
-
-                // Configurar Relógio
-                const timerEl = document.getElementById('game-timer');
-                if(data.endTime) {
-                    clearInterval(cronometroLocal);
-                    cronometroLocal = setInterval(() => {
-                        let remaining = Math.max(0, Math.floor((data.endTime - Date.now()) / 1000));
-                        timerEl.innerText = remaining;
-                        
-                        if(remaining <= 10 && remaining > 0) {
-                            timerEl.classList.add('urgent');
-                            AudioFX.tick();
-                        } else {
-                            timerEl.classList.remove('urgent');
-                        }
-
-                        if(remaining <= 0) {
-                            clearInterval(cronometroLocal);
-                            timerEl.classList.remove('urgent');
-                            if(isHost) finishRoundTimeoutOnline();
-                        }
-                    }, 1000);
-                }
-
-                if(amIArtist) {
-                    document.getElementById('mimica-wrapper').style.display = "block";
-                    document.getElementById('mp-guess-zone').style.display = "block"; // Ator pode ver o chat
-                    document.getElementById('secret-word-display').innerText = data.word;
-                    document.getElementById('mp-chute-input').disabled = true;
-                    document.getElementById('mp-chute-input').placeholder = "Você não pode chutar na sua vez!";
-                    document.querySelector('#mp-guess-zone button').style.display = 'none';
-                } else {
-                    document.getElementById('mimica-wrapper').style.display = "none";
-                    document.getElementById('mp-guess-zone').style.display = "flex";
-                    document.getElementById('mp-chute-input').disabled = false;
-                    document.getElementById('mp-chute-input').placeholder = "Digite seu chute aqui...";
-                    document.querySelector('#mp-guess-zone button').style.display = 'block';
-                }
-
-                // Tocar som de nova mensagem
-                if(data.guesses.length > lastChatLength) {
-                    AudioFX.chatMsg();
-                    lastChatLength = data.guesses.length;
-                }
-                renderChatGuesses(data.guesses);
-            }
-            // PÓDIO
-            else if(data.gameState === 'podium') {
-                clearInterval(cronometroLocal);
-                renderPodiumResults(data.players);
-                showScreen('screen-podium');
+                if(data.gameType === 'ia') syncImagemAcao(data, isMyTurn);
+                if(data.gameType === 'war') syncWarExpress(data, isMyTurn);
             }
         }
 
-        async function launchMultiplayerRound() {
-            if(!currentRoomData) return;
-            await window.FB.updateRoom(roomCode, { gameState: "turn_change" });
-        }
-
-        async function pickActionCategory() {
-            const themeArray = gameThemes[activeSelectedThemeKey].words;
-            const secretWord = themeArray[Math.floor(Math.random() * themeArray.length)];
-            
-            const calculatedEndTime = Date.now() + (61 * 1000); // 60 segundos
-            
-            await window.FB.updateRoom(roomCode, {
-                word: secretWord, gameState: "playing",
-                endTime: calculatedEndTime, guesses: []
-            }).catch(err => alert("Erro ao atualizar sala: " + err.message));
-        }
-
-        async function submitChuteOnline() {
-            const inp = document.getElementById('mp-chute-input');
-            const chute = inp.value.trim();
-            if(!chute || !currentRoomData) return;
-
-            // Remove acentos e joga pra minúsculo para comparar melhor
-            const normalize = str => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
-
-            let logMsg = `<strong>${localProfile.name}:</strong> ${chute}`;
-            
-            if(normalize(chute) === normalize(currentRoomData.word)) {
-                AudioFX.win();
-                logMsg = `🎉 <strong style="color:#10b981">${localProfile.name} ACERTOU!</strong> A palavra era: ${currentRoomData.word}`;
-                
-                let updatedPlayers = currentRoomData.players.map(p => {
-                    if(p.name === localProfile.name) p.score += 10;
-                    return p;
-                });
-
-                const targetScore = currentRoomData.config?.maxScore || 30;
-                const matchEnded = updatedPlayers.some(p => p.score >= targetScore);
-                
-                // Passar a vez para o próximo
-                let currentIndex = updatedPlayers.findIndex(p => p.name === currentRoomData.currentArtist);
-                let nextIndex = (currentIndex + 1) % updatedPlayers.length;
-                let nextArtist = updatedPlayers[nextIndex].name;
-
-                await window.FB.updateRoom(roomCode, {
-                    players: updatedPlayers,
-                    guesses: [...currentRoomData.guesses, logMsg],
-                    gameState: matchEnded ? "podium" : "turn_change",
-                    currentArtist: nextArtist 
-                });
-            } else {
-                await window.FB.updateRoom(roomCode, {
-                    guesses: [...currentRoomData.guesses, logMsg]
-                });
+        async function launchGame() {
+            if(activeGameType === 'ia') {
+                await window.FB.updateRoom(roomCode, { gameState: 'playing', gameData: { word: "", endTime: 0 } });
+            } else if (activeGameType === 'war') {
+                await window.FB.updateRoom(roomCode, { gameState: 'playing', gameData: { dice: [1,1,1] } });
             }
-            inp.value = "";
         }
 
-        // Permite o "Enter" para enviar chute
-        document.getElementById("mp-chute-input").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                submitChuteOnline();
-            }
-        });
-
-        async function skipWordOnline() {
-            if(!currentRoomData) return;
-            AudioFX.lose();
-            let msg = `⏭️ <strong>${localProfile.name} pulou a palavra!</strong> Era: ${currentRoomData.word}`;
-            passTurnSequence(msg);
-        }
-
-        async function finishRoundTimeoutOnline() {
-            if(!currentRoomData) return;
-            AudioFX.lose();
-            let msg = `⏰ <strong>O tempo acabou!</strong> Ninguém acertou. A palavra era: ${currentRoomData.word}`;
-            passTurnSequence(msg);
-        }
-
-        async function passTurnSequence(alertMsg) {
-            let currentIndex = currentRoomData.players.findIndex(p => p.name === currentRoomData.currentArtist);
-            let nextIndex = (currentIndex + 1) % currentRoomData.players.length;
-            let nextArtist = currentRoomData.players[nextIndex].name;
-
-            await window.FB.updateRoom(roomCode, {
-                gameState: "turn_change",
-                guesses: [...currentRoomData.guesses, alertMsg],
-                currentArtist: nextArtist
+        async function nextTurn() {
+            let currentIndex = roomData.players.findIndex(p => p.name === roomData.currentTurn);
+            let nextIndex = (currentIndex + 1) % roomData.players.length;
+            await window.FB.updateRoom(roomCode, { 
+                currentTurn: roomData.players[nextIndex].name,
+                "gameData.word": "", "gameData.endTime": 0, "gameData.dice": [1,1,1]
             });
         }
 
-        async function forceEndMatch() {
-            if(roomCode && confirm("Tem certeza que deseja encerrar a partida e ir para o pódio?")) {
-                await window.FB.updateRoom(roomCode, { gameState: "podium" });
+        // ==========================================
+        // LÓGICA: IMAGEM & AÇÃO
+        // ==========================================
+        const palavrasIA = ["Cachorro", "Nadar", "Violão", "Futebol", "Dança", "Matrix", "Pikachu", "Sapo"];
+
+        function syncImagemAcao(data, isMyTurn) {
+            document.getElementById('game-ui-ia').style.display = 'flex';
+            document.getElementById('ia-current-player-name').innerText = data.currentTurn;
+            
+            const isActing = data.gameData.endTime > 0;
+            
+            if(isMyTurn) {
+                document.getElementById('ia-host-controls').style.display = isActing ? 'none' : 'block';
+                document.getElementById('ia-pass-btn').style.display = isActing ? 'block' : 'none';
+                document.getElementById('ia-guess-area').style.display = 'none';
+                document.getElementById('ia-word-display').innerText = isActing ? data.gameData.word : "***";
+            } else {
+                document.getElementById('ia-host-controls').style.display = 'none';
+                document.getElementById('ia-pass-btn').style.display = 'none';
+                document.getElementById('ia-guess-area').style.display = isActing ? 'block' : 'none';
+                document.getElementById('ia-word-display').innerText = isActing ? "Adivinhe a palavra!" : "Aguardando Mestre...";
             }
-        }
 
-        function renderActorCard(targetId, p) {
-            document.getElementById(targetId).innerHTML = `
-                <div style="display:flex; align-items: center; gap: 10px;">
-                    <div class="mini-avatar" style="background:${p.color}">${p.emoji}</div>
-                    <div>
-                        <div style="font-size: 11px; color: var(--text-muted); text-transform:uppercase;">Na vez</div>
-                        <strong style="font-size: 16px;">${p.name}</strong>
-                    </div>
-                </div>
-            `;
-        }
+            document.getElementById('ia-play-area').style.display = 'block';
 
-        function renderChatGuesses(arr) {
-            const stream = document.getElementById('chat-stream');
-            stream.innerHTML = arr.map(m => {
-                let isCorrect = m.includes("🎉") || m.includes("⏰") || m.includes("⏭️");
-                return `<div class="chat-msg ${isCorrect ? 'correct' : ''}">${m}</div>`;
-            }).join('');
-            stream.scrollTop = stream.scrollHeight;
-        }
-
-        function renderPodiumResults(players) {
-            let sorted = [...players].sort((a,b) => b.score - a.score);
-            document.getElementById('podium-results-box').innerHTML = sorted.map((p, i) => `
-                <div class="player-badge" style="justify-content:space-between; background: ${i===0 ? 'rgba(245, 158, 11, 0.2)' : 'var(--bg-input)'}; ${i===0?'border:2px solid var(--warning); transform: scale(1.05); margin-bottom: 10px;':''}">
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <span style="font-size: 24px;">${i===0 ? '🥇' : i===1 ? '🥈' : i===2 ? '🥉' : ''}</span>
-                        <div class="mini-avatar" style="background:${p.color}">${p.emoji}</div>
-                        <strong style="font-size: 18px;">${p.name}</strong>
-                    </div>
-                    <span style="font-weight: 900; color: ${i===0 ? 'var(--warning)' : '#fff'};">${p.score} pts</span>
-                </div>
-            `).join('');
-            AudioFX.win();
-        }
-
-        async function pushConfigChange() {
-            const meta = parseInt(document.getElementById('config-max-score').value);
-            if(roomCode) {
-                await window.FB.updateRoom(roomCode, { "config.maxScore": meta });
+            // Timer
+            clearInterval(clockInterval);
+            if(isActing) {
+                clockInterval = setInterval(() => {
+                    let rem = Math.max(0, Math.floor((data.gameData.endTime - Date.now())/1000));
+                    document.getElementById('ia-timer').innerText = rem + "s";
+                    if(rem <= 0 && isMyTurn) iaEndTurn();
+                }, 1000);
             }
+
+            // Chat
+            const chatBox = document.getElementById('ia-chat');
+            chatBox.innerHTML = data.chat.map(m => `<div>${m}</div>`).join('');
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
+
+        async function iaPickWord() {
+            let p = palavrasIA[Math.floor(Math.random()*palavrasIA.length)];
+            await window.FB.updateRoom(roomCode, {
+                "gameData.word": p, "gameData.endTime": Date.now() + (60*1000)
+            });
+        }
+
+        async function iaSubmitGuess() {
+            const guess = document.getElementById('ia-guess-input').value.trim();
+            if(!guess) return;
+            
+            let isCorrect = guess.toLowerCase() === roomData.gameData.word.toLowerCase();
+            let msg = `<strong>${localPlayer.name}:</strong> ${guess}`;
+            
+            if(isCorrect) {
+                AudioSystem.win();
+                msg = `🎉 <strong style="color:var(--success)">${localPlayer.name} ACERTOU!</strong> Era ${roomData.gameData.word}`;
+                let updatedPlayers = roomData.players.map(p => { if(p.name === localPlayer.name) p.score+=10; return p; });
+                await window.FB.updateRoom(roomCode, { players: updatedPlayers, chat: [...roomData.chat, msg] });
+                nextTurn();
+            } else {
+                await window.FB.updateRoom(roomCode, { chat: [...roomData.chat, msg] });
+            }
+            document.getElementById('ia-guess-input').value = "";
+        }
+
+        function iaEndTurn() {
+            window.FB.updateRoom(roomCode, { chat: [...roomData.chat, `⏰ O tempo acabou ou passou a vez!`] });
+            nextTurn();
+        }
+
+        // ==========================================
+        // LÓGICA: WAR EXPRESS (BATALHA DE DADOS)
+        // ==========================================
+        function syncWarExpress(data, isMyTurn) {
+            document.getElementById('game-ui-war').style.display = 'flex';
+            document.getElementById('war-attacker-name').innerText = data.currentTurn;
+
+            // Mostrar controles apenas para a vez
+            document.getElementById('war-action-controls').style.display = isMyTurn ? 'block' : 'none';
+            document.getElementById('war-wait-msg').style.display = isMyTurn ? 'none' : 'block';
+
+            // Atualizar UI dos Dados
+            const diceHtml = (data.gameData.dice || [1,1,1]).map(v => `<div class="dice red">${v}</div>`).join('');
+            document.getElementById('war-attack-dice').innerHTML = diceHtml;
+        }
+
+        async function warRollDice() {
+            AudioSystem.dice();
+            // Rola 3 dados
+            let results = [Math.ceil(Math.random()*6), Math.ceil(Math.random()*6), Math.ceil(Math.random()*6)].sort((a,b)=>b-a);
+            
+            // Lógica Simplificada: Se a soma for > 10, ganha 5 PTs (Pontos de Território)
+            let soma = results.reduce((a,b)=>a+b, 0);
+            let updatedPlayers = roomData.players;
+            
+            if(soma >= 12) {
+                AudioSystem.win();
+                updatedPlayers = roomData.players.map(p => { if(p.name === localPlayer.name) p.score += 5; return p; });
+                alert(`Soma ${soma}! Conquista de sucesso! +5 PTs`);
+            } else {
+                alert(`Soma ${soma}. O ataque falhou.`);
+            }
+
+            await window.FB.updateRoom(roomCode, { 
+                "gameData.dice": results, 
+                players: updatedPlayers 
+            });
+        }
+
+        async function warPassTurn() {
+            nextTurn();
+        }
+
     </script>
 </body>
 </html>
