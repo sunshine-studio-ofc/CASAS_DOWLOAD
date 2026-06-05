@@ -15,14 +15,14 @@
 
         /* --- MODO DALTÔNICO --- */
         body.colorblind-mode {
-            --primary: #1e88e5; /* Azul seguro */
+            --primary: #1e88e5; 
             --primary-hover: #1565c0;
-            --success: #ffc107; /* Amarelo contraste */
-            --war-color: #d81b60; /* Rosa/Vermelho escuro */
-            --ia-color: #8e24aa; /* Roxo escuro */
+            --success: #ffc107; 
+            --war-color: #d81b60; 
+            --ia-color: #8e24aa; 
         }
         body.colorblind-mode .player-badge.active-turn { border: 3px dashed var(--success); }
-        body.colorblind-mode .dice { border: 2px solid #fff; border-radius: 0; } /* Remove bordas redondas para diferenciar formatos */
+        body.colorblind-mode .dice { border: 2px solid #fff; border-radius: 0; } 
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 20px; transition: all 0.3s; }
@@ -68,6 +68,12 @@
         .dice-container { display: flex; gap: 10px; justify-content: center; margin: 15px 0; }
         .dice { width: 50px; height: 50px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: bold; color: white; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
         .dice.red { background: var(--war-color); }
+        
+        .ia-tags { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; margin: 0 4px; }
+        .tag-theme { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid var(--ia-color); }
+        .tag-diff-Fácil { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid var(--success); }
+        .tag-diff-Médio { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid var(--warning); }
+        .tag-diff-Difícil { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid var(--war-color); }
     </style>
 </head>
 <body>
@@ -81,6 +87,7 @@
         <button class="btn-icon" onclick="toggleGlobalSettings()">⚙️</button>
     </header>
 
+    <!-- Modal de Configurações Globais -->
     <div class="modal-overlay" id="modal-global-settings">
         <div class="card" style="width: 90%; max-width: 400px;">
             <h2>⚙️ Ajustes do App</h2>
@@ -100,6 +107,7 @@
         </div>
     </div>
 
+    <!-- Modal de Configurações DA SALA -->
     <div class="modal-overlay" id="modal-room-settings">
         <div class="card" style="width: 90%; max-width: 400px;">
             <h2 style="color: var(--warning);">👑 Regras da Mesa</h2>
@@ -159,6 +167,7 @@
             </div>
         </div>
 
+        <!-- TELA: IMAGEM & AÇÃO -->
         <div id="game-ui-ia" style="display:none; width:100%; flex-direction:column; gap:15px;">
             <div class="card" id="ia-turn-announcer" style="text-align: center;">
                 <h3 style="color:var(--ia-color);">Vez do Jogador</h3>
@@ -169,6 +178,8 @@
             </div>
 
             <div class="card" id="ia-play-area" style="display:none; text-align: center; border: 2px solid var(--ia-color);">
+                <div id="ia-hint-display" style="margin-bottom: 15px; display:none;"></div>
+                
                 <p id="ia-word-display" style="font-size: 32px; font-weight: 900; margin: 10px 0;">***</p>
                 <div style="font-size: 30px; font-weight: bold; color: var(--warning); margin: 15px 0;" id="ia-timer">60s</div>
                 
@@ -193,6 +204,7 @@
             </div>
         </div>
 
+        <!-- TELA: WAR EXPRESS -->
         <div id="game-ui-war" style="display:none; width:100%; flex-direction:column; gap:15px;">
             <div class="card" style="border: 2px solid var(--war-color); text-align: center;">
                 <h2 style="color:var(--war-color);">🗺️ Batalha de Fronteira</h2>
@@ -212,6 +224,7 @@
 
     </div>
 
+    <!-- FIREBASE IMPORT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -234,7 +247,7 @@
                     code: code, gameType: gameType, host: player.name, 
                     gameState: "lobby", currentTurn: player.name, 
                     players: [player], chat: [],
-                    config: { noChat: false }, // Configurações da Sala
+                    config: { noChat: false },
                     gameData: {} 
                 });
             },
@@ -252,7 +265,6 @@
     </script>
 
     <script>
-        // --- ÁUDIO COMPLETAMENTE INDEPENDENTE ---
         const AudioSystem = {
             sfxEnabled: true,
             bgMusic: document.getElementById('bg-music'),
@@ -285,18 +297,9 @@
         };
 
         function playClick() { AudioSystem.click(); }
-        
-        function toggleGlobalSettings() { 
-            document.getElementById('modal-global-settings').classList.toggle('active');
-            AudioSystem.init(); 
-        }
+        function toggleGlobalSettings() { document.getElementById('modal-global-settings').classList.toggle('active'); AudioSystem.init(); }
+        function toggleColorblind(isActive) { document.body.classList.toggle('colorblind-mode', isActive); }
 
-        function toggleColorblind(isActive) {
-            if(isActive) document.body.classList.add('colorblind-mode');
-            else document.body.classList.remove('colorblind-mode');
-        }
-
-        // --- ESTADO GLOBAL ---
         let localPlayer = { name: "", score: 0 };
         let activeGameType = ""; 
         let roomCode = "";
@@ -328,7 +331,6 @@
             showScreen('screen-multiplayer');
         }
 
-        // --- CONFIGURAÇÕES DA SALA ---
         function openRoomSettings() {
             if(!roomData) return;
             document.getElementById('room-cfg-nochat').checked = roomData.config.noChat;
@@ -341,7 +343,6 @@
             document.getElementById('modal-room-settings').classList.remove('active');
         }
 
-        // --- FIREBASE ---
         async function executeRoomAction(action) {
             const code = document.getElementById('room-code-input').value.toUpperCase().trim();
             if(!code) return alert("Insira um código!");
@@ -361,7 +362,6 @@
                         await window.FB.updateRoom(roomCode, { players: players });
                     }
                 }
-
                 document.getElementById('lobby-code-title').innerText = roomCode;
                 document.getElementById('mp-active-lobby').style.display = "flex";
 
@@ -397,7 +397,7 @@
 
         async function launchGame() {
             if(activeGameType === 'ia') {
-                await window.FB.updateRoom(roomCode, { gameState: 'playing', gameData: { word: "", endTime: 0 } });
+                await window.FB.updateRoom(roomCode, { gameState: 'playing', gameData: { word: "", theme: "", diff: "", endTime: 0 } });
             } else if (activeGameType === 'war') {
                 await window.FB.updateRoom(roomCode, { gameState: 'playing', gameData: { dice: [1,1,1] } });
             }
@@ -408,14 +408,48 @@
             let nextIndex = (currentIndex + 1) % roomData.players.length;
             await window.FB.updateRoom(roomCode, { 
                 currentTurn: roomData.players[nextIndex].name,
-                "gameData.word": "", "gameData.endTime": 0, "gameData.dice": [1,1,1]
+                "gameData.word": "", "gameData.theme": "", "gameData.diff": "", "gameData.endTime": 0, "gameData.dice": [1,1,1]
             });
         }
 
         // ==========================================
-        // LÓGICA: IMAGEM & AÇÃO
+        // BANCO DE PALAVRAS E LÓGICA DO IMAGEM E AÇÃO
         // ==========================================
-        const palavrasIA = ["Cachorro", "Nadar", "Violão", "Matrix", "Bebedouro de Barro", "Fachada Histórica", "Escada de Cobogó"];
+        const bancoPalavrasIA = [
+            // Ações
+            { word: "Nadar", theme: "Ações", diff: "Fácil" },
+            { word: "Pular Corda", theme: "Ações", diff: "Fácil" },
+            { word: "Bater Bolo", theme: "Ações", diff: "Médio" },
+            { word: "Surfar", theme: "Ações", diff: "Médio" },
+            // Animais
+            { word: "Cachorro", theme: "Animais", diff: "Fácil" },
+            { word: "Girafa", theme: "Animais", diff: "Fácil" },
+            { word: "Sapo", theme: "Animais", diff: "Fácil" },
+            { word: "Camaleão", theme: "Animais", diff: "Médio" },
+            { word: "Ornitorrinco", theme: "Animais", diff: "Difícil" },
+            // Filmes e Pop
+            { word: "Matrix", theme: "Cultura Pop / Filmes", diff: "Médio" },
+            { word: "Pikachu", theme: "Cultura Pop / Personagens", diff: "Fácil" },
+            { word: "De Volta para o Futuro", theme: "Cultura Pop / Filmes", diff: "Difícil" },
+            { word: "Harry Potter", theme: "Cultura Pop / Filmes", diff: "Médio" },
+            // Objetos Diversos
+            { word: "Violão", theme: "Objetos", diff: "Fácil" },
+            { word: "Relógio de Parede", theme: "Objetos", diff: "Médio" },
+            { word: "Liquidificador", theme: "Objetos", diff: "Médio" },
+            // Arte, Arquitetura & Elementos Históricos
+            { word: "Argila", theme: "Artesanato & Obras", diff: "Fácil" },
+            { word: "Cerâmica", theme: "Artesanato & Obras", diff: "Médio" },
+            { word: "Bebedouro de Gato", theme: "Objetos Específicos", diff: "Difícil" },
+            { word: "Cobogó", theme: "Artesanato & Obras", diff: "Difícil" },
+            { word: "Vaso de Barro", theme: "Artesanato & Obras", diff: "Médio" },
+            { word: "Escada", theme: "Artesanato & Obras", diff: "Fácil" },
+            { word: "Olaria", theme: "Profissões & Locais", diff: "Difícil" },
+            { word: "Fachada Histórica", theme: "Artesanato & Obras", diff: "Difícil" },
+            // Cultura Local (Nordeste/Ceará)
+            { word: "Jangada", theme: "Cultura Nordestina / Transportes", diff: "Médio" },
+            { word: "Rede de Descanso", theme: "Cultura Nordestina / Objetos", diff: "Fácil" },
+            { word: "Forró", theme: "Cultura Nordestina / Dança", diff: "Fácil" }
+        ];
 
         function syncImagemAcao(data, isMyTurn) {
             document.getElementById('game-ui-ia').style.display = 'flex';
@@ -424,16 +458,25 @@
             const isActing = data.gameData.endTime > 0;
             const noChatMode = data.config && data.config.noChat;
             
-            // Controle de visibilidade
             document.getElementById('ia-host-controls').style.display = (isMyTurn && !isActing) ? 'block' : 'none';
             document.getElementById('ia-pass-btn').style.display = (isMyTurn && isActing) ? 'block' : 'none';
             document.getElementById('ia-play-area').style.display = 'block';
+
+            const hintDisplay = document.getElementById('ia-hint-display');
+            if (isActing && data.gameData.theme) {
+                hintDisplay.style.display = 'block';
+                hintDisplay.innerHTML = `
+                    <span class="ia-tags tag-theme">${data.gameData.theme}</span>
+                    <span class="ia-tags tag-diff-${data.gameData.diff}">${data.gameData.diff}</span>
+                `;
+            } else {
+                hintDisplay.style.display = 'none';
+            }
 
             if(isMyTurn) {
                 document.getElementById('ia-word-display').innerText = isActing ? data.gameData.word : "***";
                 document.getElementById('ia-guess-area').style.display = 'none';
                 
-                // Se for modo verbal, o ator ganha os controles para dar ponto
                 if(noChatMode && isActing) {
                     document.getElementById('ia-verbal-controls').style.display = 'block';
                     const select = document.getElementById('ia-verbal-winner-select');
@@ -445,7 +488,6 @@
                 document.getElementById('ia-word-display').innerText = isActing ? "Adivinhe a palavra!" : "Aguardando Mestre...";
                 document.getElementById('ia-verbal-controls').style.display = 'none';
                 
-                // Se for modo verbal, esconde o input de texto para os espectadores também
                 if(noChatMode) {
                     document.getElementById('ia-guess-area').style.display = 'none';
                     document.getElementById('ia-chat-box').style.display = 'none';
@@ -455,7 +497,6 @@
                 }
             }
 
-            // Timer
             clearInterval(clockInterval);
             if(isActing) {
                 clockInterval = setInterval(() => {
@@ -465,7 +506,6 @@
                 }, 1000);
             }
 
-            // Chat Normal
             if(!noChatMode) {
                 const chatBox = document.getElementById('ia-chat');
                 chatBox.innerHTML = data.chat.map(m => `<div>${m}</div>`).join('');
@@ -474,18 +514,23 @@
         }
 
         async function iaPickWord() {
-            let p = palavrasIA[Math.floor(Math.random()*palavrasIA.length)];
+            let sorteio = bancoPalavrasIA[Math.floor(Math.random() * bancoPalavrasIA.length)];
             await window.FB.updateRoom(roomCode, {
-                "gameData.word": p, "gameData.endTime": Date.now() + (60*1000)
+                "gameData.word": sorteio.word,
+                "gameData.theme": sorteio.theme,
+                "gameData.diff": sorteio.diff,
+                "gameData.endTime": Date.now() + (60 * 1000)
             });
         }
 
-        // Chute Escrito
         async function iaSubmitGuess() {
             const guess = document.getElementById('ia-guess-input').value.trim();
             if(!guess || !roomData) return;
             
-            let isCorrect = guess.toLowerCase() === roomData.gameData.word.toLowerCase();
+            // Normalize remove acentos para não dar errado em palavras como "Cerâmica" ou "Cobogó"
+            const normalize = str => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+            
+            let isCorrect = normalize(guess) === normalize(roomData.gameData.word);
             let msg = `<strong>${localPlayer.name}:</strong> ${guess}`;
             
             if(isCorrect) {
@@ -500,7 +545,10 @@
             document.getElementById('ia-guess-input').value = "";
         }
 
-        // Chute Modo Verbal (Ator concede ponto)
+        document.getElementById("ia-guess-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") { event.preventDefault(); iaSubmitGuess(); }
+        });
+
         async function iaDeclareVerbalWinner() {
             const winnerName = document.getElementById('ia-verbal-winner-select').value;
             if(!winnerName || !roomData) return;
