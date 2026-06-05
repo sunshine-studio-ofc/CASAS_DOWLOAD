@@ -11,26 +11,25 @@
             --ia-color: #8b5cf6; --war-color: #ef4444;
             --success: #10b981; --warning: #f59e0b;
             --text-main: #f8fafc; --text-muted: #64748b;
+            --gold: #ffd700; --silver: #c0c0c0; --bronze: #cd7f32;
         }
 
-        /* --- MODO DALTÔNICO --- */
         body.colorblind-mode {
-            --primary: #1e88e5; 
-            --primary-hover: #1565c0;
-            --success: #ffc107; 
-            --war-color: #d81b60; 
-            --ia-color: #8e24aa; 
+            --primary: #1e88e5; --primary-hover: #1565c0;
+            --success: #ffc107; --war-color: #d81b60; --ia-color: #8e24aa; 
         }
-        body.colorblind-mode .player-badge.active-turn { border: 3px dashed var(--success); }
-        body.colorblind-mode .dice { border: 2px solid #fff; border-radius: 0; } 
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 20px; transition: all 0.3s; }
         
+        /* TELA DE SPLASH (DESTALA ÁUDIO) */
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: opacity 0.5s; }
+        .pulse-text { font-size: 24px; font-weight: 900; color: var(--primary); animation: pulse 1.5s infinite; text-transform: uppercase; letter-spacing: 2px; margin-top: 20px;}
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
         header { width: 100%; background: linear-gradient(135deg, var(--bg-card), #1e293b); padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border-bottom: 1px solid rgba(255,255,255,0.1); }
         .logo { font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
         .btn-icon { background: transparent; border: none; font-size: 24px; cursor: pointer; color: #fff; transition: transform 0.2s; }
-        .btn-icon:hover { transform: scale(1.1) rotate(45deg); }
 
         .container { width: 100%; max-width: 540px; padding: 15px; flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
         
@@ -51,12 +50,21 @@
         .btn-primary { background-color: var(--primary); }
         .btn-success { background-color: var(--success); }
         .btn-danger { background-color: #ef4444; }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+
+        /* Avatares e Cores */
+        .avatar-creator { display: grid; grid-template-columns: 1fr 2fr; gap: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; }
+        .avatar-preview-box { display: flex; align-items: center; justify-content: center; font-size: 45px; border-radius: 50%; width: 90px; height: 90px; margin: auto; border: 4px solid var(--primary); box-shadow: 0 0 15px rgba(59,130,246,0.3); transition: 0.3s; }
+        .opt-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;}
+        .color-dot { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+        .color-dot.active { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 10px currentColor; }
+        .emoji-item { font-size: 22px; padding: 4px; cursor: pointer; border-radius: 8px; background: #0f172a; }
+        .emoji-item.active { background: var(--primary); }
+        .mini-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 
         .games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
         .game-card { background: #1e293b; border-radius: 12px; padding: 20px 10px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
-        .game-card:hover:not(.disabled) { transform: translateY(-5px); border-color: var(--primary); }
-        .game-card.disabled { opacity: 0.5; cursor: not-allowed; }
-        .game-icon { font-size: 40px; margin-bottom: 10px; }
+        .game-card:hover { transform: translateY(-5px); border-color: var(--primary); }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal-overlay.active { display: flex; }
@@ -65,19 +73,32 @@
         .player-badge { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bg-input); border-radius: 10px; border: 1px solid #1e293b; }
         .player-badge.active-turn { border-color: var(--success); box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
         
-        .dice-container { display: flex; gap: 10px; justify-content: center; margin: 15px 0; }
-        .dice { width: 50px; height: 50px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: bold; color: white; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
-        .dice.red { background: var(--war-color); }
-        
-        .ia-tags { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; margin: 0 4px; }
-        .tag-theme { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid var(--ia-color); }
-        .tag-diff-Fácil { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid var(--success); }
-        .tag-diff-Médio { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid var(--warning); }
-        .tag-diff-Difícil { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid var(--war-color); }
+        /* Imagem e Ação Especial */
+        .word-choice-btn { background: #1e293b; border: 2px solid #334155; padding: 12px; border-radius: 10px; width: 100%; text-align: left; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .word-choice-btn:hover { border-color: var(--ia-color); background: rgba(139, 92, 246, 0.1); }
+        .ia-tags { display: inline-block; padding: 4px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-left: 4px; }
+        .tag-points { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .tag-Fácil { color: #6ee7b7; } .tag-Médio { color: #fcd34d; } .tag-Difícil { color: #fca5a5; } .tag-Mestre { color: #c084fc; }
+
+        /* Pódio Kahoot Style */
+        .podium-container { display: flex; align-items: flex-end; justify-content: center; gap: 10px; margin-top: 30px; height: 180px; }
+        .podium-bar { display: flex; flex-direction: column; align-items: center; width: 30%; border-radius: 8px 8px 0 0; position: relative; justify-content: flex-start; padding-top: 10px; font-weight: bold; color: #000; box-shadow: inset 0 0 20px rgba(255,255,255,0.3);}
+        .podium-bar .avatar-box { position: absolute; top: -50px; background: var(--bg-card); border-radius: 50%; border: 4px solid; padding: 5px; font-size: 30px; }
+        .p1 { height: 100%; background: var(--gold); } .p1 .avatar-box { border-color: var(--gold); z-index: 2; transform: scale(1.1);}
+        .p2 { height: 70%; background: var(--silver); } .p2 .avatar-box { border-color: var(--silver); }
+        .p3 { height: 50%; background: var(--bronze); } .p3 .avatar-box { border-color: var(--bronze); }
     </style>
 </head>
 <body>
 
+    <!-- Splash Screen Obrigatória para Áudio -->
+    <div id="splash-screen" onclick="initApp()">
+        <div style="font-size: 80px;">🎮</div>
+        <div class="pulse-text">CLIQUE PARA INICIAR</div>
+        <p style="margin-top: 10px; color: var(--text-muted);">Ativando Som e Motores...</p>
+    </div>
+
+    <!-- Áudio Oculto -->
     <audio id="bg-music" loop>
         <source src="https://vgmsite.com/soundtracks/wii-shop-channel-music/qjljjscq/Wii%20Shop%20Channel%20Music.mp3" type="audio/mpeg">
     </audio>
@@ -87,34 +108,38 @@
         <button class="btn-icon" onclick="toggleGlobalSettings()">⚙️</button>
     </header>
 
-    <!-- Modal de Configurações Globais -->
+    <!-- Modais -->
     <div class="modal-overlay" id="modal-global-settings">
         <div class="card" style="width: 90%; max-width: 400px;">
             <h2>⚙️ Ajustes do App</h2>
             <div class="settings-row">
-                <span>🎵 Música (Requer Clique)</span>
+                <span>🎵 Música de Fundo</span>
                 <input type="checkbox" id="toggle-music" onchange="AudioSystem.toggleMusic(this.checked)" style="width: 24px; height: 24px;">
             </div>
             <div class="settings-row">
                 <span>🔊 Efeitos (SFX)</span>
                 <input type="checkbox" id="toggle-sfx" checked onchange="AudioSystem.sfxEnabled = this.checked" style="width: 24px; height: 24px;">
             </div>
-            <div class="settings-row" style="border-left-color: var(--warning);">
-                <span>👁️ Modo Daltônico</span>
-                <input type="checkbox" id="toggle-colorblind" onchange="toggleColorblind(this.checked)" style="width: 24px; height: 24px;">
-            </div>
             <button class="btn-primary" onclick="toggleGlobalSettings(); playClick()">Fechar</button>
         </div>
     </div>
 
-    <!-- Modal de Configurações DA SALA -->
     <div class="modal-overlay" id="modal-room-settings">
         <div class="card" style="width: 90%; max-width: 400px;">
             <h2 style="color: var(--warning);">👑 Regras da Mesa</h2>
             <div class="settings-row">
                 <div>
-                    <strong>🗣️ Modo Verbal (Sem Chat)</strong>
-                    <div style="font-size: 11px; color: var(--text-muted);">Os palpites são gritados na vida real.</div>
+                    <strong>🏆 Pontos para Vitória</strong>
+                </div>
+                <select id="room-cfg-maxscore" style="width: 120px;">
+                    <option value="50">50 pts</option>
+                    <option value="100">100 pts</option>
+                    <option value="200">200 pts</option>
+                </select>
+            </div>
+            <div class="settings-row">
+                <div>
+                    <strong>🗣️ Mímica de Sofá (Sem Chat)</strong>
                 </div>
                 <input type="checkbox" id="room-cfg-nochat" style="width: 24px; height: 24px;">
             </div>
@@ -125,35 +150,41 @@
 
     <div class="container">
         
-        <div id="screen-profile" class="screen active card">
-            <h2>Crie sua Identidade</h2>
-            <div style="font-size: 60px; text-align: center; margin: 10px 0;">🧑‍🚀</div>
+        <!-- Tela: Avatar -->
+        <div id="screen-profile" class="screen card">
+            <h2>Crie seu Avatar</h2>
+            <div class="avatar-creator">
+                <div class="avatar-preview-box" id="avatar-preview" style="background-color: #3b82f6;">🦊</div>
+                <div>
+                    <label style="font-size: 12px;">Cor:</label>
+                    <div class="opt-row" id="color-selectors"></div>
+                    <label style="font-size: 12px;">Emoji:</label>
+                    <div class="opt-row" id="emoji-selectors"></div>
+                </div>
+            </div>
             <input type="text" id="global-player-name" placeholder="Digite seu Nickname..." maxlength="15">
-            <button class="btn-primary" style="margin-top: 15px;" onclick="saveProfile(); playClick()">Entrar no Arcade</button>
+            <button class="btn-primary" style="margin-top: 10px;" onclick="saveProfile(); playClick()">Salvar e Entrar</button>
         </div>
 
+        <!-- Tela: Hub -->
         <div id="screen-hub" class="screen card">
             <h2>Escolha um Jogo</h2>
             <div class="games-grid">
                 <div class="game-card" onclick="selectGame('ia'); playClick()" style="border-bottom: 4px solid var(--ia-color);">
                     <div class="game-icon">🎭</div>
                     <h3 style="font-size: 16px;">Imagem & Ação</h3>
-                    <span style="font-size: 12px; color: var(--ia-color);">Mímica Virtual</span>
-                </div>
-                <div class="game-card" onclick="selectGame('war'); playClick()" style="border-bottom: 4px solid var(--war-color);">
-                    <div class="game-icon">⚔️</div>
-                    <h3 style="font-size: 16px;">War Express</h3>
-                    <span style="font-size: 12px; color: var(--war-color);">Batalha de Dados</span>
+                    <span style="font-size: 12px; color: var(--ia-color);">Clássico 5 Palavras</span>
                 </div>
             </div>
         </div>
 
+        <!-- Tela: Lobby -->
         <div id="screen-multiplayer" class="screen card">
             <h2 id="lobby-game-title">Lobby</h2>
-            <input type="text" id="room-code-input" placeholder="Código da Sala (Ex: SALA1)" style="text-transform:uppercase; font-weight:800; text-align:center; font-size: 20px;">
+            <input type="text" id="room-code-input" placeholder="CÓDIGO DA SALA" style="text-transform:uppercase; font-weight:800; text-align:center; font-size: 20px;">
             <div style="display:flex; gap:10px; margin-top: 15px;">
-                <button class="btn-primary" style="background:#1e293b" onclick="executeRoomAction('join'); playClick()">Entrar</button>
-                <button class="btn-success" onclick="executeRoomAction('create'); playClick()">Criar Sala</button>
+                <button class="btn-outline" onclick="executeRoomAction('join'); playClick()">Entrar</button>
+                <button class="btn-primary" onclick="executeRoomAction('create'); playClick()">Criar Nova</button>
             </div>
 
             <div id="mp-active-lobby" style="display:none; flex-direction:column; gap:12px; margin-top:20px; border-top:1px solid #1e293b; padding-top:20px;">
@@ -162,26 +193,41 @@
                     <button id="btn-room-settings" class="btn-primary" style="width: auto; padding: 8px 12px; font-size: 12px; display: none;" onclick="openRoomSettings()">⚙️ Regras</button>
                 </div>
                 <div id="lobby-players-box" style="display:flex; flex-direction:column; gap:8px;"></div>
-                <button class="btn-primary" id="start-mp-game-btn" style="display:none; margin-top:10px;" onclick="launchGame(); playClick()">Iniciar Partida!</button>
-                <button class="btn-danger" style="background:transparent; border:1px solid #ef4444; color:#ef4444;" onclick="showScreen('screen-hub'); playClick()">Voltar ao Hub</button>
+                <button class="btn-success" id="start-mp-game-btn" style="display:none; margin-top:10px;" onclick="launchGame(); playClick()">Iniciar Partida!</button>
+                <button class="btn-danger" style="background:transparent; border:1px solid #ef4444; color:#ef4444;" onclick="showScreen('screen-hub'); playClick()">Sair da Sala</button>
             </div>
         </div>
 
         <!-- TELA: IMAGEM & AÇÃO -->
         <div id="game-ui-ia" style="display:none; width:100%; flex-direction:column; gap:15px;">
-            <div class="card" id="ia-turn-announcer" style="text-align: center;">
-                <h3 style="color:var(--ia-color);">Vez do Jogador</h3>
-                <h2 id="ia-current-player-name" style="font-size: 28px; margin: 10px 0;">---</h2>
-                <div id="ia-host-controls" style="display:none;">
-                    <button class="btn-success" onclick="iaPickWord(); playClick()">Sortear Palavra</button>
+            
+            <div style="display:flex; justify-content: space-between;">
+                <div class="player-badge" style="border-color: var(--primary);">
+                    <div class="mini-avatar" id="ia-current-avatar" style="background:#3b82f6">🦊</div>
+                    <div>
+                        <div style="font-size:10px; color:var(--text-muted)">Na vez</div>
+                        <strong id="ia-current-player-name">---</strong>
+                    </div>
                 </div>
+                <button id="btn-force-end" class="btn-danger" style="width:auto; padding: 8px; font-size:12px; display:none;" onclick="triggerPodium(); playClick()">Finalizar Jogo</button>
             </div>
 
+            <!-- FASE 1: Escolha da Palavra (Apenas Ator) -->
+            <div class="card" id="ia-choose-phase" style="display:none; border: 2px dashed var(--ia-color);">
+                <h3 style="color:var(--ia-color); text-align:center; margin-bottom: 15px;">Selecione sua Palavra</h3>
+                <div id="ia-choices-container"></div>
+            </div>
+
+            <!-- FASE 2: Atuação -->
             <div class="card" id="ia-play-area" style="display:none; text-align: center; border: 2px solid var(--ia-color);">
-                <div id="ia-hint-display" style="margin-bottom: 15px; display:none;"></div>
+                <div style="margin-bottom: 15px;">
+                    <span class="ia-tags tag-theme" id="ia-display-theme">Tema</span>
+                    <span class="ia-tags tag-points" id="ia-display-points">+0 pts</span>
+                    <span class="ia-tags" id="ia-display-diff">Fácil</span>
+                </div>
                 
                 <p id="ia-word-display" style="font-size: 32px; font-weight: 900; margin: 10px 0;">***</p>
-                <div style="font-size: 30px; font-weight: bold; color: var(--warning); margin: 15px 0;" id="ia-timer">60s</div>
+                <div style="font-size: 34px; font-weight: 900; color: var(--warning); margin: 15px 0;" id="ia-timer">60s</div>
                 
                 <div id="ia-guess-area" style="margin-top: 15px;">
                     <input type="text" id="ia-guess-input" placeholder="Seu palpite aqui...">
@@ -189,37 +235,26 @@
                 </div>
 
                 <div id="ia-verbal-controls" style="display:none; margin-top: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px;">
-                    <h4 style="color: var(--warning); margin-bottom: 8px;">🗣️ Modo Verbal Ativado</h4>
-                    <p style="font-size: 12px; margin-bottom: 10px;">Alguém gritou a resposta correta?</p>
+                    <h4 style="color: var(--warning); margin-bottom: 8px;">🗣️ Mímica de Sofá</h4>
+                    <p style="font-size: 12px; margin-bottom: 10px;">Selecione quem gritou a resposta primeiro:</p>
                     <select id="ia-verbal-winner-select"></select>
                     <button class="btn-success" style="margin-top: 8px;" onclick="iaDeclareVerbalWinner(); playClick()">Conceder Pontos</button>
                 </div>
 
-                <button class="btn-danger" id="ia-pass-btn" style="margin-top: 15px; display:none;" onclick="iaEndTurn(); playClick()">Passar a Vez (Pular)</button>
+                <button class="btn-danger" id="ia-pass-btn" style="margin-top: 15px; display:none;" onclick="iaEndTurn(); playClick()">Desistir (Passar a Vez)</button>
             </div>
             
             <div class="card" id="ia-chat-box">
-                <h3>Chat & Acertos</h3>
-                <div id="ia-chat" style="height: 120px; overflow-y:auto; background:var(--bg-input); padding:10px; border-radius:8px; font-size:13px; margin-top:10px;"></div>
+                <h3>Chat</h3>
+                <div id="ia-chat" style="height: 140px; overflow-y:auto; background:var(--bg-input); padding:10px; border-radius:8px; font-size:14px; margin-top:10px;"></div>
             </div>
         </div>
 
-        <!-- TELA: WAR EXPRESS -->
-        <div id="game-ui-war" style="display:none; width:100%; flex-direction:column; gap:15px;">
-            <div class="card" style="border: 2px solid var(--war-color); text-align: center;">
-                <h2 style="color:var(--war-color);">🗺️ Batalha de Fronteira</h2>
-                <div style="margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px;">
-                    <h3>Atacante: <span id="war-attacker-name" style="color:var(--war-color)">---</span></h3>
-                    <div class="dice-container" id="war-attack-dice">
-                        <div class="dice red">?</div><div class="dice red">?</div><div class="dice red">?</div>
-                    </div>
-                </div>
-                <div id="war-action-controls" style="display:none;">
-                    <button class="btn-danger" onclick="warRollDice(); playClick()">🎲 Rolar Dados de Ataque</button>
-                    <button class="btn-primary" style="margin-top:10px;" onclick="warPassTurn(); playClick()">Passar a Vez</button>
-                </div>
-                <p id="war-wait-msg" style="color: var(--warning); font-weight: bold;">Aguarde sua vez...</p>
-            </div>
+        <!-- TELA: PODIUM -->
+        <div id="screen-podium" class="screen card">
+            <h2>🏆 Fim de Jogo! 🏆</h2>
+            <div class="podium-container" id="podium-display"></div>
+            <button class="btn-primary" style="margin-top: 30px;" onclick="showScreen('screen-hub'); playClick()">Voltar ao Menu Principal</button>
         </div>
 
     </div>
@@ -247,8 +282,8 @@
                     code: code, gameType: gameType, host: player.name, 
                     gameState: "lobby", currentTurn: player.name, 
                     players: [player], chat: [],
-                    config: { noChat: false },
-                    gameData: {} 
+                    config: { noChat: false, maxScore: 50 },
+                    gameData: { phase: "waiting" } 
                 });
             },
             async updateRoom(code, payload) { await updateDoc(doc(window.db, "rooms", code), payload); },
@@ -265,25 +300,22 @@
     </script>
 
     <script>
+        // --- SISTEMA AUDIO ROBUSTO ---
         const AudioSystem = {
-            sfxEnabled: true,
-            bgMusic: document.getElementById('bg-music'),
-            ctx: null,
+            sfxEnabled: true, bgMusic: document.getElementById('bg-music'), ctx: null,
             init() { 
                 if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); 
                 if(this.ctx.state === 'suspended') this.ctx.resume(); 
             },
             toggleMusic(state) {
                 this.bgMusic.volume = 0.2;
-                if(state) { this.bgMusic.play().catch(() => alert("O navegador impediu a música. Clique na tela e tente novamente.")); } 
-                else { this.bgMusic.pause(); }
+                if(state) { this.bgMusic.play().catch(e=>console.log("Aguardando interacao",e)); } else { this.bgMusic.pause(); }
             },
             playTone(freq, type, duration) {
                 if(!this.sfxEnabled) return;
                 try {
                     this.init();
-                    let osc = this.ctx.createOscillator();
-                    let gain = this.ctx.createGain();
+                    let osc = this.ctx.createOscillator(); let gain = this.ctx.createGain();
                     osc.type = type; osc.frequency.value = freq;
                     gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.00001, this.ctx.currentTime + duration);
@@ -292,16 +324,44 @@
                 } catch(e){}
             },
             click() { this.playTone(600, 'sine', 0.05); },
-            win() { this.playTone(523, 'triangle', 0.1); setTimeout(()=>this.playTone(659, 'triangle', 0.2), 100); },
-            dice() { this.playTone(200, 'sawtooth', 0.05); setTimeout(()=>this.playTone(250, 'square', 0.05), 50); }
+            win() { this.playTone(523, 'triangle', 0.1); setTimeout(()=>this.playTone(659, 'triangle', 0.2), 100); setTimeout(()=>this.playTone(783, 'triangle', 0.3), 300);},
+            notify() { this.playTone(880, 'sine', 0.1); }
         };
 
-        function playClick() { AudioSystem.click(); }
-        function toggleGlobalSettings() { document.getElementById('modal-global-settings').classList.toggle('active'); AudioSystem.init(); }
-        function toggleColorblind(isActive) { document.body.classList.toggle('colorblind-mode', isActive); }
+        function initApp() {
+            document.getElementById('splash-screen').style.opacity = '0';
+            setTimeout(() => document.getElementById('splash-screen').style.display = 'none', 500);
+            AudioSystem.init();
+            document.getElementById('toggle-music').checked = true;
+            AudioSystem.toggleMusic(true);
+            setupAvatars();
+            showScreen('screen-profile');
+        }
 
-        let localPlayer = { name: "", score: 0 };
-        let activeGameType = ""; 
+        function playClick() { AudioSystem.click(); }
+        function toggleGlobalSettings() { document.getElementById('modal-global-settings').classList.toggle('active'); }
+
+        // --- AVATARES ---
+        const cores = ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899"];
+        const emojis = ["🦊", "🐱", "🐶", "🐸", "🤖", "🥷", "👻", "🦁"];
+        let localPlayer = { name: "", score: 0, color: cores[0], emoji: emojis[0] };
+
+        function setupAvatars() {
+            document.getElementById('color-selectors').innerHTML = cores.map(c => `<div class="color-dot" style="background:${c}" onclick="setAvatarCol('${c}', this)"></div>`).join('');
+            document.getElementById('emoji-selectors').innerHTML = emojis.map(e => `<span class="emoji-item" onclick="setAvatarEmo('${e}', this)">${e}</span>`).join('');
+            document.getElementById('color-selectors').children[0].classList.add('active');
+            document.getElementById('emoji-selectors').children[0].classList.add('active');
+            updateAvatarPreview();
+        }
+        function setAvatarCol(c, el) { localPlayer.color = c; document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('active')); el.classList.add('active'); updateAvatarPreview(); playClick(); }
+        function setAvatarEmo(e, el) { localPlayer.emoji = e; document.querySelectorAll('.emoji-item').forEach(d=>d.classList.remove('active')); el.classList.add('active'); updateAvatarPreview(); playClick(); }
+        function updateAvatarPreview() { 
+            const box = document.getElementById('avatar-preview');
+            box.style.backgroundColor = localPlayer.color; box.innerText = localPlayer.emoji; box.style.borderColor = localPlayer.color;
+        }
+
+        // --- ESTADO ---
+        let activeGameType = "ia"; 
         let roomCode = "";
         let roomData = null;
         let unsubFirestore = null;
@@ -310,10 +370,7 @@
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if(id !== 'screen-multiplayer') {
-                document.getElementById('game-ui-ia').style.display = 'none';
-                document.getElementById('game-ui-war').style.display = 'none';
-            }
+            if(id !== 'screen-multiplayer') document.getElementById('game-ui-ia').style.display = 'none';
         }
 
         function saveProfile() {
@@ -325,7 +382,6 @@
 
         function selectGame(type) {
             activeGameType = type;
-            document.getElementById('lobby-game-title').innerText = type === 'ia' ? "Lobby: Imagem & Ação" : "Lobby: War Express";
             document.getElementById('mp-active-lobby').style.display = 'none';
             document.getElementById('room-code-input').value = "";
             showScreen('screen-multiplayer');
@@ -334,12 +390,14 @@
         function openRoomSettings() {
             if(!roomData) return;
             document.getElementById('room-cfg-nochat').checked = roomData.config.noChat;
+            document.getElementById('room-cfg-maxscore').value = roomData.config.maxScore;
             document.getElementById('modal-room-settings').classList.add('active');
         }
 
         async function saveRoomSettings() {
             const noChat = document.getElementById('room-cfg-nochat').checked;
-            await window.FB.updateRoom(roomCode, { "config.noChat": noChat });
+            const maxScore = parseInt(document.getElementById('room-cfg-maxscore').value);
+            await window.FB.updateRoom(roomCode, { "config.noChat": noChat, "config.maxScore": maxScore });
             document.getElementById('modal-room-settings').classList.remove('active');
         }
 
@@ -354,11 +412,13 @@
                 } else {
                     const existing = await window.FB.checkRoomExists(roomCode);
                     if(!existing) return alert("Sala não encontrada!");
-                    if(existing.gameType !== activeGameType) return alert("Esta sala está jogando outro jogo!");
-                    
                     let players = existing.players || [];
-                    if(!players.some(p => p.name === localPlayer.name)) {
+                    let meIndex = players.findIndex(p => p.name === localPlayer.name);
+                    if(meIndex === -1) {
                         players.push(localPlayer);
+                        await window.FB.updateRoom(roomCode, { players: players });
+                    } else {
+                        players[meIndex] = localPlayer; // atualiza avatar se reentrar
                         await window.FB.updateRoom(roomCode, { players: players });
                     }
                 }
@@ -374,131 +434,144 @@
         function handleSync(data) {
             if(!data) return;
             roomData = data;
-            
-            const isMyTurn = data.currentTurn === localPlayer.name;
             const isHost = data.host === localPlayer.name;
             
+            // Render Lobby Players
             document.getElementById('lobby-players-box').innerHTML = data.players.map(p => `
-                <div class="player-badge ${p.name === data.currentTurn && data.gameState !== 'lobby' ? 'active-turn' : ''}">
+                <div class="player-badge ${p.name === data.currentTurn && data.gameState === 'playing' ? 'active-turn' : ''}">
+                    <div class="mini-avatar" style="background:${p.color}">${p.emoji}</div>
                     <strong>${p.name}</strong> 
-                    <span style="margin-left:auto; color:var(--success)">${p.score} pts</span>
+                    <span style="margin-left:auto; color:var(--success); font-weight:900;">${p.score} <small>pts</small></span>
                 </div>
             `).join('');
 
             document.getElementById('start-mp-game-btn').style.display = (isHost && data.gameState === 'lobby') ? "block" : "none";
             document.getElementById('btn-room-settings').style.display = isHost ? "block" : "none";
+            document.getElementById('btn-force-end').style.display = isHost ? "block" : "none";
 
             if(data.gameState === 'playing') {
                 document.getElementById('mp-active-lobby').style.display = 'none';
-                if(data.gameType === 'ia') syncImagemAcao(data, isMyTurn);
-                if(data.gameType === 'war') syncWarExpress(data, isMyTurn);
+                syncImagemAcao(data, data.currentTurn === localPlayer.name);
+            } else if (data.gameState === 'podium') {
+                renderPodium(data.players);
             }
         }
+
+        // ==========================================
+        // BANCO DE PALAVRAS ULTIMATE (+50 palavras)
+        // ==========================================
+        const bancoPalavrasIA = [
+            { word: "Nadar", theme: "Ações", diff: "Fácil", points: 5 }, { word: "Escovar os Dentes", theme: "Ações", diff: "Fácil", points: 5 }, { word: "Pular Corda", theme: "Ações", diff: "Fácil", points: 5 },
+            { word: "Cozinhar", theme: "Ações", diff: "Médio", points: 10 }, { word: "Surfar", theme: "Ações", diff: "Médio", points: 10 }, { word: "Meditar", theme: "Ações", diff: "Médio", points: 10 },
+            { word: "Cachorro", theme: "Animais", diff: "Fácil", points: 5 }, { word: "Gato", theme: "Animais", diff: "Fácil", points: 5 }, { word: "Macaco", theme: "Animais", diff: "Fácil", points: 5 },
+            { word: "Cobra", theme: "Animais", diff: "Médio", points: 10 }, { word: "Tubarão", theme: "Animais", diff: "Médio", points: 10 }, { word: "Camaleão", theme: "Animais", diff: "Difícil", points: 15 },
+            { word: "Violão", theme: "Objetos", diff: "Fácil", points: 5 }, { word: "Telefone", theme: "Objetos", diff: "Fácil", points: 5 }, { word: "Liquidificador", theme: "Objetos", diff: "Médio", points: 10 },
+            { word: "Martelo", theme: "Objetos", diff: "Médio", points: 10 }, { word: "Extintor de Incêndio", theme: "Objetos", diff: "Difícil", points: 15 },
+            { word: "Homem-Aranha", theme: "Filmes/Cultura Pop", diff: "Fácil", points: 5 }, { word: "Harry Potter", theme: "Filmes/Cultura Pop", diff: "Médio", points: 10 }, { word: "Matrix", theme: "Filmes/Cultura Pop", diff: "Difícil", points: 15 },
+            { word: "Pikachu", theme: "Filmes/Cultura Pop", diff: "Fácil", points: 5 }, { word: "De Volta para o Futuro", theme: "Filmes/Cultura Pop", diff: "Mestre", points: 20 },
+            // Artesanato, Arquitetura e Elementos de Ceará (Contexto Oculto)
+            { word: "Argila Fria", theme: "Artesanato & Materiais", diff: "Fácil", points: 10 },
+            { word: "Trabalho em Barro", theme: "Artesanato & Materiais", diff: "Médio", points: 15 },
+            { word: "Cerâmica", theme: "Artesanato & Obras", diff: "Médio", points: 15 },
+            { word: "Cobogó", theme: "Arquitetura/Construção", diff: "Difícil", points: 20 },
+            { word: "Fachada Histórica", theme: "Arquitetura do Ceará", diff: "Mestre", points: 30 },
+            { word: "Bebedouro de Gato", theme: "Cerâmica & Pets", diff: "Difícil", points: 20 },
+            { word: "Vaso de Planta", theme: "Objetos/Artesanato", diff: "Fácil", points: 5 },
+            { word: "Olaria", theme: "Profissões & Locais", diff: "Mestre", points: 30 },
+            { word: "Rede de Descanso", theme: "Cultura do Ceará", diff: "Fácil", points: 5 },
+            { word: "Jangada", theme: "Cultura do Ceará", diff: "Médio", points: 10 },
+            { word: "Forró", theme: "Cultura Nordestina", diff: "Fácil", points: 5 }
+        ];
 
         async function launchGame() {
-            if(activeGameType === 'ia') {
-                await window.FB.updateRoom(roomCode, { gameState: 'playing', gameData: { word: "", theme: "", diff: "", endTime: 0 } });
-            } else if (activeGameType === 'war') {
-                await window.FB.updateRoom(roomCode, { gameState: 'playing', gameData: { dice: [1,1,1] } });
-            }
+            await nextTurn(true);
         }
 
-        async function nextTurn() {
-            let currentIndex = roomData.players.findIndex(p => p.name === roomData.currentTurn);
-            let nextIndex = (currentIndex + 1) % roomData.players.length;
+        async function nextTurn(forceStart = false) {
+            let nextPlayer = localPlayer.name;
+            if(!forceStart) {
+                let currentIndex = roomData.players.findIndex(p => p.name === roomData.currentTurn);
+                nextPlayer = roomData.players[(currentIndex + 1) % roomData.players.length].name;
+            }
+
+            // Sorteia 5 palavras para o novo ator escolher
+            let escolhas = [...bancoPalavrasIA].sort(() => 0.5 - Math.random()).slice(0, 5);
+
             await window.FB.updateRoom(roomCode, { 
-                currentTurn: roomData.players[nextIndex].name,
-                "gameData.word": "", "gameData.theme": "", "gameData.diff": "", "gameData.endTime": 0, "gameData.dice": [1,1,1]
+                gameState: 'playing',
+                currentTurn: nextPlayer,
+                "gameData.phase": "choosing",
+                "gameData.choices": escolhas,
+                "gameData.word": "", "gameData.theme": "", "gameData.diff": "", "gameData.points": 0, "gameData.endTime": 0
             });
         }
 
-        // ==========================================
-        // BANCO DE PALAVRAS E LÓGICA DO IMAGEM E AÇÃO
-        // ==========================================
-        const bancoPalavrasIA = [
-            // Ações
-            { word: "Nadar", theme: "Ações", diff: "Fácil" },
-            { word: "Pular Corda", theme: "Ações", diff: "Fácil" },
-            { word: "Bater Bolo", theme: "Ações", diff: "Médio" },
-            { word: "Surfar", theme: "Ações", diff: "Médio" },
-            // Animais
-            { word: "Cachorro", theme: "Animais", diff: "Fácil" },
-            { word: "Girafa", theme: "Animais", diff: "Fácil" },
-            { word: "Sapo", theme: "Animais", diff: "Fácil" },
-            { word: "Camaleão", theme: "Animais", diff: "Médio" },
-            { word: "Ornitorrinco", theme: "Animais", diff: "Difícil" },
-            // Filmes e Pop
-            { word: "Matrix", theme: "Cultura Pop / Filmes", diff: "Médio" },
-            { word: "Pikachu", theme: "Cultura Pop / Personagens", diff: "Fácil" },
-            { word: "De Volta para o Futuro", theme: "Cultura Pop / Filmes", diff: "Difícil" },
-            { word: "Harry Potter", theme: "Cultura Pop / Filmes", diff: "Médio" },
-            // Objetos Diversos
-            { word: "Violão", theme: "Objetos", diff: "Fácil" },
-            { word: "Relógio de Parede", theme: "Objetos", diff: "Médio" },
-            { word: "Liquidificador", theme: "Objetos", diff: "Médio" },
-            // Arte, Arquitetura & Elementos Históricos
-            { word: "Argila", theme: "Artesanato & Obras", diff: "Fácil" },
-            { word: "Cerâmica", theme: "Artesanato & Obras", diff: "Médio" },
-            { word: "Bebedouro de Gato", theme: "Objetos Específicos", diff: "Difícil" },
-            { word: "Cobogó", theme: "Artesanato & Obras", diff: "Difícil" },
-            { word: "Vaso de Barro", theme: "Artesanato & Obras", diff: "Médio" },
-            { word: "Escada", theme: "Artesanato & Obras", diff: "Fácil" },
-            { word: "Olaria", theme: "Profissões & Locais", diff: "Difícil" },
-            { word: "Fachada Histórica", theme: "Artesanato & Obras", diff: "Difícil" },
-            // Cultura Local (Nordeste/Ceará)
-            { word: "Jangada", theme: "Cultura Nordestina / Transportes", diff: "Médio" },
-            { word: "Rede de Descanso", theme: "Cultura Nordestina / Objetos", diff: "Fácil" },
-            { word: "Forró", theme: "Cultura Nordestina / Dança", diff: "Fácil" }
-        ];
-
         function syncImagemAcao(data, isMyTurn) {
             document.getElementById('game-ui-ia').style.display = 'flex';
-            document.getElementById('ia-current-player-name').innerText = data.currentTurn;
             
-            const isActing = data.gameData.endTime > 0;
+            let turnPlayer = data.players.find(p => p.name === data.currentTurn) || data.players[0];
+            document.getElementById('ia-current-player-name').innerText = turnPlayer.name;
+            document.getElementById('ia-current-avatar').innerText = turnPlayer.emoji;
+            document.getElementById('ia-current-avatar').style.backgroundColor = turnPlayer.color;
+            
+            const phase = data.gameData.phase;
+            const isActing = (phase === "acting");
             const noChatMode = data.config && data.config.noChat;
-            
-            document.getElementById('ia-host-controls').style.display = (isMyTurn && !isActing) ? 'block' : 'none';
-            document.getElementById('ia-pass-btn').style.display = (isMyTurn && isActing) ? 'block' : 'none';
-            document.getElementById('ia-play-area').style.display = 'block';
 
-            const hintDisplay = document.getElementById('ia-hint-display');
-            if (isActing && data.gameData.theme) {
-                hintDisplay.style.display = 'block';
-                hintDisplay.innerHTML = `
-                    <span class="ia-tags tag-theme">${data.gameData.theme}</span>
-                    <span class="ia-tags tag-diff-${data.gameData.diff}">${data.gameData.diff}</span>
-                `;
-            } else {
-                hintDisplay.style.display = 'none';
-            }
-
-            if(isMyTurn) {
-                document.getElementById('ia-word-display').innerText = isActing ? data.gameData.word : "***";
-                document.getElementById('ia-guess-area').style.display = 'none';
-                
-                if(noChatMode && isActing) {
-                    document.getElementById('ia-verbal-controls').style.display = 'block';
-                    const select = document.getElementById('ia-verbal-winner-select');
-                    select.innerHTML = data.players.filter(p => p.name !== localPlayer.name).map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+            // FASE DE ESCOLHA DE PALAVRAS
+            if(phase === "choosing") {
+                document.getElementById('ia-play-area').style.display = 'none';
+                if(isMyTurn) {
+                    document.getElementById('ia-choose-phase').style.display = 'block';
+                    document.getElementById('ia-choices-container').innerHTML = data.gameData.choices.map((c, i) => `
+                        <div class="word-choice-btn" onclick="selectWordToAct(${i}); playClick()">
+                            <strong>${c.word}</strong>
+                            <div>
+                                <span class="ia-tags tag-theme">${c.theme}</span>
+                                <span class="ia-tags tag-${c.diff}">${c.diff}</span>
+                                <span class="ia-tags tag-points">+${c.points}pts</span>
+                            </div>
+                        </div>
+                    `).join('');
                 } else {
-                    document.getElementById('ia-verbal-controls').style.display = 'none';
+                    document.getElementById('ia-choose-phase').style.display = 'none';
                 }
-            } else {
-                document.getElementById('ia-word-display').innerText = isActing ? "Adivinhe a palavra!" : "Aguardando Mestre...";
-                document.getElementById('ia-verbal-controls').style.display = 'none';
-                
-                if(noChatMode) {
+            } 
+            // FASE DE ATUAÇÃO E CHUTES
+            else if(phase === "acting") {
+                document.getElementById('ia-choose-phase').style.display = 'none';
+                document.getElementById('ia-play-area').style.display = 'block';
+                document.getElementById('ia-pass-btn').style.display = isMyTurn ? 'block' : 'none';
+
+                // Cabeçalho da Dica
+                document.getElementById('ia-display-theme').innerText = data.gameData.theme;
+                document.getElementById('ia-display-points').innerText = `+${data.gameData.points} pts (Equipe)`;
+                let diffEl = document.getElementById('ia-display-diff');
+                diffEl.innerText = data.gameData.diff;
+                diffEl.className = `ia-tags tag-${data.gameData.diff}`;
+
+                if(isMyTurn) {
+                    document.getElementById('ia-word-display').innerText = data.gameData.word;
                     document.getElementById('ia-guess-area').style.display = 'none';
-                    document.getElementById('ia-chat-box').style.display = 'none';
+                    if(noChatMode) {
+                        document.getElementById('ia-verbal-controls').style.display = 'block';
+                        const select = document.getElementById('ia-verbal-winner-select');
+                        select.innerHTML = data.players.filter(p => p.name !== localPlayer.name).map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+                    } else { document.getElementById('ia-verbal-controls').style.display = 'none'; }
                 } else {
-                    document.getElementById('ia-guess-area').style.display = isActing ? 'block' : 'none';
-                    document.getElementById('ia-chat-box').style.display = 'block';
+                    document.getElementById('ia-word-display').innerText = "???";
+                    document.getElementById('ia-verbal-controls').style.display = 'none';
+                    if(noChatMode) {
+                        document.getElementById('ia-guess-area').style.display = 'none';
+                        document.getElementById('ia-chat-box').style.display = 'none';
+                    } else {
+                        document.getElementById('ia-guess-area').style.display = 'block';
+                        document.getElementById('ia-chat-box').style.display = 'block';
+                    }
                 }
-            }
 
-            clearInterval(clockInterval);
-            if(isActing) {
+                // Timer
+                clearInterval(clockInterval);
                 clockInterval = setInterval(() => {
                     let rem = Math.max(0, Math.floor((data.gameData.endTime - Date.now())/1000));
                     document.getElementById('ia-timer').innerText = rem + "s";
@@ -506,19 +579,18 @@
                 }, 1000);
             }
 
-            if(!noChatMode) {
-                const chatBox = document.getElementById('ia-chat');
-                chatBox.innerHTML = data.chat.map(m => `<div>${m}</div>`).join('');
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
+            // Atualiza Chat
+            const chatBox = document.getElementById('ia-chat');
+            chatBox.innerHTML = data.chat.map(m => `<div style="margin-bottom:4px;">${m}</div>`).join('');
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        async function iaPickWord() {
-            let sorteio = bancoPalavrasIA[Math.floor(Math.random() * bancoPalavrasIA.length)];
+        async function selectWordToAct(index) {
+            let chosen = roomData.gameData.choices[index];
+            AudioSystem.notify();
             await window.FB.updateRoom(roomCode, {
-                "gameData.word": sorteio.word,
-                "gameData.theme": sorteio.theme,
-                "gameData.diff": sorteio.diff,
+                "gameData.phase": "acting",
+                "gameData.word": chosen.word, "gameData.theme": chosen.theme, "gameData.diff": chosen.diff, "gameData.points": chosen.points,
                 "gameData.endTime": Date.now() + (60 * 1000)
             });
         }
@@ -526,82 +598,72 @@
         async function iaSubmitGuess() {
             const guess = document.getElementById('ia-guess-input').value.trim();
             if(!guess || !roomData) return;
-            
-            // Normalize remove acentos para não dar errado em palavras como "Cerâmica" ou "Cobogó"
             const normalize = str => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
             
             let isCorrect = normalize(guess) === normalize(roomData.gameData.word);
             let msg = `<strong>${localPlayer.name}:</strong> ${guess}`;
             
             if(isCorrect) {
-                AudioSystem.win();
-                msg = `🎉 <strong style="color:var(--success)">${localPlayer.name} ACERTOU!</strong> Era ${roomData.gameData.word}`;
-                let updatedPlayers = roomData.players.map(p => { if(p.name === localPlayer.name) p.score+=10; return p; });
-                await window.FB.updateRoom(roomCode, { players: updatedPlayers, chat: [...roomData.chat, msg] });
-                nextTurn();
+                await processVictory(localPlayer.name);
             } else {
                 await window.FB.updateRoom(roomCode, { chat: [...roomData.chat, msg] });
             }
             document.getElementById('ia-guess-input').value = "";
         }
 
-        document.getElementById("ia-guess-input").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") { event.preventDefault(); iaSubmitGuess(); }
-        });
+        document.getElementById("ia-guess-input").addEventListener("keypress", function(e) { if (e.key === "Enter") { e.preventDefault(); iaSubmitGuess(); }});
 
         async function iaDeclareVerbalWinner() {
             const winnerName = document.getElementById('ia-verbal-winner-select').value;
             if(!winnerName || !roomData) return;
+            await processVictory(winnerName);
+        }
 
+        async function processVictory(winnerName) {
             AudioSystem.win();
-            let msg = `🗣️ 🎉 <strong style="color:var(--success)">${winnerName} ACERTOU (No Grito)!</strong> Era ${roomData.gameData.word}`;
-            let updatedPlayers = roomData.players.map(p => { if(p.name === winnerName) p.score+=10; return p; });
+            const pts = roomData.gameData.points;
+            let msg = `🎉 <strong style="color:var(--success)">${winnerName} ACERTOU!</strong> Era ${roomData.gameData.word}. (Guesser +${pts} | Ator +${pts})`;
             
+            let maxScoreLimit = roomData.config.maxScore || 50;
+            let gameEnded = false;
+
+            let updatedPlayers = roomData.players.map(p => { 
+                if(p.name === winnerName) p.score += pts; 
+                if(p.name === roomData.currentTurn) p.score += pts; // O ator também ganha!
+                if(p.score >= maxScoreLimit) gameEnded = true;
+                return p; 
+            });
+
             await window.FB.updateRoom(roomCode, { players: updatedPlayers, chat: [...roomData.chat, msg] });
-            nextTurn();
+            
+            if(gameEnded) triggerPodium();
+            else nextTurn();
         }
 
         function iaEndTurn() {
-            window.FB.updateRoom(roomCode, { chat: [...roomData.chat, `⏰ O tempo acabou ou a palavra foi pulada!`] });
+            window.FB.updateRoom(roomCode, { chat: [...roomData.chat, `⏰ Ninguém acertou a palavra "${roomData.gameData.word}".`] });
             nextTurn();
         }
 
-        // ==========================================
-        // LÓGICA: WAR EXPRESS
-        // ==========================================
-        function syncWarExpress(data, isMyTurn) {
-            document.getElementById('game-ui-war').style.display = 'flex';
-            document.getElementById('war-attacker-name').innerText = data.currentTurn;
-
-            document.getElementById('war-action-controls').style.display = isMyTurn ? 'block' : 'none';
-            document.getElementById('war-wait-msg').style.display = isMyTurn ? 'none' : 'block';
-
-            const diceHtml = (data.gameData.dice || [1,1,1]).map(v => `<div class="dice red">${v}</div>`).join('');
-            document.getElementById('war-attack-dice').innerHTML = diceHtml;
+        async function triggerPodium() {
+            await window.FB.updateRoom(roomCode, { gameState: 'podium' });
         }
 
-        async function warRollDice() {
-            AudioSystem.dice();
-            let results = [Math.ceil(Math.random()*6), Math.ceil(Math.random()*6), Math.ceil(Math.random()*6)].sort((a,b)=>b-a);
+        function renderPodium(players) {
+            showScreen('screen-podium');
+            AudioSystem.win();
+            let sorted = [...players].sort((a,b) => b.score - a.score);
             
-            let soma = results.reduce((a,b)=>a+b, 0);
-            let updatedPlayers = roomData.players;
+            // Kahoot style: 2nd, 1st, 3rd
+            let p1 = sorted[0], p2 = sorted[1], p3 = sorted[2];
             
-            if(soma >= 12) {
-                AudioSystem.win();
-                updatedPlayers = roomData.players.map(p => { if(p.name === localPlayer.name) p.score += 5; return p; });
-                alert(`Soma ${soma}! Conquista de sucesso! +5 PTs`);
-            } else {
-                alert(`Soma ${soma}. O ataque falhou.`);
-            }
-
-            await window.FB.updateRoom(roomCode, { 
-                "gameData.dice": results, 
-                players: updatedPlayers 
-            });
+            let html = "";
+            if(p2) html += `<div class="podium-bar p2"><div class="avatar-box" style="background:${p2.color}">${p2.emoji}</div>${p2.name}<br>${p2.score}</div>`;
+            if(p1) html += `<div class="podium-bar p1"><div class="avatar-box" style="background:${p1.color}">${p1.emoji}</div>${p1.name}<br>${p1.score}</div>`;
+            if(p3) html += `<div class="podium-bar p3"><div class="avatar-box" style="background:${p3.color}">${p3.emoji}</div>${p3.name}<br>${p3.score}</div>`;
+            
+            document.getElementById('podium-display').innerHTML = html;
         }
-
-        async function warPassTurn() { nextTurn(); }
 
     </script>
 </body>
