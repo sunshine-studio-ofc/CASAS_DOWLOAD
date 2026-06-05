@@ -6,208 +6,205 @@
     <title>Imagem & Ação Virtual Pro</title>
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --primary: #ef4444;
-            --primary-hover: #dc2626;
+            --bg-dark: #0b0f19;
+            --bg-card: #151f32;
+            --bg-input: #0d1527;
+            --primary: #f43f5e;
+            --primary-hover: #e11d48;
             --secondary: #3b82f6;
-            --secondary-hover: #2563eb;
             --success: #10b981;
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --text-muted: #64748b;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 20px; }
         
-        body { background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 30px; }
-        
-        header { width: 100%; background: linear-gradient(135deg, var(--primary), #b91c1c); padding: 20px; text-align: center; font-size: 26px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-        
-        .container { width: 100%; max-width: 550px; padding: 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 20px; }
+        header { width: 100%; background: linear-gradient(135deg, var(--primary), #9f1239); padding: 18px; text-align: center; font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        .container { width: 100%; max-width: 540px; padding: 15px; flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
         
         .screen { display: none; flex-direction: column; gap: 15px; }
-        .screen.active { display: flex; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .screen.active { display: flex; animation: viewSlide 0.25s ease-out; }
+        @keyframes viewSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background-color: var(--bg-card); padding: 22px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); }
+        h2 { font-size: 20px; text-align: center; margin-bottom: 5px; color: #fff; font-weight: 700; }
+        p { color: #94a3b8; line-height: 1.5; font-size: 14px; }
         
-        .card { background-color: var(--bg-card); padding: 24px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.05); }
-        
-        h2 { font-size: 22px; font-weight: 700; color: #fff; text-align: center; margin-bottom: 8px; border-bottom: 2px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
-        h3 { font-size: 18px; color: var(--secondary); margin-bottom: 10px; }
-        p { color: var(--text-muted); line-height: 1.6; font-size: 15px; }
-        
-        input, select { width: 100%; padding: 14px; margin-top: 6px; border-radius: 10px; border: 2px solid #334155; background: #0f172a; color: #fff; font-size: 16px; transition: border-color 0.2s; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 10px; border: 2px solid #1e293b; background: var(--bg-input); color: #fff; font-size: 15px; }
         input:focus, select:focus { outline: none; border-color: var(--secondary); }
         
-        button { width: 100%; padding: 16px; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        button:active { transform: scale(0.98); }
+        button { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        button:active { transform: scale(0.97); }
         .btn-primary { background-color: var(--primary); color: white; }
         .btn-primary:hover { background-color: var(--primary-hover); }
         .btn-secondary { background-color: var(--secondary); color: white; }
-        .btn-secondary:hover { background-color: var(--secondary-hover); }
         .btn-success { background-color: var(--success); color: white; }
-        .btn-success:hover { opacity: 0.9; }
         .btn-danger { background-color: #ef4444; color: white; }
         
-        .list-items { list-style: none; margin-top: 10px; max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
-        .list-items li { background: #0f172a; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1e293b; }
-        
-        .huge-text { font-size: 36px; text-align: center; margin: 20px 0; color: #fff; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.5); letter-spacing: -0.5px; }
-        .alert-box { background: rgba(239, 68, 68, 0.15); border: 2px dashed var(--primary); padding: 14px; border-radius: 10px; text-align: center; font-weight: 600; color: #fca5a5; }
-        
-        .game-canvas-container { width: 100%; height: 340px; background: #f8fafc; border-radius: 12px; position: relative; overflow: hidden; box-shadow: inset 0 2px 8px rgba(0,0,0,0.2); }
-        #canvas-game, #tutorial-canvas { width: 100%; height: 100%; cursor: crosshair; display: block; }
-        
-        .timer { font-size: 48px; text-align: center; font-weight: 800; color: var(--primary); font-variant-numeric: tabular-nums; text-shadow: 0 0 10px rgba(239, 68, 68, 0.3); }
-        
-        .table-preview { border: 3px dashed var(--secondary); border-radius: 50%; width: 110px; height: 110px; margin: 12px auto; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; background: rgba(59, 130, 246, 0.1); }
-        
-        .badge { background: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
-        .chat-box { background: #0f172a; height: 120px; overflow-y: auto; border-radius: 8px; padding: 10px; font-size: 14px; display: flex; flex-direction: column; gap: 4px; border: 1px solid #334155; }
+        /* Customizador de Personagem */
+        .avatar-creator { display: grid; grid-template-columns: 1fr 2fr; gap: 15px; margin: 10px 0; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; }
+        .avatar-preview-box { display: flex; align-items: center; justify-content: center; font-size: 45px; border-radius: 50%; width: 90px; height: 90px; margin: auto; border: 4px solid var(--secondary); box-shadow: 0 0 15px rgba(59,130,246,0.3); }
+        .custom-options { display: flex; flex-direction: column; gap: 8px; }
+        .opt-row { display: flex; gap: 5px; flex-wrap: wrap; }
+        .color-dot { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+        .color-dot.active { border-color: #fff; transform: scale(1.1); }
+        .emoji-item { font-size: 20px; padding: 4px; cursor: pointer; border-radius: 6px; background: #0f172a; }
+        .emoji-item.active { background: var(--secondary); }
+
+        /* Componentes de Jogo */
+        .game-canvas-container { width: 100%; height: 320px; background: #ffffff; border-radius: 12px; position: relative; overflow: hidden; }
+        #canvas-game, #tutorial-canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
+        .timer { font-size: 46px; text-align: center; font-weight: 800; color: var(--primary); font-variant-numeric: tabular-nums; }
+        .player-badge { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg-input); border-radius: 8px; border: 1px solid #1e293b; }
+        .mini-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .chat-area { background: var(--bg-input); height: 110px; overflow-y: auto; border-radius: 8px; padding: 8px; font-size: 13px; border: 1px solid #1e293b; display: flex; flex-direction: column; gap: 4px; }
+        .config-group { background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-    <header>🎲 Imagem & Ação Virtual</header>
+    <header>🎲 Imagem & Ação Virtual Pro</header>
 
     <div class="container">
         
         <div id="screen-terms" class="screen active card">
-            <h2>Termos de Uso & Regras</h2>
-            <p>Seja bem-vindo ao manual virtual do Imagem & Ação. Leia atentamente as diretrizes antes de começar:</p>
-            <p><strong>✏️ Modo Desenho:</strong> Ilustre a palavra usando o painel digital. É expressamente proibido desenhar números, letras, setas indicativas ou se comunicar verbalmente.</p>
-            <p><strong>🤷‍♂️ Modo Mímica:</strong> Faça gestos e expressões reais e corporais para seus amigos fisicamente ou na sala. Proibido emitir qualquer tipo de som ou sussurrar.</p>
-            <button class="btn-primary" onclick="showScreen('screen-tutorial')">Aceitar e Avançar</button>
+            <h2>Termos de Uso & Configuração Inicial</h2>
+            <p>Seja bem-vindo! Prometa jogar de forma limpa. Não escreva letras/números no modo desenho e mantenha silêncio absoluto no modo mímica.</p>
+            <button class="btn-primary" onclick="showScreen('screen-customizer')">Aceitar e Prosseguir</button>
+        </div>
+
+        <div id="screen-customizer" class="screen card">
+            <h2>Crie seu Personagem</h2>
+            
+            <div class="avatar-creator">
+                <div class="avatar-preview-box" id="avatar-preview" style="background-color: #ef4444;">🦊</div>
+                <div class="custom-options">
+                    <label style="font-size: 12px; color: var(--text-muted);">Cor do Perfil:</label>
+                    <div class="opt-row" id="color-selectors"></div>
+                    <label style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Seu Ícone:</label>
+                    <div class="opt-row" id="emoji-selectors"></div>
+                </div>
+            </div>
+
+            <label>Seu Nome / Nickname:</label>
+            <input type="text" id="global-player-name" placeholder="Digite seu nome aqui...">
+            
+            <button class="btn-primary" style="margin-top: 10px;" onclick="saveCharacterAndGo()">Salvar e Avançar</button>
         </div>
 
         <div id="screen-tutorial" class="screen card">
-            <h2>⏱️ Treinamento Rápido</h2>
-            <p id="tutorial-text" style="text-align: center; font-weight: 600; color:#fff;">1/3: O objetivo do jogo é fazer sua equipe desvendar a palavra antes que o tempo acabe.</p>
-            
-            <div id="tutorial-sandbox" class="game-canvas-container" style="display:none; background:#ffffff;">
-                <canvas id="tutorial-canvas"></canvas>
-            </div>
-            
-            <button class="btn-primary" id="btn-next-tutorial" onclick="advanceTutorial()">Próximo Passo</button>
+            <h2>⏱️ Tutorial Rápido</h2>
+            <p id="tutorial-text" style="text-align: center; font-weight: 600;">1/3: O objetivo do jogo é fazer com que sua mesa adivinhe a palavra secreta.</p>
+            <div id="tutorial-sandbox" class="game-canvas-container" style="display:none; background:#fff;"><canvas id="tutorial-canvas"></canvas></div>
+            <button class="btn-primary" id="btn-next-tutorial" onclick="advanceTutorial()">Entendi</button>
         </div>
 
         <div id="screen-mode" class="screen card">
-            <h2>Escolha como quer Jogar</h2>
-            <p style="text-align: center; margin-bottom: 10px;">Defina o método de funcionamento da sua mesa:</p>
-            <button class="btn-primary" onclick="selectGameMode('local')">📱 Passar Único Celular (Roda Física)</button>
-            <button class="btn-secondary" onclick="selectGameMode('multiplayer')">🌐 Vários Celulares (Online via Firebase)</button>
+            <h2>Selecione o Modo de Funcionamento</h2>
+            <button class="btn-primary" onclick="selectEngineMode('local')">📱 Passar Único Celular (Roda Física)</button>
+            <button class="btn-secondary" onclick="selectEngineMode('multiplayer')">🌐 Multiplayer Real-Time (Vários Celulares)</button>
         </div>
 
         <div id="screen-setup-local" class="screen card">
-            <h2>Estruturar Mesa Local</h2>
-            
-            <label>Formato de Organização:</label>
-            <select id="table-format" onchange="updateTablePreview()">
-                <option value="Roda">Mesa Redonda / Em Roda</option>
+            <h2>Configurar Mesa Local</h2>
+            <label>Formato Físico da Mesa:</label>
+            <select id="table-format">
+                <option value="Roda">Mesa Redonda / Círculo</option>
                 <option value="Quadrada">Mesa Quadrada / Retangular</option>
-                <option value="LadoALado">Linha Reta / Lado a Lado</option>
+                <option value="Sofá">Lado a Lado / Sofá</option>
             </select>
-            <div id="table-view" class="table-preview">Roda</div>
-
-            <label>Nomes dos Integrantes na Mesa:</label>
+            <label>Adicionar Pessoas na Mesa:</label>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="player-name-input" placeholder="Nome do participante">
-                <button class="btn-primary" style="width: auto; margin-top:6px;" onclick="addPlayerLocal()">+</button>
+                <input type="text" id="local-name-input" placeholder="Nome do participante">
+                <button class="btn-primary" style="width: auto; margin-top:5px;" onclick="addLocalSeat()">+</button>
             </div>
-            <ul id="local-players-list" class="list-items"></ul>
-            
-            <label>Tempo Regulamentar por Rodada:</label>
-            <select id="match-time">
-                <option value="60">60 Segundos</option>
-                <option value="90">90 Segundos</option>
-                <option value="120">120 Segundos</option>
-            </select>
-
-            <button class="btn-success" style="margin-top: 10px;" onclick="startLocalMatch()">Iniciar Partida</button>
+            <div id="local-seats-list" style="display:flex; flex-direction:column; gap:5px; margin: 10px 0;"></div>
+            <button class="btn-success" onclick="startLocalMatchEngine()">Começar Jogo Local</button>
         </div>
 
         <div id="screen-pass" class="screen card" style="text-align: center;">
-            <div class="alert-box">⚠️ PRIVACIDADE MÁXIMA EXIGIDA</div>
-            <p style="margin-top: 12px;">Rodada finalizada com sucesso.</p>
-            <div class="huge-text" id="pass-instruction">PASSE PARA: ---</div>
-            <p>Esconda imediatamente a tela das outras pessoas ao pegar o dispositivo!</p>
-            
-            <div style="margin-top: 15px; display: flex; gap: 10px;">
-                <button class="btn-primary" onclick="pickCategory('desenho')">✏️ Modo Desenho</button>
-                <button class="btn-secondary" onclick="pickCategory('mimica')">🤷‍♂️ Modo Mímica</button>
+            <h3 style="color:var(--primary);">🔒 PRIVACIDADE DO VISOR</h3>
+            <div class="huge-text" id="pass-instruction-text">PASSE O APARELHO</div>
+            <p>Esconda a tela dos demais participantes ao pegar o dispositivo!</p>
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button class="btn-primary" onclick="pickActionCategory('desenho')">✏️ Desenhar</button>
+                <button class="btn-secondary" onclick="pickActionCategory('mimica')">🤷‍♂️ Mímica</button>
             </div>
         </div>
 
         <div id="screen-secret" class="screen card" style="text-align: center;">
-            <h2>Sua Palavra Secreta</h2>
-            <p>Mantenha em segredo absoluto!</p>
-            <div class="huge-text" id="text-secret-word" style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid #334155;">---</div>
-            <p style="margin-top: 10px;">Categoria Selecionada: <strong id="text-selected-category" style="color:var(--secondary)"></strong></p>
-            <button class="btn-success" onclick="startCountdownPlay()">Estou Pronto, Começar!</button>
+            <h2>Sua Palavra Oculta</h2>
+            <div class="huge-text" id="secret-word-display" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius:10px;">---</div>
+            <p>Estilo: <strong id="secret-category-display" style="color:var(--secondary)"></strong></p>
+            <button class="btn-success" style="margin-top:15px;" onclick="engagePlaySession()">Iniciar Cronômetro!</button>
         </div>
 
         <div id="screen-play" class="screen card">
-            <div style="display:flex; justify-content: space-between; align-items:center;">
-                <span id="player-acting-label" style="font-weight:700; color:#fff; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 6px;">Jogador</span>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div id="active-actor-card"></div>
                 <div class="timer" id="game-timer">60</div>
             </div>
 
-            <div id="area-canvas" class="game-canvas-container" style="display: none;">
-                <canvas id="canvas-game"></canvas>
-                <button id="clear-btn" onclick="clearGameCanvas()" style="position:absolute; bottom:10px; right:10px; width:auto; padding:6px 12px; font-size:12px; background:#0f172a; margin:0;">Limpar Tela</button>
+            <div id="canvas-wrapper" class="game-canvas-container" style="display:none;"><canvas id="canvas-game"></canvas></div>
+            <div id="mimica-wrapper" class="card" style="display:none; background:#0d1527; text-align:center;">
+                <span style="font-size:40px;">🤷‍♂️</span>
+                <h3>Mímica em Ação!</h3>
+                <p>Nenhuma câmera necessária. Faça expressões corporais físicas reais olhando para seus amigos!</p>
             </div>
 
-            <div id="area-mimica-info" class="card" style="display: none; background: #0f172a; text-align: center; border: 1px solid #334155;">
-                <div style="font-size: 50px; margin-bottom: 10px;">🤷‍♂️</div>
-                <h3 style="color:#fff;">Mímica em Andamento!</h3>
-                <p>Faça gestos corporais usando todo o seu talento. Não emita som algum! O celular pode ficar na mesa ou na sua mão para validação.</p>
-            </div>
-
-            <div id="area-multiplayer-guess" style="display:none; flex-direction:column; gap:10px;">
-                <div class="chat-box" id="chat-guesses">
-                    <div><em>Aguardando palpites...</em></div>
-                </div>
-                <div style="display:flex; gap:8px;">
-                    <input type="text" id="guess-input" placeholder="Digite seu palpite aqui..." style="margin:0;">
-                    <button class="btn-secondary" style="width:auto; margin:0;" onclick="sendGuess()">Chutar</button>
+            <div id="mp-guess-zone" style="display:none; flex-direction:column; gap:8px;">
+                <div class="chat-area" id="chat-stream"></div>
+                <div style="display:flex; gap:6px;">
+                    <input type="text" id="mp-chute-input" placeholder="Escreva seu palpite aqui..." style="margin:0;">
+                    <button class="btn-secondary" style="width:auto; margin:0;" onclick="submitChuteOnline()">Chutar</button>
                 </div>
             </div>
 
-            <div style="margin-top: 10px;" id="action-controls-local">
-                <button class="btn-success" onclick="resolveTurn(true)">👍 Acertamos!</button>
-                <button class="btn-danger" onclick="resolveTurn(false)">👎 Tempo Acabou / Erramos</button>
+            <div id="local-controls" style="margin-top:10px;">
+                <button class="btn-success" onclick="endLocalTurn(true)">👍 Acertamos!</button>
+                <button class="btn-danger" onclick="endLocalTurn(false)" style="margin-top:5px;">👎 Erramos/Tempo Esgotado</button>
             </div>
+            <button class="btn-danger" id="host-abort-btn" style="display:none; background:#475569; margin-top:5px;" onclick="forceEndMatch()">Finalizar Partida</button>
         </div>
 
         <div id="screen-multiplayer" class="screen card">
             <h2>Lobby Online Firebase</h2>
-            <p>Conecte múltiplos aparelhos na mesma sala. Os desenhos e chutes serão sincronizados via Firestore em tempo real!</p>
-            
-            <label>Seu Nome:</label>
-            <input type="text" id="mp-player-name" placeholder="Ex: Lucas">
-
-            <label>Código da Sala:</label>
-            <input type="text" id="room-code-input" placeholder="Ex: AB12" style="text-transform: uppercase; font-weight:bold; letter-spacing: 2px;">
-            
-            <div style="display:flex; gap:10px; margin-top:10px;">
-                <button class="btn-secondary" onclick="handleFirebaseRoom('join')">🔗 Entrar na Sala</button>
-                <button class="btn-success" onclick="handleFirebaseRoom('create')">✨ Criar Nova Sala</button>
-            </div>
-            
-            <div id="mp-lobby-wait" style="display:none; flex-direction:column; gap:10px; margin-top:15px; border-top: 1px solid #334155; padding-top:15px;">
-                <h3>Jogadores Conectados na Sala <span id="display-room-code" style="color:#fff; font-weight:bold;">---</span>:</h3>
-                <ul id="mp-players-list" class="list-items"></ul>
-                <button class="btn-primary" id="btn-mp-start" style="display:none;" onclick="startMultiplayerMatch()">Iniciar Jogo Online</button>
+            <input type="text" id="room-code-input" placeholder="Código da Sala (Ex: JOGA)" style="text-transform:uppercase; font-weight:800; text-align:center; letter-spacing:2px;">
+            <div style="display:flex; gap:10px;">
+                <button class="btn-secondary" onclick="executeRoomAction('join')">Entrar na Sala</button>
+                <button class="btn-success" onclick="executeRoomAction('create')">Criar Nova Sala</button>
             </div>
 
-            <button class="btn-danger" onclick="showScreen('screen-mode')" style="margin-top: 15px; background:#334155;">Voltar</button>
+            <div id="mp-active-lobby" style="display:none; flex-direction:column; gap:10px; margin-top:15px; border-top:1px solid #1e293b; padding-top:15px;">
+                <h3>Sala Oculta: <span id="lobby-code-title" style="color:var(--primary)">---</span></h3>
+                
+                <div class="config-group" id="host-config-panel" style="display:none;">
+                    <label style="font-size:12px; color:var(--secondary)">Painel de Configuração do Host:</label>
+                    <select id="config-max-score" onchange="pushConfigChange()">
+                        <option value="30">Meta: 30 Pontos</option>
+                        <option value="60">Meta: 60 Pontos</option>
+                        <option value="100">Meta: 100 Pontos</option>
+                    </select>
+                </div>
+
+                <div id="lobby-players-box" style="display:flex; flex-direction:column; gap:5px;"></div>
+                <button class="btn-primary" id="start-mp-game-btn" style="display:none; margin-top:10px;" onclick="launchMultiplayerRound()">Lançar Rodada Online</button>
+            </div>
+        </div>
+
+        <div id="screen-podium" class="screen card" style="text-align: center;">
+            <h2>🏆 Partida Finalizada!</h2>
+            <p>Parabéns a todos os competidores. Veja o placar da mesa:</p>
+            <div id="podium-results-box" style="display:flex; flex-direction:column; gap:6px; margin:15px 0;"></div>
+            <button class="btn-primary" onclick="showScreen('screen-mode')">Voltar para o Menu</button>
         </div>
 
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyD7VGTWjDCIoKqiHN8CCSkgmpUohQQ649I",
@@ -222,376 +219,522 @@
         const app = initializeApp(firebaseConfig);
         window.db = getFirestore(app);
 
-        // Funções de Gerenciamento de Rede injetadas globalmente
-        window.NetworkManager = {
-            setupRoomListener(roomCode, callback) {
-                return onSnapshot(doc(window.db, "salas", roomCode), (docSnap) => {
-                    if (docSnap.exists()) callback(docSnap.data());
+        // Funções estruturadas expostas na camada global da janela para o jogo consumir
+        window.FB = {
+            async createRoom(code, player) {
+                await setDoc(doc(window.db, "rooms", code), {
+                    code: code, host: player.name, gameState: "lobby",
+                    currentArtist: player.name, category: "", word: "",
+                    endTime: 0, lines: [], guesses: [], players: [player],
+                    config: { maxScore: 30 }
                 });
             },
-            async createRoom(roomCode, hostName) {
-                await setDoc(doc(window.db, "salas", roomCode), {
-                    code: roomCode,
-                    host: hostName,
-                    players: [hostName],
-                    gameState: "lobby", // lobby, playing, turn_change
-                    currentArtist: hostName,
-                    category: "",
-                    word: "",
-                    lines: [], // Sincronização vetorial de desenhos em tempo real
-                    guesses: [],
-                    timestamp: new Date().getTime()
-                });
+            async updateRoom(code, payload) {
+                await updateDoc(doc(window.db, "rooms", code), payload);
             },
-            async joinRoom(roomCode, playerName) {
-                await updateDoc(doc(window.db, "salas", roomCode), {
-                    players: arrayUnion(playerName)
+            syncRoom(code, callback) {
+                return onSnapshot(doc(window.db, "rooms", code), (snap) => {
+                    if(snap.exists()) callback(snap.data());
                 });
-            },
-            async updateRoomData(roomCode, data) {
-                await updateDoc(doc(window.db, "salas", roomCode), data);
             }
         };
     </script>
 
     <script>
-        const words = ["Cachorro", "Liquidificador", "Aranha", "Carro de Corrida", "Computador", "Sorvete", "Futebol", "Astronauta", "Pirata"];
-        
-        // Estados Locais e Variáveis de Controle
-        let currentTutorialStep = 1;
-        let localPlayers = [];
-        let currentLocalTurnIndex = 0;
-        let selectedCategory = "";
-        let secretWordChosen = "";
-        let timerInterval = null;
-        let gameDuration = 60;
-        
-        // Estados de Rede (Multiplayer)
-        let isMultiplayer = false;
-        let myPlayerName = "";
-        let activeRoomCode = "";
-        let amIArtist = false;
-        let unsubRoom = null;
-        let localLinesUploadedCount = 0;
+        // Sintetizador Nativo (Sem arquivos externos mp3)
+        const AudioFX = {
+            ctx: null,
+            init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+            playTone(freq, type, duration) {
+                try {
+                    this.init();
+                    let osc = this.ctx.createOscillator();
+                    let gain = this.ctx.createGain();
+                    osc.type = type; osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.00001, this.ctx.currentTime + duration);
+                    osc.connect(gain); gain.connect(this.ctx.destination);
+                    osc.start(); osc.stop(this.ctx.currentTime + duration);
+                } catch(e){}
+            },
+            tick() { this.playTone(600, 'sine', 0.04); },
+            win() { this.playTone(523, 'triangle', 0.1); setTimeout(()=>this.playTone(659, 'triangle', 0.1), 100); setTimeout(()=>this.playTone(783, 'triangle', 0.25), 200); },
+            lose() { this.playTone(250, 'sawtooth', 0.3); }
+        };
 
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
+        // Dados de Palavras do Jogo
+        const palavraMesa = ["Gato", "Celular", "Futebol", "Sanduíche", "Avião", "Guitarra", "Praia", "Skate", "Relógio", "Papai Noel"];
+        
+        // Estado do Personagem Local
+        let charColor = "#ef4444";
+        let charEmoji = "🦊";
+        let localProfile = { name: "", score: 0, color: "", emoji: "" };
+        
+        // Variáveis operacionais de jogo
+        let currentScreenTutorial = 1;
+        let selectedEngine = "local";
+        let seatsLocal = [];
+        let indexTurnLocal = 0;
+        let chosenCategoryLocal = "";
+        let secretWordLocal = "";
+        let cronometroLocal = null;
+
+        // Dados Multiplayer Ativo
+        let roomCode = "";
+        let currentRoomData = null;
+        let unsubFirestore = null;
+        let localLinesDrawnCount = 0;
+
+        // Inicialização do Customizador de Aparência
+        const cores = ["#ef4444", "#3b82f6", "#10b981", "#eab308", "#a855f7", "#ec4899"];
+        const emojis = ["🦊", "🐱", "🐸", "🤖", "🥷", "👽", "👻", "🦁"];
+        
+        const cContainer = document.getElementById('color-selectors');
+        cContainer.innerHTML = cores.map(c => `<div class="color-dot" style="background:${c}" onclick="setCharColor('${c}', this)"></div>`).join('');
+        cContainer.children[0].classList.add('active');
+        
+        const eContainer = document.getElementById('emoji-selectors');
+        eContainer.innerHTML = emojis.map(e => `<span class="emoji-item" onclick="setCharEmoji('${e}', this)">${e}</span>`).join('');
+        eContainer.children[0].classList.add('active');
+
+        function setCharColor(c, el) {
+            charColor = c;
+            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('avatar-preview').style.backgroundColor = c;
+        }
+        function setCharEmoji(e, el) {
+            charEmoji = e;
+            document.querySelectorAll('.emoji-item').forEach(em => em.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('avatar-preview').innerText = e;
         }
 
-        // --- SISTEMA INTERATIVO DE TUTORIAL ---
-        function advanceTutorial() {
-            currentTutorialStep++;
-            const txt = document.getElementById('tutorial-text');
-            const sandbox = document.getElementById('tutorial-sandbox');
-            const btn = document.getElementById('btn-next-tutorial');
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
 
-            if (currentTutorialStep === 2) {
-                txt.innerHTML = "2/3: <strong>Pratique o Desenho!</strong> Use o painel abaixo com o dedo para validar o funcionamento do pincel digital.";
-                sandbox.style.display = "block";
-                initCanvasEngine('tutorial-canvas', false);
-            } else if (currentTutorialStep === 3) {
-                sandbox.style.display = "none";
-                txt.innerHTML = "3/3: <strong>Entendendo a Mímica!</strong> Sem câmeras. Você usará pura expressão corporal real na frente dos seus amigos.";
-                btn.innerText = "Concluir e Ir Jogar";
+        function saveCharacterAndGo() {
+            const name = document.getElementById('global-player-name').value.trim();
+            if(!name) { alert("Insira seu nome primeiro!"); return; }
+            localProfile = { name: name, score: 0, color: charColor, emoji: charEmoji };
+            showScreen('screen-tutorial');
+        }
+
+        // --- MÁQUINA DE ETAPAS DO TUTORIAL ---
+        function advanceTutorial() {
+            currentScreenTutorial++;
+            const txt = document.getElementById('tutorial-text');
+            const box = document.getElementById('tutorial-sandbox');
+            const btn = document.getElementById('btn-next-tutorial');
+            
+            if(currentScreenTutorial === 2) {
+                txt.innerHTML = "2/3: <strong>Treino de Desenho!</strong> Teste rabiscar livremente na lousa abaixo com seu dedo para treinar:";
+                box.style.display = "block";
+                setupCanvasCore('tutorial-canvas', false);
+            } else if(currentScreenTutorial === 3) {
+                box.style.display = "none";
+                txt.innerHTML = "3/3: <strong>Treino de Mímica!</strong> Sem câmera. Você usará movimentos reais na frente das pessoas da sala.";
+                btn.innerText = "Ir para o Jogo";
             } else {
                 showScreen('screen-mode');
             }
         }
 
-        // --- CONFIGURAÇÃO DA DISPOSIÇÃO DA MESA ---
-        function updateTablePreview() {
-            const val = document.getElementById('table-format').value;
-            const view = document.getElementById('table-view');
-            view.innerText = val;
-            if(val === 'Quadrada') view.style.borderRadius = "12px";
-            else if(val === 'LadoALado') view.style.borderRadius = "0px";
-            else view.style.borderRadius = "50%";
-        }
-
-        function addPlayerLocal() {
-            const inp = document.getElementById('player-name-input');
-            const n = inp.value.trim();
-            if(!n) return;
-            localPlayers.push(n);
-            inp.value = "";
-            
-            const list = document.getElementById('local-players-list');
-            list.innerHTML = localPlayers.map((p, idx) => `<li><span>👤 ${p}</span> <button class="btn-danger" style="width:auto; padding:6px 12px; margin:0;" onclick="removePlayerLocal(${idx})">Remover</button></li>`).join('');
-        }
-
-        function removePlayerLocal(idx) {
-            localPlayers.splice(idx, 1);
-            addPlayerLocal();
-        }
-
-        function selectGameMode(mode) {
+        function selectEngineMode(mode) {
+            selectedEngine = mode;
             if(mode === 'local') {
-                isMultiplayer = false;
+                seatsLocal = [localProfile];
+                renderLocalSeats();
                 showScreen('screen-setup-local');
             } else {
-                isMultiplayer = true;
                 showScreen('screen-multiplayer');
             }
         }
 
-        // --- INICIALIZADOR DO MODO LOCAL (PASSA CELULAR) ---
-        function startLocalMatch() {
-            if(localPlayers.length < 2) {
-                alert("Adicione pelo menos 2 participantes para jogar na mesa!");
-                return;
-            }
-            gameDuration = parseInt(document.getElementById('match-time').value);
-            currentLocalTurnIndex = 0;
-            triggerLocalTurnSystem();
+        // --- SISTEMA INTERNO MESA LOCAL (PASSA CELULAR) ---
+        function addLocalSeat() {
+            const inp = document.getElementById('local-name-input');
+            const name = inp.value.trim();
+            if(!name) return;
+            seatsLocal.push({
+                name: name, score: 0,
+                color: cores[Math.floor(Math.random()*cores.length)],
+                emoji: emojis[Math.floor(Math.random()*emojis.length)]
+            });
+            inp.value = "";
+            renderLocalSeats();
         }
 
-        function triggerLocalTurnSystem() {
-            const activePlayer = localPlayers[currentLocalTurnIndex % localPlayers.length];
-            document.getElementById('pass-instruction').innerText = `PASSE PARA: ${activePlayer.toUpperCase()}`;
+        function renderLocalSeats() {
+            document.getElementById('local-seats-list').innerHTML = seatsLocal.map(s => `
+                <div class="player-badge">
+                    <div class="mini-avatar" style="background:${s.color}">${s.emoji}</div>
+                    <span>${s.name} (Pontos: ${s.score})</span>
+                </div>
+            `).join('');
+        }
+
+        function startLocalMatchEngine() {
+            if(seatsLocal.length < 2) { alert("Adicione pelo menos 2 pessoas na roda!"); return; }
+            indexTurnLocal = 0;
+            triggerLocalTurnRoute();
+        }
+
+        function triggerLocalTurnRoute() {
+            const activeUser = seatsLocal[indexTurnLocal % seatsLocal.length];
+            document.getElementById('pass-instruction-text').innerText = `PASSE PARA: ${activeUser.name.toUpperCase()}`;
             showScreen('screen-pass');
             
-            if ('speechSynthesis' in window) {
-                let textToSpeak = new SpeechSynthesisUtterance(`Passe para ${activePlayer}`);
-                textToSpeak.lang = 'pt-BR';
-                window.speechSynthesis.speak(textToSpeak);
+            if('speechSynthesis' in window) {
+                let utterance = new SpeechSynthesisUtterance(`Passe para ${activeUser.name}`);
+                utterance.lang = 'pt-BR';
+                window.speechSynthesis.speak(utterance);
             }
         }
 
-        function pickCategory(category) {
-            selectedCategory = category;
-            secretWordChosen = words[Math.floor(Math.random() * words.length)];
+        function pickActionCategory(cat) {
+            chosenCategoryLocal = cat;
+            secretWordLocal = palavraMesa[Math.floor(Math.random() * palavraMesa.length)];
             
-            if(isMultiplayer) {
-                window.NetworkManager.updateRoomData(activeRoomCode, {
-                    category: category,
-                    word: secretWordChosen,
-                    gameState: "playing",
-                    lines: [],
-                    guesses: []
+            if(selectedEngine === 'multiplayer') {
+                // Sincroniza estado de jogo no Firebase com timestamp futuro baseado no relógio local do Host
+                const calculatedEndTime = Date.now() + (61 * 1000);
+                window.FB.updateRoom(roomCode, {
+                    category: cat, word: secretWordLocal, gameState: "playing",
+                    endTime: calculatedEndTime, lines: [], guesses: []
                 });
             } else {
-                document.getElementById('text-secret-word').innerText = secretWordChosen;
-                document.getElementById('text-selected-category').innerText = category === 'desenho' ? "✏️ Desenho" : "🤷‍♂️ Mímica";
+                document.getElementById('secret-word-display').innerText = secretWordLocal;
+                document.getElementById('secret-category-display').innerText = cat === 'desenho' ? "✏️ Desenho" : "🤷‍♂️ Mímica";
                 showScreen('screen-secret');
             }
         }
 
-        function startCountdownPlay() {
+        function engagePlaySession() {
             showScreen('screen-play');
-            document.getElementById('action-controls-local').style.display = "block";
-            document.getElementById('area-multiplayer-guess').style.display = "none";
+            document.getElementById('local-controls').style.display = "block";
+            document.getElementById('mp-guess-zone').style.display = "none";
+            document.getElementById('host-abort-btn').style.display = "none";
             
-            const pName = localPlayers[currentLocalTurnIndex % localPlayers.length];
-            document.getElementById('player-acting-label').innerText = `Vez de: ${pName}`;
+            const activeUser = seatsLocal[indexTurnLocal % seatsLocal.length];
+            renderActorCard('active-actor-card', activeUser);
             
-            setupGameplayUI();
-            startTimer(gameDuration, () => resolveTurn(false));
-        }
+            toggleGameAreas(chosenCategoryLocal);
+            if(chosenCategoryLocal === 'desenho') setupCanvasCore('canvas-game', false);
 
-        function setupGameplayUI() {
-            const canvasArea = document.getElementById('area-canvas');
-            const mimicaArea = document.getElementById('area-mimica-info');
-
-            if(selectedCategory === 'desenho') {
-                canvasArea.style.display = "block";
-                mimicaArea.style.display = "none";
-                initCanvasEngine('canvas-game', isMultiplayer && amIArtist);
-            } else {
-                canvasArea.style.display = "none";
-                mimicaArea.style.display = "block";
-            }
-        }
-
-        function startTimer(seconds, timeoutCallback) {
-            let t = seconds;
-            document.getElementById('game-timer').innerText = t;
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                t--;
-                document.getElementById('game-timer').innerText = t;
-                if(t <= 0) {
-                    clearInterval(timerInterval);
-                    timeoutCallback();
+            let tempoRestante = 60;
+            document.getElementById('game-timer').innerText = tempoRestante;
+            
+            clearInterval(cronometroLocal);
+            cronometroLocal = setInterval(() => {
+                tempoRestante--;
+                document.getElementById('game-timer').innerText = tempoRestante;
+                if(tempoRestante <= 5 && tempoRestante > 0) AudioFX.tick();
+                if(tempoRestante <= 0) {
+                    clearInterval(cronometroLocal);
+                    endLocalTurn(false);
                 }
             }, 1000);
         }
 
-        function resolveTurn(success) {
-            clearInterval(timerInterval);
-            alert(success ? "🎯 Incrível! Ponto computado para o jogador!" : `💥 Tempo esgotado! A palavra era: ${secretWordChosen}`);
-            currentLocalTurnIndex++;
-            triggerLocalTurnSystem();
+        function toggleGameAreas(cat) {
+            document.getElementById('canvas-wrapper').style.display = (cat === 'desenho') ? "block" : "none";
+            document.getElementById('mimica-wrapper').style.display = (cat === 'mimica') ? "block" : "none";
         }
 
-        // --- SISTEMA MULTIPLAYER INTEGRADO VIA FIREBASE ---
-        async function handleFirebaseRoom(action) {
-            myPlayerName = document.getElementById('mp-player-name').value.trim();
-            const inputCode = document.getElementById('room-code-input').value.toUpperCase().trim();
-            
-            if(!myPlayerName || (!inputCode && action === 'join')) {
-                alert("Preencha seu nome e digite o código da sala corretamente!");
-                return;
-            }
+        function renderActorCard(targetId, p) {
+            document.getElementById(targetId).innerHTML = `
+                <div class="player-badge">
+                    <div class="mini-avatar" style="background:${p.color}">${p.emoji}</div>
+                    <strong>${p.name}</strong>
+                </div>
+            `;
+        }
 
-            activeRoomCode = inputCode || Math.random().toString(36).substring(2, 6).toUpperCase();
-            
-            if(action === 'create') {
-                await window.NetworkManager.createRoom(activeRoomCode, myPlayerName);
+        function endLocalTurn(success) {
+            clearInterval(cronometroLocal);
+            if(success) {
+                AudioFX.win();
+                seatsLocal[indexTurnLocal % seatsLocal.length].score += 10;
+                alert("Acertou! +10 pontos.");
             } else {
-                await window.NetworkManager.joinRoom(activeRoomCode, myPlayerName);
+                AudioFX.lose();
+                alert(`Fim do tempo! A palavra era: ${secretWordLocal}`);
             }
-
-            document.getElementById('display-room-code').innerText = activeRoomCode;
-            document.getElementById('mp-lobby-wait').style.display = "flex";
-            
-            // Ativa Escuta Real-Time do Firebase Firestore
-            unsubRoom = window.NetworkManager.setupRoomListener(activeRoomCode, (data) => {
-                syncMultiplayerEngine(data);
-            });
+            indexTurnLocal++;
+            triggerLocalTurnRoute();
         }
 
-        function syncMultiplayerEngine(data) {
-            // Sincroniza lista de jogadores do Lobby
-            const listElement = document.getElementById('mp-players-list');
-            listElement.innerHTML = data.players.map(p => `<li>👤 ${p} ${data.host === p ? '<span class="badge">Dono</span>' : ''}</li>`).join('');
-            
-            if(data.host === myPlayerName && data.gameState === "lobby") {
-                document.getElementById('btn-mp-start').style.display = "block";
+        // --- SISTEMA MULTIPLAYER EM TEMPO REAL (FIREBASE) ---
+        async function executeRoomAction(type) {
+            const inputField = document.getElementById('room-code-input');
+            const code = inputField.value.toUpperCase().trim();
+            if(!code) { alert("Insira o código da sala!"); return; }
+            roomCode = code;
+
+            if(type === 'create') {
+                await window.FB.createRoom(roomCode, localProfile);
             } else {
-                document.getElementById('btn-mp-start').style.display = "none";
-            }
-
-            amIArtist = (data.currentArtist === myPlayerName);
-            selectedCategory = data.category;
-            secretWordChosen = data.word;
-
-            // Tratamento de Máquina de Estados
-            if(data.gameState === "turn_change") {
-                clearInterval(timerInterval);
-                if(amIArtist) {
-                    document.getElementById('pass-instruction').innerText = "SUA VEZ DE OPERAR!";
-                    showScreen('screen-pass');
-                } else {
-                    document.getElementById('pass-instruction').innerText = `AGUARDANDO: ${data.currentArtist}`;
-                    showScreen('screen-pass');
-                }
-            } 
-            else if(data.gameState === "playing") {
-                showScreen('screen-play');
-                document.getElementById('player-acting-label').innerText = amIArtist ? `Sua vez (${myPlayerName})` : `Artista: ${data.currentArtist}`;
-                document.getElementById('action-controls-local').style.display = "none";
-                
-                setupGameplayUI();
-
-                // Se eu NÃO sou o artista e o modo for desenho, renderiza as linhas gravadas no Firebase
-                if(!amIArtist && selectedCategory === 'desenho' && data.lines) {
-                    renderRemoteLinesOnCanvas(data.lines);
-                }
-
-                // Exibe caixa de chutes para quem está assistindo e tentando adivinhar
-                if(!amIArtist) {
-                    document.getElementById('area-multiplayer-guess').style.display = "flex";
-                    renderGuessesBox(data.guesses);
-                } else {
-                    document.getElementById('area-multiplayer-guess').style.display = "none";
+                // Lê sala atual para injetar o novo participante no array sem duplicar
+                if(window.FB) {
+                    const snap = await getDoc(doc(window.db, "rooms", roomCode));
+                    if(snap.exists()) {
+                        let currentPlayers = snap.data().players || [];
+                        // Evita duplicar se o jogador reconectar com mesmo nome
+                        if(!currentPlayers.some(p => p.name === localProfile.name)) {
+                            currentPlayers.push(localProfile);
+                            await window.FB.updateRoom(roomCode, { players: currentPlayers });
+                        }
+                    } else { alert("Sala não encontrada!"); return; }
                 }
             }
-        }
 
-        async function startMultiplayerMatch() {
-            await window.NetworkManager.updateRoomData(activeRoomCode, { gameState: "turn_change" });
-        }
+            document.getElementById('lobby-code-title').innerText = roomCode;
+            document.getElementById('mp-active-lobby').style.display = "flex";
 
-        async function sendGuess() {
-            const input = document.getElementById('guess-input');
-            const val = input.value.trim();
-            if(!val) return;
-
-            let systemMsg = `[Chute] ${myPlayerName}: ${val}`;
-            if(val.toLowerCase() === secretWordChosen.toLowerCase()) {
-                systemMsg = `🎉 ${myPlayerName} ACERTOU DE PRIMEIRA! A palavra era ${secretWordChosen}!`;
-                alert("Você acertou! Parabéns!");
-                // Reseta rodada passando para o próximo jogador da lista automaticamente
-                await window.NetworkManager.updateRoomData(activeRoomCode, { gameState: "turn_change", currentArtist: myPlayerName });
-            }
-
-            await window.NetworkManager.updateDoc(doc(window.db, "salas", activeRoomCode), {
-                guesses: arrayUnion(systemMsg)
-            });
-            input.value = "";
-        }
-
-        function renderGuessesBox(arr) {
-            const chat = document.getElementById('chat-guesses');
-            chat.innerHTML = arr.map(g => `<div>${g}</div>`).join('');
-            chat.scrollTop = chat.scrollHeight;
-        }
-
-        // --- MOTORES INTERNOS: CANVAS (DESENHO DIGITAL) ---
-        let drawing = false;
-        let ctx, canvas;
-        
-        function initCanvasEngine(id, syncWithFirebase) {
-            canvas = document.getElementById(id);
-            ctx = canvas.getContext('2d');
-            
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
-            
-            ctx.strokeStyle = '#0f172a';
-            ctx.lineWidth = 5;
-            ctx.lineCap = 'round';
-
-            if(isMultiplayer && !amIArtist && id === 'canvas-game') return; // Bloqueia input se for espectador
-
-            canvas.onmousedown = (e) => { drawing = true; ctx.beginPath(); trackDraw(e, syncWithFirebase); };
-            canvas.onmousemove = (e) => trackDraw(e, syncWithFirebase);
-            canvas.onmouseup = () => drawing = false;
-            
-            canvas.ontouchstart = (e) => { drawing = true; ctx.beginPath(); trackDraw(e.touches[0], syncWithFirebase); };
-            canvas.ontouchmove = (e) => { e.preventDefault(); trackDraw(e.touches[0], syncWithFirebase); };
-            canvas.ontouchend = () => drawing = false;
-        }
-
-        function trackDraw(e, sync) {
-            if(!drawing) return;
-            const r = canvas.getBoundingClientRect();
-            const x = e.clientX - r.left;
-            const y = e.clientY - r.top;
-            
-            ctx.lineTo(x, y);
-            ctx.stroke();
-
-            if(sync) {
-                // Envia as coordenadas estruturadas em formato vetorial para o documento no Firebase Firestore
-                window.NetworkManager.updateRoomData(activeRoomCode, {
-                    lines: arrayUnion({x: x, y: y})
+            // Liga a escuta em tempo real do documento da sala no Firebase
+            if(window.FB) {
+                unsubFirestore = window.FB.syncRoom(roomCode, (data) => {
+                    handleRoomSync(data);
                 });
             }
         }
 
-        function renderRemoteLinesOnCanvas(linesArray) {
-            if(!canvas || !ctx) return;
-            // Evita re-renderização completa desnecessária piscando a tela
-            if(linesArray.length === localLinesUploadedCount) return; 
+        function handleRoomSync(data) {
+            currentRoomData = data;
             
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.beginPath();
-            for(let i=0; i<linesArray.length; i++) {
-                ctx.lineTo(linesArray[i].x, linesArray[i].y);
-                ctx.stroke();
-            }
-            localLinesUploadedCount = linesArray.length;
-        }
+            // Renderiza lista de competidores do lobby online
+            const lobbyBox = document.getElementById('lobby-players-box');
+            lobbyBox.innerHTML = data.players.map(p => `
+                <div class="player-badge">
+                    <div class="mini-avatar" style="background:${p.color}">${p.emoji}</div>
+                    <span>${p.name} - <strong>${p.score} pts</strong></span>
+                </div>
+            `).join('');
 
-        function clearGameCanvas() {
-            if(ctx && canvas) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                if(isMultiplayer && amIArtist) {
-                    window.NetworkManager.updateRoomData(activeRoomCode, { lines: [] });
+            // Controle de interface do Host da partida
+            const isHost = (data.host === localProfile.name);
+            document.getElementById('host-config-panel').style.display = isHost ? "block" : "none";
+            document.getElementById('host-abort-btn').style.display = isHost ? "block" : "none";
+            
+            if(isHost && data.gameState === 'lobby') {
+                document.getElementById('start-mp-game-btn').style.display = "block";
+            } else {
+                document.getElementById('start-mp-game-btn').style.display = "none";
+            }
+
+            const amIArtist = (data.currentArtist === localProfile.name);
+
+            // MÁQUINA DE ESTADOS DO MULTIPLAYER ONLINE
+            if(data.gameState === 'turn_change') {
+                clearInterval(cronometroLocal);
+                if(amIArtist) {
+                    document.getElementById('pass-instruction-text').innerText = "SUA VEZ DE OPERAR!";
+                    showScreen('screen-pass');
+                } else {
+                    document.getElementById('pass-instruction-text').innerText = `VEZ DE: ${data.currentArtist.toUpperCase()}`;
+                    showScreen('screen-pass');
+                }
+            } 
+            else if(data.gameState === 'playing') {
+                showScreen('screen-play');
+                document.getElementById('local-controls').style.display = "none";
+                
+                // Renderiza Card do Jogador da vez
+                const artistObj = data.players.find(p => p.name === data.currentArtist) || localProfile;
+                renderActorCard('active-actor-card', artistObj);
+                
+                toggleGameAreas(data.category);
+
+                // Executa Lógica de Cronômetro Autorizativa Baseada no Fim do Carimbo de Data/Hora (`endTime`)
+                if(data.endTime) {
+                    clearInterval(cronometroLocal);
+                    cronometroLocal = setInterval(() => {
+                        let remaining = Math.max(0, Math.floor((data.endTime - Date.now()) / 1000));
+                        document.getElementById('game-timer').innerText = remaining;
+                        if(remaining <= 5 && remaining > 0) AudioFX.tick();
+                        if(remaining <= 0) {
+                            clearInterval(cronometroLocal);
+                            if(isHost) finishRoundTimeoutOnline();
+                        }
+                    }, 1000);
+                }
+
+                // Processo do Desenho Coletivo Sincronizado
+                if(data.category === 'desenho') {
+                    setupCanvasCore('canvas-game', amIArtist);
+                    if(!amIArtist && data.lines) {
+                        applyRemoteCanvasLines(data.lines);
+                    }
+                }
+
+                // Zona de Palpites Ativa para Espectadores
+                if(!amIArtist) {
+                    document.getElementById('mp-guess-zone').style.display = "flex";
+                    renderChatGuesses(data.guesses);
+                } else {
+                    document.getElementById('mp-guess-zone').style.display = "none";
                 }
             }
+            else if(data.gameState === 'podium') {
+                clearInterval(cronometroLocal);
+                renderPodiumResults(data.players);
+                showScreen('screen-podium');
+            }
+        }
+
+        async function launchMultiplayerRound() {
+            if(!currentRoomData) return;
+            await window.FB.updateRoom(roomCode, { gameState: "turn_change" });
+        }
+
+        async function submitChuteOnline() {
+            const inp = document.getElementById('mp-chute-input');
+            const chute = inp.value.trim();
+            if(!chute || !currentRoomData) return;
+
+            let logMsg = `${localProfile.name}: ${chute}`;
+            
+            // Validação de Chute Correto: Quem acertar ganha os pontos na hora!
+            if(chute.toLowerCase() === currentRoomData.word.toLowerCase()) {
+                AudioFX.win();
+                logMsg = `🎉 ${localProfile.name} ACERTOU! Resposta: ${currentRoomData.word}`;
+                alert("Você acertou a palavra! +10 pontos para você.");
+
+                // Modifica os pontos do jogador vitorioso diretamente no array
+                let updatedPlayers = currentRoomData.players.map(p => {
+                    if(p.name === localProfile.name) p.score += 10;
+                    return p;
+                });
+
+                // Verifica se a meta de pontuação máxima configurada foi atingida
+                const targetScore = currentRoomData.config?.maxScore || 30;
+                const matchEnded = updatedPlayers.some(p => p.score >= targetScore);
+                
+                // Define quem será o próximo artista (o jogador que acertou)
+                await window.FB.updateRoom(roomCode, {
+                    players: updatedPlayers,
+                    guesses: [...currentRoomData.guesses, logMsg],
+                    gameState: matchEnded ? "podium" : "turn_change",
+                    currentArtist: localProfile.name 
+                });
+            } else {
+                // Palpite incorreto apenas entra para a lista de logs
+                await window.FB.updateRoom(roomCode, {
+                    guesses: [...currentRoomData.guesses, logMsg]
+                });
+            }
+            inp.value = "";
+        }
+
+        async function finishRoundTimeoutOnline() {
+            if(!currentRoomData) return;
+            AudioFX.lose();
+            let msg = `💥 O tempo acabou! A palavra era: ${currentRoomData.word}`;
+            
+            // Passa a vez para a próxima pessoa da lista de jogadores online
+            let currentIndex = currentRoomData.players.findIndex(p => p.name === currentRoomData.currentArtist);
+            let nextIndex = (currentIndex + 1) % currentRoomData.players.length;
+            let nextArtist = currentRoomData.players[nextIndex].name;
+
+            await window.FB.updateRoom(roomCode, {
+                gameState: "turn_change",
+                guesses: [...currentRoomData.guesses, msg],
+                currentArtist: nextArtist
+            });
+        }
+
+        async function forceEndMatch() {
+            if(roomCode) {
+                await window.FB.updateRoom(roomCode, { gameState: "podium" });
+            }
+        }
+
+        function renderChatGuesses(arr) {
+            const stream = document.getElementById('chat-stream');
+            stream.innerHTML = arr.map(m => `<div>${m}</div>`).join('');
+            stream.scrollTop = stream.scrollHeight;
+        }
+
+        function renderPodiumResults(players) {
+            // Ordena os jogadores por pontuação decrescente
+            let sorted = [...players].sort((a,b) => b.score - a.score);
+            document.getElementById('podium-results-box').innerHTML = sorted.map((p, i) => `
+                <div class="player-badge" style="justify-content:space-between; ${i===0?'border:2px solid var(--secondary);':''}">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span>#${i+1}</span>
+                        <div class="mini-avatar" style="background:${p.color}">${p.emoji}</div>
+                        <strong>${p.name}</strong>
+                    </div>
+                    <span>${p.score} Pontos</span>
+                </div>
+            `).join('');
+        }
+
+        async function pushConfigChange() {
+            const meta = parseInt(document.getElementById('config-max-score').value);
+            if(roomCode) {
+                await window.FB.updateRoom(roomCode, { "config.maxScore": meta });
+            }
+        }
+
+        // --- ENGINE DO CANVAS INTERATIVO ---
+        let isDrawing = false;
+        let drawCtx, drawCanvas;
+
+        function setupCanvasCore(id, isOnlineArtist) {
+            drawCanvas = document.getElementById(id);
+            drawCtx = drawCanvas.getContext('2d');
+            
+            drawCanvas.width = drawCanvas.parentElement.clientWidth;
+            drawCanvas.height = drawCanvas.parentElement.clientHeight;
+            
+            drawCtx.strokeStyle = '#0f172a';
+            drawCtx.lineWidth = 5;
+            drawCtx.lineCap = 'round';
+
+            // No modo multiplayer, bloqueia a escrita se o jogador for espectador
+            if(selectedEngine === 'multiplayer' && !isOnlineArtist && id === 'canvas-game') return;
+
+            drawCanvas.onmousedown = (e) => { isDrawing = true; drawCtx.beginPath(); paint(e, isOnlineArtist); };
+            drawCanvas.onmousemove = (e) => paint(e, isOnlineArtist);
+            drawCanvas.onmouseup = () => isDrawing = false;
+
+            drawCanvas.ontouchstart = (e) => { isDrawing = true; drawCtx.beginPath(); paint(e.touches[0], isOnlineArtist); };
+            drawCanvas.ontouchmove = (e) => { e.preventDefault(); paint(e.touches[0], isOnlineArtist); };
+            drawCanvas.ontouchend = () => isDrawing = false;
+        }
+
+        function paint(e, syncOnline) {
+            if(!isDrawing) return;
+            const rect = drawCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            drawCtx.lineTo(x, y);
+            drawCtx.stroke();
+
+            // Injeta as coordenadas vetoriais em lote incremental dentro do Firestore
+            if(syncOnline && roomCode && currentRoomData) {
+                let currentLines = currentRoomData.lines || [];
+                currentLines.push({x: x, y: y});
+                window.FB.updateRoom(roomCode, { lines: currentLines });
+            }
+        }
+
+        function applyRemoteCanvasLines(linesArray) {
+            if(!drawCanvas || !drawCtx) return;
+            if(linesArray.length === localLinesDrawnCount) return; // Evita flickering redundante
+            
+            drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+            drawCtx.beginPath();
+            for(let i=0; i<linesArray.length; i++) {
+                drawCtx.lineTo(linesArray[i].x, linesArray[i].y);
+                drawCtx.stroke();
+            }
+            localLinesDrawnCount = linesArray.length;
         }
     </script>
 </body>
