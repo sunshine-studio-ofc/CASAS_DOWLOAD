@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arcade Board Games Pro</title>
+    <title>Arcade Board Games Pro - Ultimate</title>
     <style>
         :root {
             --bg-dark: #070a13; --bg-card: #111a2e; --bg-input: #090f1c;
@@ -13,8 +13,19 @@
             --text-main: #f8fafc; --text-muted: #64748b;
         }
 
+        /* --- MODO DALTÔNICO --- */
+        body.colorblind-mode {
+            --primary: #1e88e5; /* Azul seguro */
+            --primary-hover: #1565c0;
+            --success: #ffc107; /* Amarelo contraste */
+            --war-color: #d81b60; /* Rosa/Vermelho escuro */
+            --ia-color: #8e24aa; /* Roxo escuro */
+        }
+        body.colorblind-mode .player-badge.active-turn { border: 3px dashed var(--success); }
+        body.colorblind-mode .dice { border: 2px solid #fff; border-radius: 0; } /* Remove bordas redondas para diferenciar formatos */
+
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 20px; }
+        body { background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 20px; transition: all 0.3s; }
         
         header { width: 100%; background: linear-gradient(135deg, var(--bg-card), #1e293b); padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border-bottom: 1px solid rgba(255,255,255,0.1); }
         .logo { font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
@@ -36,181 +47,171 @@
         
         button { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.2s; color: white; display: flex; justify-content: center; align-items: center; gap: 8px;}
         button:active { transform: scale(0.97); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-primary { background-color: var(--primary); }
         .btn-success { background-color: var(--success); }
         .btn-danger { background-color: #ef4444; }
 
-        /* Hub de Jogos */
         .games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
         .game-card { background: #1e293b; border-radius: 12px; padding: 20px 10px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
         .game-card:hover:not(.disabled) { transform: translateY(-5px); border-color: var(--primary); }
         .game-card.disabled { opacity: 0.5; cursor: not-allowed; }
         .game-icon { font-size: 40px; margin-bottom: 10px; }
         
-        /* Modais */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal-overlay.active { display: flex; }
-        .settings-row { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; }
+        .settings-row { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border-left: 3px solid var(--primary); }
 
-        /* Elementos de Jogo Gerais */
         .player-badge { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bg-input); border-radius: 10px; border: 1px solid #1e293b; }
         .player-badge.active-turn { border-color: var(--success); box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
         
-        /* War Specific */
         .dice-container { display: flex; gap: 10px; justify-content: center; margin: 15px 0; }
         .dice { width: 50px; height: 50px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: bold; color: white; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
-        .dice.red { background: #dc2626; }
-        .dice.yellow { background: #eab308; color: #000; }
+        .dice.red { background: var(--war-color); }
     </style>
 </head>
 <body>
 
-    <!-- Elemento de Áudio Oculto (Música de Fundo) -->
     <audio id="bg-music" loop>
         <source src="https://vgmsite.com/soundtracks/wii-shop-channel-music/qjljjscq/Wii%20Shop%20Channel%20Music.mp3" type="audio/mpeg">
     </audio>
 
     <header>
         <div class="logo">🎲 JogoMesa<span style="color:var(--primary)">.io</span></div>
-        <button class="btn-icon" onclick="toggleSettings()">⚙️</button>
+        <button class="btn-icon" onclick="toggleGlobalSettings()">⚙️</button>
     </header>
 
-    <!-- Modal de Configurações -->
-    <div class="modal-overlay" id="modal-settings">
+    <div class="modal-overlay" id="modal-global-settings">
         <div class="card" style="width: 90%; max-width: 400px;">
-            <h2>⚙️ Configurações</h2>
+            <h2>⚙️ Ajustes do App</h2>
             <div class="settings-row">
-                <span>🎵 Música de Fundo</span>
+                <span>🎵 Música (Requer Clique)</span>
                 <input type="checkbox" id="toggle-music" onchange="AudioSystem.toggleMusic(this.checked)" style="width: 24px; height: 24px;">
             </div>
             <div class="settings-row">
-                <span>🔊 Efeitos Sonoros (SFX)</span>
+                <span>🔊 Efeitos (SFX)</span>
                 <input type="checkbox" id="toggle-sfx" checked onchange="AudioSystem.sfxEnabled = this.checked" style="width: 24px; height: 24px;">
             </div>
-            <button class="btn-primary" onclick="toggleSettings(); playClick()">Salvar e Fechar</button>
+            <div class="settings-row" style="border-left-color: var(--warning);">
+                <span>👁️ Modo Daltônico</span>
+                <input type="checkbox" id="toggle-colorblind" onchange="toggleColorblind(this.checked)" style="width: 24px; height: 24px;">
+            </div>
+            <button class="btn-primary" onclick="toggleGlobalSettings(); playClick()">Fechar</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-room-settings">
+        <div class="card" style="width: 90%; max-width: 400px;">
+            <h2 style="color: var(--warning);">👑 Regras da Mesa</h2>
+            <div class="settings-row">
+                <div>
+                    <strong>🗣️ Modo Verbal (Sem Chat)</strong>
+                    <div style="font-size: 11px; color: var(--text-muted);">Os palpites são gritados na vida real.</div>
+                </div>
+                <input type="checkbox" id="room-cfg-nochat" style="width: 24px; height: 24px;">
+            </div>
+            <button class="btn-success" onclick="saveRoomSettings(); playClick()">Salvar Regras</button>
+            <button class="btn-danger" style="margin-top: 5px;" onclick="document.getElementById('modal-room-settings').classList.remove('active'); playClick()">Cancelar</button>
         </div>
     </div>
 
     <div class="container">
         
-        <!-- Tela 1: Perfil Global -->
         <div id="screen-profile" class="screen active card">
-            <h2>Crie sua Identidade Global</h2>
-            <p>Este nome será usado em todos os jogos do site.</p>
+            <h2>Crie sua Identidade</h2>
             <div style="font-size: 60px; text-align: center; margin: 10px 0;">🧑‍🚀</div>
             <input type="text" id="global-player-name" placeholder="Digite seu Nickname..." maxlength="15">
             <button class="btn-primary" style="margin-top: 15px;" onclick="saveProfile(); playClick()">Entrar no Arcade</button>
         </div>
 
-        <!-- Tela 2: Hub de Jogos -->
         <div id="screen-hub" class="screen card">
             <h2>Escolha um Jogo</h2>
-            <p>Selecione uma mesa virtual para jogar com seus amigos.</p>
-            
             <div class="games-grid">
                 <div class="game-card" onclick="selectGame('ia'); playClick()" style="border-bottom: 4px solid var(--ia-color);">
                     <div class="game-icon">🎭</div>
                     <h3 style="font-size: 16px;">Imagem & Ação</h3>
                     <span style="font-size: 12px; color: var(--ia-color);">Mímica Virtual</span>
                 </div>
-                
                 <div class="game-card" onclick="selectGame('war'); playClick()" style="border-bottom: 4px solid var(--war-color);">
                     <div class="game-icon">⚔️</div>
                     <h3 style="font-size: 16px;">War Express</h3>
                     <span style="font-size: 12px; color: var(--war-color);">Batalha de Dados</span>
                 </div>
-
-                <div class="game-card disabled">
-                    <div class="game-icon">🃏</div>
-                    <h3 style="font-size: 16px;">Baralho</h3>
-                    <span style="font-size: 12px; color: gray;">Em Breve</span>
-                </div>
-
-                <div class="game-card disabled">
-                    <div class="game-icon">🁣</div>
-                    <h3 style="font-size: 16px;">Dominó</h3>
-                    <span style="font-size: 12px; color: gray;">Em Breve</span>
-                </div>
             </div>
         </div>
 
-        <!-- Tela 3: Lobby Sincronizado -->
         <div id="screen-multiplayer" class="screen card">
             <h2 id="lobby-game-title">Lobby</h2>
-            <p>Todos os jogadores devem inserir o mesmo código.</p>
-            
             <input type="text" id="room-code-input" placeholder="Código da Sala (Ex: SALA1)" style="text-transform:uppercase; font-weight:800; text-align:center; font-size: 20px;">
-            
             <div style="display:flex; gap:10px; margin-top: 15px;">
                 <button class="btn-primary" style="background:#1e293b" onclick="executeRoomAction('join'); playClick()">Entrar</button>
                 <button class="btn-success" onclick="executeRoomAction('create'); playClick()">Criar Sala</button>
             </div>
 
             <div id="mp-active-lobby" style="display:none; flex-direction:column; gap:12px; margin-top:20px; border-top:1px solid #1e293b; padding-top:20px;">
-                <h3>Sala: <span id="lobby-code-title" style="color:var(--primary); font-size: 24px;">---</span></h3>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3>Sala: <span id="lobby-code-title" style="color:var(--primary); font-size: 24px;">---</span></h3>
+                    <button id="btn-room-settings" class="btn-primary" style="width: auto; padding: 8px 12px; font-size: 12px; display: none;" onclick="openRoomSettings()">⚙️ Regras</button>
+                </div>
                 <div id="lobby-players-box" style="display:flex; flex-direction:column; gap:8px;"></div>
                 <button class="btn-primary" id="start-mp-game-btn" style="display:none; margin-top:10px;" onclick="launchGame(); playClick()">Iniciar Partida!</button>
                 <button class="btn-danger" style="background:transparent; border:1px solid #ef4444; color:#ef4444;" onclick="showScreen('screen-hub'); playClick()">Voltar ao Hub</button>
             </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- TELAS ESPECÍFICAS: IMAGEM & AÇÃO               -->
-        <!-- ============================================== -->
         <div id="game-ui-ia" style="display:none; width:100%; flex-direction:column; gap:15px;">
             <div class="card" id="ia-turn-announcer" style="text-align: center;">
                 <h3 style="color:var(--ia-color);">Vez do Jogador</h3>
                 <h2 id="ia-current-player-name" style="font-size: 28px; margin: 10px 0;">---</h2>
                 <div id="ia-host-controls" style="display:none;">
-                    <p>Você é o mestre. Gere uma palavra para atuar!</p>
                     <button class="btn-success" onclick="iaPickWord(); playClick()">Sortear Palavra</button>
                 </div>
             </div>
 
             <div class="card" id="ia-play-area" style="display:none; text-align: center; border: 2px solid var(--ia-color);">
                 <p id="ia-word-display" style="font-size: 32px; font-weight: 900; margin: 10px 0;">***</p>
-                <p style="font-size: 12px; color: var(--text-muted);">(Faça Mímica para a sala!)</p>
                 <div style="font-size: 30px; font-weight: bold; color: var(--warning); margin: 15px 0;" id="ia-timer">60s</div>
                 
                 <div id="ia-guess-area" style="margin-top: 15px;">
                     <input type="text" id="ia-guess-input" placeholder="Seu palpite aqui...">
                     <button class="btn-primary" style="margin-top: 5px;" onclick="iaSubmitGuess(); playClick()">Chutar</button>
                 </div>
+
+                <div id="ia-verbal-controls" style="display:none; margin-top: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px;">
+                    <h4 style="color: var(--warning); margin-bottom: 8px;">🗣️ Modo Verbal Ativado</h4>
+                    <p style="font-size: 12px; margin-bottom: 10px;">Alguém gritou a resposta correta?</p>
+                    <select id="ia-verbal-winner-select"></select>
+                    <button class="btn-success" style="margin-top: 8px;" onclick="iaDeclareVerbalWinner(); playClick()">Conceder Pontos</button>
+                </div>
+
                 <button class="btn-danger" id="ia-pass-btn" style="margin-top: 15px; display:none;" onclick="iaEndTurn(); playClick()">Passar a Vez (Pular)</button>
             </div>
             
-            <div class="card">
+            <div class="card" id="ia-chat-box">
                 <h3>Chat & Acertos</h3>
                 <div id="ia-chat" style="height: 120px; overflow-y:auto; background:var(--bg-input); padding:10px; border-radius:8px; font-size:13px; margin-top:10px;"></div>
             </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- TELAS ESPECÍFICAS: WAR EXPRESS                 -->
-        <!-- ============================================== -->
         <div id="game-ui-war" style="display:none; width:100%; flex-direction:column; gap:15px;">
             <div class="card" style="border: 2px solid var(--war-color); text-align: center;">
                 <h2 style="color:var(--war-color);">🗺️ Batalha de Fronteira</h2>
-                <p>Role os dados para conquistar Pontos de Território (PTs).</p>
-                
                 <div style="margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px;">
                     <h3>Atacante: <span id="war-attacker-name" style="color:var(--war-color)">---</span></h3>
                     <div class="dice-container" id="war-attack-dice">
                         <div class="dice red">?</div><div class="dice red">?</div><div class="dice red">?</div>
                     </div>
                 </div>
-
                 <div id="war-action-controls" style="display:none;">
                     <button class="btn-danger" onclick="warRollDice(); playClick()">🎲 Rolar Dados de Ataque</button>
-                    <button class="btn-primary" style="margin-top:10px;" onclick="warPassTurn(); playClick()">Passar a Vez (Fim de Turno)</button>
+                    <button class="btn-primary" style="margin-top:10px;" onclick="warPassTurn(); playClick()">Passar a Vez</button>
                 </div>
-                <p id="war-wait-msg" style="color: var(--warning); font-weight: bold;">Aguarde sua vez de atacar...</p>
+                <p id="war-wait-msg" style="color: var(--warning); font-weight: bold;">Aguarde sua vez...</p>
             </div>
         </div>
 
     </div>
 
-    <!-- FIREBASE IMPORT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -233,12 +234,11 @@
                     code: code, gameType: gameType, host: player.name, 
                     gameState: "lobby", currentTurn: player.name, 
                     players: [player], chat: [],
-                    gameData: {} // Dados específicos do jogo
+                    config: { noChat: false }, // Configurações da Sala
+                    gameData: {} 
                 });
             },
-            async updateRoom(code, payload) {
-                await updateDoc(doc(window.db, "rooms", code), payload);
-            },
+            async updateRoom(code, payload) { await updateDoc(doc(window.db, "rooms", code), payload); },
             async checkRoomExists(code) {
                 const snap = await getDoc(doc(window.db, "rooms", code));
                 return snap.exists() ? snap.data() : null;
@@ -251,20 +251,19 @@
         };
     </script>
 
-    <!-- LÓGICA PRINCIPAL DO ARCADE -->
     <script>
-        // --- SISTEMA DE ÁUDIO ---
+        // --- ÁUDIO COMPLETAMENTE INDEPENDENTE ---
         const AudioSystem = {
             sfxEnabled: true,
             bgMusic: document.getElementById('bg-music'),
             ctx: null,
             init() { 
                 if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); 
-                if(this.ctx.state === 'suspended') this.ctx.resume(); // Fix para bloqueio de áudio do Chrome
+                if(this.ctx.state === 'suspended') this.ctx.resume(); 
             },
             toggleMusic(state) {
                 this.bgMusic.volume = 0.2;
-                if(state) { this.bgMusic.play().catch(e => console.log("Interação necessária antes de tocar.")); } 
+                if(state) { this.bgMusic.play().catch(() => alert("O navegador impediu a música. Clique na tela e tente novamente.")); } 
                 else { this.bgMusic.pause(); }
             },
             playTone(freq, type, duration) {
@@ -282,29 +281,32 @@
             },
             click() { this.playTone(600, 'sine', 0.05); },
             win() { this.playTone(523, 'triangle', 0.1); setTimeout(()=>this.playTone(659, 'triangle', 0.2), 100); },
-            dice() { this.playTone(200, 'sawtooth', 0.05); setTimeout(()=>this.playTone(250, 'sawtooth', 0.05), 50); }
+            dice() { this.playTone(200, 'sawtooth', 0.05); setTimeout(()=>this.playTone(250, 'square', 0.05), 50); }
         };
 
         function playClick() { AudioSystem.click(); }
-        function toggleSettings() { 
-            const mod = document.getElementById('modal-settings');
-            mod.classList.toggle('active');
-            AudioSystem.init(); // Inicia o contexto de áudio no primeiro clique do usuário
+        
+        function toggleGlobalSettings() { 
+            document.getElementById('modal-global-settings').classList.toggle('active');
+            AudioSystem.init(); 
+        }
+
+        function toggleColorblind(isActive) {
+            if(isActive) document.body.classList.add('colorblind-mode');
+            else document.body.classList.remove('colorblind-mode');
         }
 
         // --- ESTADO GLOBAL ---
         let localPlayer = { name: "", score: 0 };
-        let activeGameType = ""; // 'ia' ou 'war'
+        let activeGameType = ""; 
         let roomCode = "";
         let roomData = null;
         let unsubFirestore = null;
         let clockInterval = null;
 
-        // --- NAVEGAÇÃO BÁSICA ---
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            // Esconder UIs de jogo se sair do lobby
             if(id !== 'screen-multiplayer') {
                 document.getElementById('game-ui-ia').style.display = 'none';
                 document.getElementById('game-ui-war').style.display = 'none';
@@ -326,7 +328,20 @@
             showScreen('screen-multiplayer');
         }
 
-        // --- LÓGICA DE SALA FIREBASE ---
+        // --- CONFIGURAÇÕES DA SALA ---
+        function openRoomSettings() {
+            if(!roomData) return;
+            document.getElementById('room-cfg-nochat').checked = roomData.config.noChat;
+            document.getElementById('modal-room-settings').classList.add('active');
+        }
+
+        async function saveRoomSettings() {
+            const noChat = document.getElementById('room-cfg-nochat').checked;
+            await window.FB.updateRoom(roomCode, { "config.noChat": noChat });
+            document.getElementById('modal-room-settings').classList.remove('active');
+        }
+
+        // --- FIREBASE ---
         async function executeRoomAction(action) {
             const code = document.getElementById('room-code-input').value.toUpperCase().trim();
             if(!code) return alert("Insira um código!");
@@ -360,7 +375,6 @@
             if(!data) return;
             roomData = data;
             
-            // Render Players
             const isMyTurn = data.currentTurn === localPlayer.name;
             const isHost = data.host === localPlayer.name;
             
@@ -372,11 +386,10 @@
             `).join('');
 
             document.getElementById('start-mp-game-btn').style.display = (isHost && data.gameState === 'lobby') ? "block" : "none";
+            document.getElementById('btn-room-settings').style.display = isHost ? "block" : "none";
 
-            // Roteamento de Interface baseada no Jogo e Estado
             if(data.gameState === 'playing') {
                 document.getElementById('mp-active-lobby').style.display = 'none';
-                
                 if(data.gameType === 'ia') syncImagemAcao(data, isMyTurn);
                 if(data.gameType === 'war') syncWarExpress(data, isMyTurn);
             }
@@ -402,27 +415,45 @@
         // ==========================================
         // LÓGICA: IMAGEM & AÇÃO
         // ==========================================
-        const palavrasIA = ["Cachorro", "Nadar", "Violão", "Futebol", "Dança", "Matrix", "Pikachu", "Sapo"];
+        const palavrasIA = ["Cachorro", "Nadar", "Violão", "Matrix", "Bebedouro de Barro", "Fachada Histórica", "Escada de Cobogó"];
 
         function syncImagemAcao(data, isMyTurn) {
             document.getElementById('game-ui-ia').style.display = 'flex';
             document.getElementById('ia-current-player-name').innerText = data.currentTurn;
             
             const isActing = data.gameData.endTime > 0;
+            const noChatMode = data.config && data.config.noChat;
             
-            if(isMyTurn) {
-                document.getElementById('ia-host-controls').style.display = isActing ? 'none' : 'block';
-                document.getElementById('ia-pass-btn').style.display = isActing ? 'block' : 'none';
-                document.getElementById('ia-guess-area').style.display = 'none';
-                document.getElementById('ia-word-display').innerText = isActing ? data.gameData.word : "***";
-            } else {
-                document.getElementById('ia-host-controls').style.display = 'none';
-                document.getElementById('ia-pass-btn').style.display = 'none';
-                document.getElementById('ia-guess-area').style.display = isActing ? 'block' : 'none';
-                document.getElementById('ia-word-display').innerText = isActing ? "Adivinhe a palavra!" : "Aguardando Mestre...";
-            }
-
+            // Controle de visibilidade
+            document.getElementById('ia-host-controls').style.display = (isMyTurn && !isActing) ? 'block' : 'none';
+            document.getElementById('ia-pass-btn').style.display = (isMyTurn && isActing) ? 'block' : 'none';
             document.getElementById('ia-play-area').style.display = 'block';
+
+            if(isMyTurn) {
+                document.getElementById('ia-word-display').innerText = isActing ? data.gameData.word : "***";
+                document.getElementById('ia-guess-area').style.display = 'none';
+                
+                // Se for modo verbal, o ator ganha os controles para dar ponto
+                if(noChatMode && isActing) {
+                    document.getElementById('ia-verbal-controls').style.display = 'block';
+                    const select = document.getElementById('ia-verbal-winner-select');
+                    select.innerHTML = data.players.filter(p => p.name !== localPlayer.name).map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+                } else {
+                    document.getElementById('ia-verbal-controls').style.display = 'none';
+                }
+            } else {
+                document.getElementById('ia-word-display').innerText = isActing ? "Adivinhe a palavra!" : "Aguardando Mestre...";
+                document.getElementById('ia-verbal-controls').style.display = 'none';
+                
+                // Se for modo verbal, esconde o input de texto para os espectadores também
+                if(noChatMode) {
+                    document.getElementById('ia-guess-area').style.display = 'none';
+                    document.getElementById('ia-chat-box').style.display = 'none';
+                } else {
+                    document.getElementById('ia-guess-area').style.display = isActing ? 'block' : 'none';
+                    document.getElementById('ia-chat-box').style.display = 'block';
+                }
+            }
 
             // Timer
             clearInterval(clockInterval);
@@ -434,10 +465,12 @@
                 }, 1000);
             }
 
-            // Chat
-            const chatBox = document.getElementById('ia-chat');
-            chatBox.innerHTML = data.chat.map(m => `<div>${m}</div>`).join('');
-            chatBox.scrollTop = chatBox.scrollHeight;
+            // Chat Normal
+            if(!noChatMode) {
+                const chatBox = document.getElementById('ia-chat');
+                chatBox.innerHTML = data.chat.map(m => `<div>${m}</div>`).join('');
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
         }
 
         async function iaPickWord() {
@@ -447,9 +480,10 @@
             });
         }
 
+        // Chute Escrito
         async function iaSubmitGuess() {
             const guess = document.getElementById('ia-guess-input').value.trim();
-            if(!guess) return;
+            if(!guess || !roomData) return;
             
             let isCorrect = guess.toLowerCase() === roomData.gameData.word.toLowerCase();
             let msg = `<strong>${localPlayer.name}:</strong> ${guess}`;
@@ -466,33 +500,42 @@
             document.getElementById('ia-guess-input').value = "";
         }
 
+        // Chute Modo Verbal (Ator concede ponto)
+        async function iaDeclareVerbalWinner() {
+            const winnerName = document.getElementById('ia-verbal-winner-select').value;
+            if(!winnerName || !roomData) return;
+
+            AudioSystem.win();
+            let msg = `🗣️ 🎉 <strong style="color:var(--success)">${winnerName} ACERTOU (No Grito)!</strong> Era ${roomData.gameData.word}`;
+            let updatedPlayers = roomData.players.map(p => { if(p.name === winnerName) p.score+=10; return p; });
+            
+            await window.FB.updateRoom(roomCode, { players: updatedPlayers, chat: [...roomData.chat, msg] });
+            nextTurn();
+        }
+
         function iaEndTurn() {
-            window.FB.updateRoom(roomCode, { chat: [...roomData.chat, `⏰ O tempo acabou ou passou a vez!`] });
+            window.FB.updateRoom(roomCode, { chat: [...roomData.chat, `⏰ O tempo acabou ou a palavra foi pulada!`] });
             nextTurn();
         }
 
         // ==========================================
-        // LÓGICA: WAR EXPRESS (BATALHA DE DADOS)
+        // LÓGICA: WAR EXPRESS
         // ==========================================
         function syncWarExpress(data, isMyTurn) {
             document.getElementById('game-ui-war').style.display = 'flex';
             document.getElementById('war-attacker-name').innerText = data.currentTurn;
 
-            // Mostrar controles apenas para a vez
             document.getElementById('war-action-controls').style.display = isMyTurn ? 'block' : 'none';
             document.getElementById('war-wait-msg').style.display = isMyTurn ? 'none' : 'block';
 
-            // Atualizar UI dos Dados
             const diceHtml = (data.gameData.dice || [1,1,1]).map(v => `<div class="dice red">${v}</div>`).join('');
             document.getElementById('war-attack-dice').innerHTML = diceHtml;
         }
 
         async function warRollDice() {
             AudioSystem.dice();
-            // Rola 3 dados
             let results = [Math.ceil(Math.random()*6), Math.ceil(Math.random()*6), Math.ceil(Math.random()*6)].sort((a,b)=>b-a);
             
-            // Lógica Simplificada: Se a soma for > 10, ganha 5 PTs (Pontos de Território)
             let soma = results.reduce((a,b)=>a+b, 0);
             let updatedPlayers = roomData.players;
             
@@ -510,9 +553,7 @@
             });
         }
 
-        async function warPassTurn() {
-            nextTurn();
-        }
+        async function warPassTurn() { nextTurn(); }
 
     </script>
 </body>
