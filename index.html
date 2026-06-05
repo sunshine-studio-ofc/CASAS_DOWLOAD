@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imagem & Ação Virtual Pro - Elite Edition</title>
+    <title>Imagem & Ação Virtual Pro - Ultimate</title>
     <style>
         :root {
-            --bg-dark: #090d16;
-            --bg-card: #131c2e;
-            --bg-input: #0b111e;
+            --bg-dark: #070a13;
+            --bg-card: #111a2e;
+            --bg-input: #090f1c;
             --primary: #f43f5e;
             --primary-hover: #e11d48;
             --secondary: #3b82f6;
             --secondary-hover: #1d4ed8;
             --success: #10b981;
+            --warning: #f59e0b;
             --text-main: #f8fafc;
             --text-muted: #64748b;
         }
@@ -21,22 +22,22 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 20px; }
         
-        header { width: 100%; background: linear-gradient(135deg, var(--primary), #9f1239); padding: 18px; text-align: center; font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        header { width: 100%; background: linear-gradient(135deg, var(--primary), #9f1239); padding: 18px; text-align: center; font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
         .container { width: 100%; max-width: 540px; padding: 15px; flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
         
         .screen { display: none; flex-direction: column; gap: 15px; }
-        .screen.active { display: flex; animation: viewSlide 0.25s ease-out; }
-        @keyframes viewSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .screen.active { display: flex; animation: viewSlide 0.2s ease-out; }
+        @keyframes viewSlide { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         
-        .card { background-color: var(--bg-card); padding: 22px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); }
-        h2 { font-size: 20px; text-align: center; margin-bottom: 5px; color: #fff; font-weight: 700; }
-        p { color: #94a3b8; line-height: 1.5; font-size: 14px; }
+        .card { background-color: var(--bg-card); padding: 22px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.03); }
+        h2 { font-size: 22px; text-align: center; margin-bottom: 8px; color: #fff; font-weight: 800; letter-spacing: -0.5px; }
+        p { color: #94a3b8; line-height: 1.6; font-size: 14px; }
         
-        input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 10px; border: 2px solid #1e293b; background: var(--bg-input); color: #fff; font-size: 15px; }
+        input, select { width: 100%; padding: 14px; margin-top: 5px; border-radius: 10px; border: 2px solid #1e293b; background: var(--bg-input); color: #fff; font-size: 15px; transition: border 0.2s; }
         input:focus, select:focus { outline: none; border-color: var(--secondary); }
         
         button { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        button:active { transform: scale(0.97); }
+        button:active { transform: scale(0.98); }
         .btn-primary { background-color: var(--primary); color: white; }
         .btn-primary:hover { background-color: var(--primary-hover); }
         .btn-secondary { background-color: var(--secondary); color: white; }
@@ -44,14 +45,18 @@
         .btn-success { background-color: var(--success); color: white; }
         .btn-danger { background-color: #ef4444; color: white; }
         
+        /* Regras Estilizadas */
+        .rules-box { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid var(--warning); }
+        .rules-item { font-size: 13px; margin-bottom: 6px; display: flex; gap: 6px; color: #cbd5e1; }
+
         /* Customizador de Personagem */
-        .avatar-creator { display: grid; grid-template-columns: 1fr 2fr; gap: 15px; margin: 10px 0; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; }
-        .avatar-preview-box { display: flex; align-items: center; justify-content: center; font-size: 45px; border-radius: 50%; width: 90px; height: 90px; margin: auto; border: 4px solid var(--secondary); box-shadow: 0 0 15px rgba(59,130,246,0.3); }
+        .avatar-creator { display: grid; grid-template-columns: 1fr 2fr; gap: 15px; margin: 10px 0; background: rgba(0,0,0,0.25); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.02); }
+        .avatar-preview-box { display: flex; align-items: center; justify-content: center; font-size: 45px; border-radius: 50%; width: 90px; height: 90px; margin: auto; border: 4px solid var(--secondary); box-shadow: 0 0 15px rgba(59,130,246,0.3); transition: all 0.2s; }
         .custom-options { display: flex; flex-direction: column; gap: 8px; }
-        .opt-row { display: flex; gap: 5px; flex-wrap: wrap; }
-        .color-dot { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
-        .color-dot.active { border-color: #fff; transform: scale(1.1); }
-        .emoji-item { font-size: 20px; padding: 4px; cursor: pointer; border-radius: 6px; background: #0f172a; }
+        .opt-row { display: flex; gap: 6px; flex-wrap: wrap; }
+        .color-dot { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.15s; }
+        .color-dot.active { border-color: #fff; transform: scale(1.15); }
+        .emoji-item { font-size: 20px; padding: 5px; cursor: pointer; border-radius: 6px; background: #0f172a; transition: background 0.15s; }
         .emoji-item.active { background: var(--secondary); }
 
         /* Temas e Componentes */
@@ -59,14 +64,16 @@
         .theme-btn { background: #1e293b; color: #fff; border: 2px solid transparent; text-align: left; justify-content: flex-start; padding: 12px; }
         .theme-btn.active { border-color: var(--success); background: rgba(16, 185, 129, 0.15); }
         
-        .game-canvas-container { width: 100%; height: 320px; background: #ffffff; border-radius: 12px; position: relative; overflow: hidden; }
+        .game-canvas-container { width: 100%; height: 320px; background: #ffffff; border-radius: 12px; position: relative; overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
         #canvas-game, #tutorial-canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
         .timer { font-size: 46px; text-align: center; font-weight: 800; color: var(--primary); font-variant-numeric: tabular-nums; }
         
-        .player-badge { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg-input); border-radius: 8px; border: 1px solid #1e293b; }
+        .player-badge { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg-input); border-radius: 8px; border: 1px solid #1e293b; }
         .mini-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; }
-        .chat-area { background: var(--bg-input); height: 110px; overflow-y: auto; border-radius: 8px; padding: 8px; font-size: 13px; border: 1px solid #1e293b; display: flex; flex-direction: column; gap: 4px; }
-        .config-group { background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px; margin-top: 5px; }
+        .chat-area { background: var(--bg-input); height: 130px; overflow-y: auto; border-radius: 8px; padding: 10px; font-size: 13px; border: 1px solid #1e293b; display: flex; flex-direction: column; gap: 6px; }
+        .chat-msg { padding: 2px 4px; border-radius: 4px; }
+        .chat-msg.correct { background: rgba(16, 185, 129, 0.2); color: #34d399; font-weight: bold; }
+        .config-group { background: rgba(0,0,0,0.15); padding: 12px; border-radius: 8px; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -76,36 +83,42 @@
     <div class="container">
         
         <div id="screen-terms" class="screen active card">
-            <h2>Termos de Uso & Configuração Inicial</h2>
-            <p>Seja bem-vindo! Prometa jogar de forma limpa. Não escreva letras/números no modo desenho e mantenha silêncio absoluto no modo mímica.</p>
-            <button class="btn-primary" onclick="showScreen('screen-customizer')">Aceitar e Prosseguir</button>
+            <h2>📜 Regras Oficiais do Jogo</h2>
+            <div class="rules-box">
+                <div class="rules-item"><span>✏️</span> <strong>Modo Desenho:</strong> Proibido escrever letras, números ou fazer gestos indicativos.</div>
+                <div class="rules-item"><span>🤷‍♂️</span> <strong>Modo Mímica:</strong> Silêncio absoluto. Nenhum som ou som labial é permitido.</div>
+                <div class="rules-item"><span>⏱️</span> <strong>Adivinhação:</strong> Quem digitar a palavra exata primeiro no chat rouba a vez e ganha +10 pontos instantaneamente!</div>
+                <div class="rules-item"><span>🛡️</span> <strong>Segurança:</strong> Respeite os outros jogadores. Evite trapaças e calúnias.</div>
+            </div>
+            <p style="margin-bottom: 10px; text-align: center;">Ao avançar, você concorda em seguir o manual de fair-play da mesa.</p>
+            <button class="btn-primary" onclick="showScreen('screen-customizer')">Aceitar e Criar Personagem</button>
         </div>
 
         <div id="screen-customizer" class="screen card">
-            <h2>Crie seu Personagem</h2>
+            <h2>Personalize seu Perfil</h2>
             <div class="avatar-creator">
                 <div class="avatar-preview-box" id="avatar-preview" style="background-color: #ef4444;">🦊</div>
                 <div class="custom-options">
-                    <label style="font-size: 12px; color: var(--text-muted);">Cor do Perfil:</label>
+                    <label style="font-size: 12px; color: var(--text-muted);">Cor de Fundo:</label>
                     <div class="opt-row" id="color-selectors"></div>
-                    <label style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Seu Ícone:</label>
+                    <label style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Seu Avatar:</label>
                     <div class="opt-row" id="emoji-selectors"></div>
                 </div>
             </div>
             <label>Seu Nome / Nickname:</label>
-            <input type="text" id="global-player-name" placeholder="Digite seu nome aqui...">
-            <button class="btn-primary" style="margin-top: 10px;" onclick="saveCharacterAndGo()">Salvar e Avançar</button>
+            <input type="text" id="global-player-name" placeholder="Ex: JogadorMestre" maxlength="15">
+            <button class="btn-primary" style="margin-top: 10px;" onclick="saveCharacterAndGo()">Confirmar Identidade</button>
         </div>
 
         <div id="screen-tutorial" class="screen card">
-            <h2>⏱️ Tutorial Rápido</h2>
+            <h2>⏱️ Área de Testes</h2>
             <p id="tutorial-text" style="text-align: center; font-weight: 600;">1/3: O objetivo do jogo é fazer com que sua mesa adivinhe a palavra secreta.</p>
             <div id="tutorial-sandbox" class="game-canvas-container" style="display:none; background:#fff;"><canvas id="tutorial-canvas"></canvas></div>
             <button class="btn-primary" id="btn-next-tutorial" onclick="advanceTutorial()">Entendi</button>
         </div>
 
         <div id="screen-mode" class="screen card">
-            <h2>Selecione o Modo de Jogo</h2>
+            <h2>Selecione o Modo de Funcionamento</h2>
             <button class="btn-primary" onclick="selectEngineMode('local')">📱 Passar Único Celular (Roda Física)</button>
             <button class="btn-secondary" onclick="selectEngineMode('multiplayer')">🌐 Multiplayer Real-Time (Vários Celulares)</button>
         </div>
@@ -129,9 +142,9 @@
 
         <div id="screen-pass" class="screen card" style="text-align: center;">
             <h3 style="color:var(--primary);">🔒 PRIVACIDADE DO VISOR</h3>
-            <div class="huge-text" id="pass-instruction-text" style="font-size: 28px; margin: 10px 0;">PASSE O APARELHO</div>
+            <div id="pass-instruction-text" style="font-size: 26px; margin: 12px 0; font-weight: 800;">PASSE O APARELHO</div>
             
-            <label style="text-align: left; display: block; margin-top: 10px;">Escolha o Tema da Rodada:</label>
+            <label style="text-align: left; display: block; margin-top: 10px; font-size: 13px; color: var(--text-muted);">Escolha o Tema da Rodada:</label>
             <div class="theme-grid" id="theme-button-container"></div>
 
             <div style="display:flex; gap:10px; margin-top:15px;">
@@ -142,7 +155,7 @@
 
         <div id="screen-secret" class="screen card" style="text-align: center;">
             <h2>Sua Palavra Oculta</h2>
-            <div class="huge-text" id="secret-word-display" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius:10px; font-size: 32px; margin: 15px 0;">---</div>
+            <div id="secret-word-display" style="background: rgba(0,0,0,0.3); padding: 14px; border-radius:10px; font-size: 32px; margin: 15px 0; font-weight: 800; border: 1px dashed var(--secondary);">---</div>
             <p>Estilo: <strong id="secret-category-display" style="color:var(--secondary)"></strong></p>
             <button class="btn-success" style="margin-top:15px;" onclick="engagePlaySession()">Iniciar Cronômetro!</button>
         </div>
@@ -157,7 +170,7 @@
             <div id="mimica-wrapper" class="card" style="display:none; background:#0d1527; text-align:center;">
                 <span style="font-size:40px;">🤷‍♂️</span>
                 <h3>Mímica em Ação!</h3>
-                <p>Nenhuma câmera necessária. Faça expressões corporais físicas reais olhando para seus amigos!</p>
+                <p>Nenhuma câmera necessária. Faça expressões corporais físicas olhando para a sala!</p>
             </div>
 
             <div id="mp-guess-zone" style="display:none; flex-direction:column; gap:8px;">
@@ -176,9 +189,9 @@
         </div>
 
         <div id="screen-multiplayer" class="screen card">
-            <h2>Lobby Online Firebase</h2>
-            <input type="text" id="room-code-input" placeholder="Código da Sala (Ex: JOGA)" style="text-transform:uppercase; font-weight:800; text-align:center; letter-spacing:2px;">
-            <div style="display:flex; gap:10px;">
+            <h2>Lobby Online Sincronizado</h2>
+            <input type="text" id="room-code-input" placeholder="Código da Sala (Ex: SALA1)" style="text-transform:uppercase; font-weight:800; text-align:center; letter-spacing:2px;">
+            <div style="display:flex; gap:10px; margin-top: 8px;">
                 <button class="btn-secondary" onclick="executeRoomAction('join')">Entrar na Sala</button>
                 <button class="btn-success" onclick="executeRoomAction('create')">Criar Nova Sala</button>
             </div>
@@ -241,6 +254,8 @@
             syncRoom(code, callback) {
                 return onSnapshot(doc(window.db, "rooms", code), (snap) => {
                     if(snap.exists()) callback(snap.data());
+                }, (error) => {
+                    console.error("Erro na sincronização da sala:", error);
                 });
             }
         };
@@ -267,22 +282,18 @@
             lose() { this.playTone(250, 'sawtooth', 0.3); }
         };
 
-        // Banco de Dados Estruturado por Temas (Categorias)
         const gameThemes = {
-            animais: { label: "🐶 Animais", words: ["Girafa", "Cachorro", "Aranha", "Leão", "Jacaré", "Elefante", "Tubarão", "Gato"] },
-            objetos: { label: "📦 Objetos", words: ["Liquidificador", "Guitarra", "Celular", "Relógio", "Notebook", "Martelo", "Chave", "Cadeira"] },
-            acoes: { label: "🏃‍♂️ Ações", words: ["Futebol", "Nadar", "Escovar os dentes", "Dançar", "Cozinhar", "Andar de Skate", "Cantar"] },
-            geek: { label: "🎬 Pop / Geek", words: ["Batman", "Harry Potter", "Mickey Mouse", "Super Mario", "Minecraft", "Papai Noel", "Astronauta"] }
+            animais: { label: "🐶 Animais", words: ["Girafa", "Cachorro", "Aranha", "Leão", "Jacaré", "Elefante", "Tubarão", "Gato", "Cobra", "Urso"] },
+            objetos: { label: "📦 Objetos", words: ["Liquidificador", "Guitarra", "Celular", "Relógio", "Notebook", "Martelo", "Chave", "Cadeira", "Garfo", "Espelho"] },
+            acoes: { label: "🏃‍♂️ Ações", words: ["Futebol", "Nadar", "Escovar os dentes", "Dançar", "Cozinhar", "Andar de Skate", "Cantar", "Correr", "Dormir"] },
+            geek: { label: "🎬 Pop / Geek", words: ["Batman", "Harry Potter", "Mickey Mouse", "Super Mario", "Minecraft", "Papai Noel", "Astronauta", "Pikachu"] }
         };
         
         let activeSelectedThemeKey = "animais";
-
-        // Estado do Personagem Local
         let charColor = "#ef4444";
         let charEmoji = "🦊";
         let localProfile = { name: "", score: 0, color: "", emoji: "" };
         
-        // Controle de Fluxo
         let currentScreenTutorial = 1;
         let selectedEngine = "local";
         let seatsLocal = [];
@@ -296,7 +307,6 @@
         let unsubFirestore = null;
         let localLinesDrawnCount = 0;
 
-        // Gerador de Componentes do Customizador de Aparência
         const cores = ["#ef4444", "#3b82f6", "#10b981", "#eab308", "#a855f7", "#ec4899"];
         const emojis = ["🦊", "🐱", "🐸", "🤖", "🥷", "👽", "👻", "🦁"];
         
@@ -306,7 +316,6 @@
         document.getElementById('emoji-selectors').innerHTML = emojis.map(e => `<span class="emoji-item" onclick="setCharEmoji('${e}', this)">${e}</span>`).join('');
         document.getElementById('emoji-selectors').children[0].classList.add('active');
 
-        // Renderizador de Botões de Temas Dinâmicos
         document.getElementById('theme-button-container').innerHTML = Object.keys(gameThemes).map(key => `
             <button class="theme-btn ${key === activeSelectedThemeKey ? 'active' : ''}" id="btn-theme-${key}" onclick="setGameThemeKey('${key}')">
                 ${gameThemes[key].label}
@@ -337,8 +346,8 @@
         }
 
         function saveCharacterAndGo() {
-            const name = document.getElementById('global-player-name').value.trim();
-            if(!name) { alert("Insira seu nome primeiro!"); return; }
+            const name = document.getElementById('global-player-name').value.trim().replace(/[^a-zA-Z0-9]/g, "");
+            if(!name) { alert("Insira um nome válido (apenas letras e números)!"); return; }
             localProfile = { name: name, score: 0, color: charColor, emoji: charEmoji };
             showScreen('screen-tutorial');
         }
@@ -405,12 +414,6 @@
             const activeUser = seatsLocal[indexTurnLocal % seatsLocal.length];
             document.getElementById('pass-instruction-text').innerText = `PASSE PARA: ${activeUser.name.toUpperCase()}`;
             showScreen('screen-pass');
-            
-            if('speechSynthesis' in window) {
-                let utterance = new SpeechSynthesisUtterance(`Passe para ${activeUser.name}`);
-                utterance.lang = 'pt-BR';
-                window.speechSynthesis.speak(utterance);
-            }
         }
 
         function pickActionCategory(cat) {
@@ -423,7 +426,7 @@
                 window.FB.updateRoom(roomCode, {
                     category: cat, word: secretWordLocal, gameState: "playing",
                     endTime: calculatedEndTime, lines: [], guesses: []
-                });
+                }).catch(err => alert("Erro ao atualizar sala: " + err.message));
             } else {
                 document.getElementById('secret-word-display').innerText = secretWordLocal;
                 document.getElementById('secret-category-display').innerText = cat === 'desenho' ? "✏️ Desenho" : "🤷‍♂️ Mímica";
@@ -486,39 +489,61 @@
             triggerLocalTurnRoute();
         }
 
-        // --- SISTEMA MULTIPLAYER ONLINE VIA FIRESTORE ---
+        // --- SISTEMA MULTIPLAYER SEGURO E CORRIGIDO ---
         async function executeRoomAction(type) {
             const inputField = document.getElementById('room-code-input');
-            const code = inputField.value.toUpperCase().trim();
-            if(!code) { alert("Insira o código da sala!"); return; }
+            const code = inputField.value.toUpperCase().trim().replace(/[^A-Z0-9]/g, "");
+            if(!code) { alert("Insira um código de sala válido (Apenas letras e números)!"); return; }
             roomCode = code;
 
-            if(type === 'create') {
-                await window.FB.createRoom(roomCode, localProfile);
-            } else {
-                if(window.FB) {
-                    const snap = await getDoc(doc(window.db, "rooms", roomCode));
-                    if(snap.exists()) {
-                        let currentPlayers = snap.data().players || [];
-                        if(!currentPlayers.some(p => p.name === localProfile.name)) {
+            try {
+                if(type === 'create') {
+                    await window.FB.createRoom(roomCode, localProfile);
+                } else {
+                    if(window.FB) {
+                        const snap = await getDoc(doc(window.db, "rooms", roomCode));
+                        if(snap.exists()) {
+                            let roomData = snap.data();
+                            let currentPlayers = roomData.players || [];
+                            
+                            // Bloqueio de Segurança: Nome Duplicado
+                            if(currentPlayers.some(p => p.name.toLowerCase() === localProfile.name.toLowerCase())) {
+                                alert("Este nome já está em uso nesta sala! Mude seu nome no menu.");
+                                return;
+                            }
+
+                            // Bloqueio de Segurança: Jogo em Andamento
+                            if(roomData.gameState !== 'lobby') {
+                                alert("Esta partida já começou! Aguarde até que ela termine.");
+                                return;
+                            }
+
                             currentPlayers.push(localProfile);
                             await window.FB.updateRoom(roomCode, { players: currentPlayers });
+                        } else { 
+                            alert("Sala não encontrada! Verifique o código digitado."); 
+                            return; 
                         }
-                    } else { alert("Sala não encontrada!"); return; }
+                    }
                 }
-            }
 
-            document.getElementById('lobby-code-title').innerText = roomCode;
-            document.getElementById('mp-active-lobby').style.display = "flex";
+                document.getElementById('lobby-code-title').innerText = roomCode;
+                document.getElementById('mp-active-lobby').style.display = "flex";
 
-            if(window.FB) {
-                unsubFirestore = window.FB.syncRoom(roomCode, (data) => {
-                    handleRoomSync(data);
-                });
+                if(window.FB) {
+                    if(unsubFirestore) unsubFirestore();
+                    unsubFirestore = window.FB.syncRoom(roomCode, (data) => {
+                        handleRoomSync(data);
+                    });
+                }
+            } catch (error) {
+                alert("Erro de Conexão/Permissão Firebase: " + error.message);
+                console.error(error);
             }
         }
 
         function handleRoomSync(data) {
+            if(!data) return;
             currentRoomData = data;
             
             const lobbyBox = document.getElementById('lobby-players-box');
@@ -657,7 +682,10 @@
 
         function renderChatGuesses(arr) {
             const stream = document.getElementById('chat-stream');
-            stream.innerHTML = arr.map(m => `<div>${m}</div>`).join('');
+            stream.innerHTML = arr.map(m => {
+                let isCorrect = m.includes("🎉");
+                return `<div class="chat-msg ${isCorrect ? 'correct' : ''}">${m}</div>`;
+            }).join('');
             stream.scrollTop = stream.scrollHeight;
         }
 
@@ -682,7 +710,7 @@
             }
         }
 
-        // --- ENGINE DO CANVAS INTERATIVO ---
+        // --- INTERATIVIDADE DO CANVAS ---
         let isDrawing = false;
         let drawCtx, drawCanvas;
 
