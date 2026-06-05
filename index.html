@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imagem & Ação Virtual Pro</title>
+    <title>Imagem & Ação Virtual Pro - Elite Edition</title>
     <style>
         :root {
-            --bg-dark: #0b0f19;
-            --bg-card: #151f32;
-            --bg-input: #0d1527;
+            --bg-dark: #090d16;
+            --bg-card: #131c2e;
+            --bg-input: #0b111e;
             --primary: #f43f5e;
             --primary-hover: #e11d48;
             --secondary: #3b82f6;
+            --secondary-hover: #1d4ed8;
             --success: #10b981;
             --text-main: #f8fafc;
             --text-muted: #64748b;
@@ -39,6 +40,7 @@
         .btn-primary { background-color: var(--primary); color: white; }
         .btn-primary:hover { background-color: var(--primary-hover); }
         .btn-secondary { background-color: var(--secondary); color: white; }
+        .btn-secondary:hover { background-color: var(--secondary-hover); }
         .btn-success { background-color: var(--success); color: white; }
         .btn-danger { background-color: #ef4444; color: white; }
         
@@ -52,19 +54,24 @@
         .emoji-item { font-size: 20px; padding: 4px; cursor: pointer; border-radius: 6px; background: #0f172a; }
         .emoji-item.active { background: var(--secondary); }
 
-        /* Componentes de Jogo */
+        /* Temas e Componentes */
+        .theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .theme-btn { background: #1e293b; color: #fff; border: 2px solid transparent; text-align: left; justify-content: flex-start; padding: 12px; }
+        .theme-btn.active { border-color: var(--success); background: rgba(16, 185, 129, 0.15); }
+        
         .game-canvas-container { width: 100%; height: 320px; background: #ffffff; border-radius: 12px; position: relative; overflow: hidden; }
         #canvas-game, #tutorial-canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
         .timer { font-size: 46px; text-align: center; font-weight: 800; color: var(--primary); font-variant-numeric: tabular-nums; }
+        
         .player-badge { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg-input); border-radius: 8px; border: 1px solid #1e293b; }
-        .mini-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .mini-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; }
         .chat-area { background: var(--bg-input); height: 110px; overflow-y: auto; border-radius: 8px; padding: 8px; font-size: 13px; border: 1px solid #1e293b; display: flex; flex-direction: column; gap: 4px; }
         .config-group { background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-    <header>🎲 Imagem & Ação Virtual Pro</header>
+    <header>🎲 Imagem & Ação Virtual</header>
 
     <div class="container">
         
@@ -76,7 +83,6 @@
 
         <div id="screen-customizer" class="screen card">
             <h2>Crie seu Personagem</h2>
-            
             <div class="avatar-creator">
                 <div class="avatar-preview-box" id="avatar-preview" style="background-color: #ef4444;">🦊</div>
                 <div class="custom-options">
@@ -86,10 +92,8 @@
                     <div class="opt-row" id="emoji-selectors"></div>
                 </div>
             </div>
-
             <label>Seu Nome / Nickname:</label>
             <input type="text" id="global-player-name" placeholder="Digite seu nome aqui...">
-            
             <button class="btn-primary" style="margin-top: 10px;" onclick="saveCharacterAndGo()">Salvar e Avançar</button>
         </div>
 
@@ -101,7 +105,7 @@
         </div>
 
         <div id="screen-mode" class="screen card">
-            <h2>Selecione o Modo de Funcionamento</h2>
+            <h2>Selecione o Modo de Jogo</h2>
             <button class="btn-primary" onclick="selectEngineMode('local')">📱 Passar Único Celular (Roda Física)</button>
             <button class="btn-secondary" onclick="selectEngineMode('multiplayer')">🌐 Multiplayer Real-Time (Vários Celulares)</button>
         </div>
@@ -125,8 +129,11 @@
 
         <div id="screen-pass" class="screen card" style="text-align: center;">
             <h3 style="color:var(--primary);">🔒 PRIVACIDADE DO VISOR</h3>
-            <div class="huge-text" id="pass-instruction-text">PASSE O APARELHO</div>
-            <p>Esconda a tela dos demais participantes ao pegar o dispositivo!</p>
+            <div class="huge-text" id="pass-instruction-text" style="font-size: 28px; margin: 10px 0;">PASSE O APARELHO</div>
+            
+            <label style="text-align: left; display: block; margin-top: 10px;">Escolha o Tema da Rodada:</label>
+            <div class="theme-grid" id="theme-button-container"></div>
+
             <div style="display:flex; gap:10px; margin-top:15px;">
                 <button class="btn-primary" onclick="pickActionCategory('desenho')">✏️ Desenhar</button>
                 <button class="btn-secondary" onclick="pickActionCategory('mimica')">🤷‍♂️ Mímica</button>
@@ -135,7 +142,7 @@
 
         <div id="screen-secret" class="screen card" style="text-align: center;">
             <h2>Sua Palavra Oculta</h2>
-            <div class="huge-text" id="secret-word-display" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius:10px;">---</div>
+            <div class="huge-text" id="secret-word-display" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius:10px; font-size: 32px; margin: 15px 0;">---</div>
             <p>Estilo: <strong id="secret-category-display" style="color:var(--secondary)"></strong></p>
             <button class="btn-success" style="margin-top:15px;" onclick="engagePlaySession()">Iniciar Cronômetro!</button>
         </div>
@@ -180,11 +187,11 @@
                 <h3>Sala Oculta: <span id="lobby-code-title" style="color:var(--primary)">---</span></h3>
                 
                 <div class="config-group" id="host-config-panel" style="display:none;">
-                    <label style="font-size:12px; color:var(--secondary)">Painel de Configuração do Host:</label>
+                    <label style="font-size:12px; color:var(--secondary)">Meta de Pontuação da Vitória:</label>
                     <select id="config-max-score" onchange="pushConfigChange()">
-                        <option value="30">Meta: 30 Pontos</option>
-                        <option value="60">Meta: 60 Pontos</option>
-                        <option value="100">Meta: 100 Pontos</option>
+                        <option value="30">30 Pontos</option>
+                        <option value="60">60 Pontos</option>
+                        <option value="100">100 Pontos</option>
                     </select>
                 </div>
 
@@ -195,7 +202,7 @@
 
         <div id="screen-podium" class="screen card" style="text-align: center;">
             <h2>🏆 Partida Finalizada!</h2>
-            <p>Parabéns a todos os competidores. Veja o placar da mesa:</p>
+            <p>Veja a consagração do pódio da rodada:</p>
             <div id="podium-results-box" style="display:flex; flex-direction:column; gap:6px; margin:15px 0;"></div>
             <button class="btn-primary" onclick="showScreen('screen-mode')">Voltar para o Menu</button>
         </div>
@@ -219,7 +226,6 @@
         const app = initializeApp(firebaseConfig);
         window.db = getFirestore(app);
 
-        // Funções estruturadas expostas na camada global da janela para o jogo consumir
         window.FB = {
             async createRoom(code, player) {
                 await setDoc(doc(window.db, "rooms", code), {
@@ -241,7 +247,6 @@
     </script>
 
     <script>
-        // Sintetizador Nativo (Sem arquivos externos mp3)
         const AudioFX = {
             ctx: null,
             init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
@@ -262,15 +267,22 @@
             lose() { this.playTone(250, 'sawtooth', 0.3); }
         };
 
-        // Dados de Palavras do Jogo
-        const palavraMesa = ["Gato", "Celular", "Futebol", "Sanduíche", "Avião", "Guitarra", "Praia", "Skate", "Relógio", "Papai Noel"];
+        // Banco de Dados Estruturado por Temas (Categorias)
+        const gameThemes = {
+            animais: { label: "🐶 Animais", words: ["Girafa", "Cachorro", "Aranha", "Leão", "Jacaré", "Elefante", "Tubarão", "Gato"] },
+            objetos: { label: "📦 Objetos", words: ["Liquidificador", "Guitarra", "Celular", "Relógio", "Notebook", "Martelo", "Chave", "Cadeira"] },
+            acoes: { label: "🏃‍♂️ Ações", words: ["Futebol", "Nadar", "Escovar os dentes", "Dançar", "Cozinhar", "Andar de Skate", "Cantar"] },
+            geek: { label: "🎬 Pop / Geek", words: ["Batman", "Harry Potter", "Mickey Mouse", "Super Mario", "Minecraft", "Papai Noel", "Astronauta"] }
+        };
         
+        let activeSelectedThemeKey = "animais";
+
         // Estado do Personagem Local
         let charColor = "#ef4444";
         let charEmoji = "🦊";
         let localProfile = { name: "", score: 0, color: "", emoji: "" };
         
-        // Variáveis operacionais de jogo
+        // Controle de Fluxo
         let currentScreenTutorial = 1;
         let selectedEngine = "local";
         let seatsLocal = [];
@@ -279,23 +291,27 @@
         let secretWordLocal = "";
         let cronometroLocal = null;
 
-        // Dados Multiplayer Ativo
         let roomCode = "";
         let currentRoomData = null;
         let unsubFirestore = null;
         let localLinesDrawnCount = 0;
 
-        // Inicialização do Customizador de Aparência
+        // Gerador de Componentes do Customizador de Aparência
         const cores = ["#ef4444", "#3b82f6", "#10b981", "#eab308", "#a855f7", "#ec4899"];
         const emojis = ["🦊", "🐱", "🐸", "🤖", "🥷", "👽", "👻", "🦁"];
         
-        const cContainer = document.getElementById('color-selectors');
-        cContainer.innerHTML = cores.map(c => `<div class="color-dot" style="background:${c}" onclick="setCharColor('${c}', this)"></div>`).join('');
-        cContainer.children[0].classList.add('active');
+        document.getElementById('color-selectors').innerHTML = cores.map(c => `<div class="color-dot" style="background:${c}" onclick="setCharColor('${c}', this)"></div>`).join('');
+        document.getElementById('color-selectors').children[0].classList.add('active');
         
-        const eContainer = document.getElementById('emoji-selectors');
-        eContainer.innerHTML = emojis.map(e => `<span class="emoji-item" onclick="setCharEmoji('${e}', this)">${e}</span>`).join('');
-        eContainer.children[0].classList.add('active');
+        document.getElementById('emoji-selectors').innerHTML = emojis.map(e => `<span class="emoji-item" onclick="setCharEmoji('${e}', this)">${e}</span>`).join('');
+        document.getElementById('emoji-selectors').children[0].classList.add('active');
+
+        // Renderizador de Botões de Temas Dinâmicos
+        document.getElementById('theme-button-container').innerHTML = Object.keys(gameThemes).map(key => `
+            <button class="theme-btn ${key === activeSelectedThemeKey ? 'active' : ''}" id="btn-theme-${key}" onclick="setGameThemeKey('${key}')">
+                ${gameThemes[key].label}
+            </button>
+        `).join('');
 
         function setCharColor(c, el) {
             charColor = c;
@@ -308,6 +324,11 @@
             document.querySelectorAll('.emoji-item').forEach(em => em.classList.remove('active'));
             el.classList.add('active');
             document.getElementById('avatar-preview').innerText = e;
+        }
+        function setGameThemeKey(key) {
+            activeSelectedThemeKey = key;
+            document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-theme-${key}`).classList.add('active');
         }
 
         function showScreen(id) {
@@ -322,7 +343,6 @@
             showScreen('screen-tutorial');
         }
 
-        // --- MÁQUINA DE ETAPAS DO TUTORIAL ---
         function advanceTutorial() {
             currentScreenTutorial++;
             const txt = document.getElementById('tutorial-text');
@@ -353,7 +373,6 @@
             }
         }
 
-        // --- SISTEMA INTERNO MESA LOCAL (PASSA CELULAR) ---
         function addLocalSeat() {
             const inp = document.getElementById('local-name-input');
             const name = inp.value.trim();
@@ -396,10 +415,10 @@
 
         function pickActionCategory(cat) {
             chosenCategoryLocal = cat;
-            secretWordLocal = palavraMesa[Math.floor(Math.random() * palavraMesa.length)];
+            const themeArray = gameThemes[activeSelectedThemeKey].words;
+            secretWordLocal = themeArray[Math.floor(Math.random() * themeArray.length)];
             
             if(selectedEngine === 'multiplayer') {
-                // Sincroniza estado de jogo no Firebase com timestamp futuro baseado no relógio local do Host
                 const calculatedEndTime = Date.now() + (61 * 1000);
                 window.FB.updateRoom(roomCode, {
                     category: cat, word: secretWordLocal, gameState: "playing",
@@ -467,7 +486,7 @@
             triggerLocalTurnRoute();
         }
 
-        // --- SISTEMA MULTIPLAYER EM TEMPO REAL (FIREBASE) ---
+        // --- SISTEMA MULTIPLAYER ONLINE VIA FIRESTORE ---
         async function executeRoomAction(type) {
             const inputField = document.getElementById('room-code-input');
             const code = inputField.value.toUpperCase().trim();
@@ -477,12 +496,10 @@
             if(type === 'create') {
                 await window.FB.createRoom(roomCode, localProfile);
             } else {
-                // Lê sala atual para injetar o novo participante no array sem duplicar
                 if(window.FB) {
                     const snap = await getDoc(doc(window.db, "rooms", roomCode));
                     if(snap.exists()) {
                         let currentPlayers = snap.data().players || [];
-                        // Evita duplicar se o jogador reconectar com mesmo nome
                         if(!currentPlayers.some(p => p.name === localProfile.name)) {
                             currentPlayers.push(localProfile);
                             await window.FB.updateRoom(roomCode, { players: currentPlayers });
@@ -494,7 +511,6 @@
             document.getElementById('lobby-code-title').innerText = roomCode;
             document.getElementById('mp-active-lobby').style.display = "flex";
 
-            // Liga a escuta em tempo real do documento da sala no Firebase
             if(window.FB) {
                 unsubFirestore = window.FB.syncRoom(roomCode, (data) => {
                     handleRoomSync(data);
@@ -505,7 +521,6 @@
         function handleRoomSync(data) {
             currentRoomData = data;
             
-            // Renderiza lista de competidores do lobby online
             const lobbyBox = document.getElementById('lobby-players-box');
             lobbyBox.innerHTML = data.players.map(p => `
                 <div class="player-badge">
@@ -514,7 +529,6 @@
                 </div>
             `).join('');
 
-            // Controle de interface do Host da partida
             const isHost = (data.host === localProfile.name);
             document.getElementById('host-config-panel').style.display = isHost ? "block" : "none";
             document.getElementById('host-abort-btn').style.display = isHost ? "block" : "none";
@@ -527,7 +541,6 @@
 
             const amIArtist = (data.currentArtist === localProfile.name);
 
-            // MÁQUINA DE ESTADOS DO MULTIPLAYER ONLINE
             if(data.gameState === 'turn_change') {
                 clearInterval(cronometroLocal);
                 if(amIArtist) {
@@ -542,13 +555,11 @@
                 showScreen('screen-play');
                 document.getElementById('local-controls').style.display = "none";
                 
-                // Renderiza Card do Jogador da vez
                 const artistObj = data.players.find(p => p.name === data.currentArtist) || localProfile;
                 renderActorCard('active-actor-card', artistObj);
                 
                 toggleGameAreas(data.category);
 
-                // Executa Lógica de Cronômetro Autorizativa Baseada no Fim do Carimbo de Data/Hora (`endTime`)
                 if(data.endTime) {
                     clearInterval(cronometroLocal);
                     cronometroLocal = setInterval(() => {
@@ -562,7 +573,6 @@
                     }, 1000);
                 }
 
-                // Processo do Desenho Coletivo Sincronizado
                 if(data.category === 'desenho') {
                     setupCanvasCore('canvas-game', amIArtist);
                     if(!amIArtist && data.lines) {
@@ -570,7 +580,6 @@
                     }
                 }
 
-                // Zona de Palpites Ativa para Espectadores
                 if(!amIArtist) {
                     document.getElementById('mp-guess-zone').style.display = "flex";
                     renderChatGuesses(data.guesses);
@@ -597,23 +606,19 @@
 
             let logMsg = `${localProfile.name}: ${chute}`;
             
-            // Validação de Chute Correto: Quem acertar ganha os pontos na hora!
             if(chute.toLowerCase() === currentRoomData.word.toLowerCase()) {
                 AudioFX.win();
                 logMsg = `🎉 ${localProfile.name} ACERTOU! Resposta: ${currentRoomData.word}`;
-                alert("Você acertou a palavra! +10 pontos para você.");
+                alert("Você acertou a palavra! +10 pontos.");
 
-                // Modifica os pontos do jogador vitorioso diretamente no array
                 let updatedPlayers = currentRoomData.players.map(p => {
                     if(p.name === localProfile.name) p.score += 10;
                     return p;
                 });
 
-                // Verifica se a meta de pontuação máxima configurada foi atingida
                 const targetScore = currentRoomData.config?.maxScore || 30;
                 const matchEnded = updatedPlayers.some(p => p.score >= targetScore);
                 
-                // Define quem será o próximo artista (o jogador que acertou)
                 await window.FB.updateRoom(roomCode, {
                     players: updatedPlayers,
                     guesses: [...currentRoomData.guesses, logMsg],
@@ -621,7 +626,6 @@
                     currentArtist: localProfile.name 
                 });
             } else {
-                // Palpite incorreto apenas entra para a lista de logs
                 await window.FB.updateRoom(roomCode, {
                     guesses: [...currentRoomData.guesses, logMsg]
                 });
@@ -634,7 +638,6 @@
             AudioFX.lose();
             let msg = `💥 O tempo acabou! A palavra era: ${currentRoomData.word}`;
             
-            // Passa a vez para a próxima pessoa da lista de jogadores online
             let currentIndex = currentRoomData.players.findIndex(p => p.name === currentRoomData.currentArtist);
             let nextIndex = (currentIndex + 1) % currentRoomData.players.length;
             let nextArtist = currentRoomData.players[nextIndex].name;
@@ -659,7 +662,6 @@
         }
 
         function renderPodiumResults(players) {
-            // Ordena os jogadores por pontuação decrescente
             let sorted = [...players].sort((a,b) => b.score - a.score);
             document.getElementById('podium-results-box').innerHTML = sorted.map((p, i) => `
                 <div class="player-badge" style="justify-content:space-between; ${i===0?'border:2px solid var(--secondary);':''}">
@@ -695,7 +697,6 @@
             drawCtx.lineWidth = 5;
             drawCtx.lineCap = 'round';
 
-            // No modo multiplayer, bloqueia a escrita se o jogador for espectador
             if(selectedEngine === 'multiplayer' && !isOnlineArtist && id === 'canvas-game') return;
 
             drawCanvas.onmousedown = (e) => { isDrawing = true; drawCtx.beginPath(); paint(e, isOnlineArtist); };
@@ -716,7 +717,6 @@
             drawCtx.lineTo(x, y);
             drawCtx.stroke();
 
-            // Injeta as coordenadas vetoriais em lote incremental dentro do Firestore
             if(syncOnline && roomCode && currentRoomData) {
                 let currentLines = currentRoomData.lines || [];
                 currentLines.push({x: x, y: y});
@@ -726,7 +726,7 @@
 
         function applyRemoteCanvasLines(linesArray) {
             if(!drawCanvas || !drawCtx) return;
-            if(linesArray.length === localLinesDrawnCount) return; // Evita flickering redundante
+            if(linesArray.length === localLinesDrawnCount) return; 
             
             drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
             drawCtx.beginPath();
