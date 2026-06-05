@@ -251,6 +251,10 @@
             async updateRoom(code, payload) {
                 await updateDoc(doc(window.db, "rooms", code), payload);
             },
+            async checkRoomExists(code) {
+                const snap = await getDoc(doc(window.db, "rooms", code));
+                return snap.exists() ? snap.data() : null;
+            },
             syncRoom(code, callback) {
                 return onSnapshot(doc(window.db, "rooms", code), (snap) => {
                     if(snap.exists()) callback(snap.data());
@@ -489,11 +493,11 @@
             triggerLocalTurnRoute();
         }
 
-        // --- SISTEMA MULTIPLAYER SEGURO E CORRIGIDO ---
+        // --- SISTEMA MULTIPLAYER ONLINE CORRIGIDO ---
         async function executeRoomAction(type) {
             const inputField = document.getElementById('room-code-input');
             const code = inputField.value.toUpperCase().trim().replace(/[^A-Z0-9]/g, "");
-            if(!code) { alert("Insira um código de sala válido (Apenas letras e números)!"); return; }
+            if(!code) { alert("Insira um código de sala válido!"); return; }
             roomCode = code;
 
             try {
@@ -501,18 +505,16 @@
                     await window.FB.createRoom(roomCode, localProfile);
                 } else {
                     if(window.FB) {
-                        const snap = await getDoc(doc(window.db, "rooms", roomCode));
-                        if(snap.exists()) {
-                            let roomData = snap.data();
+                        // Correção aqui: Chamar o método encapsulado para evitar erro de escopo de getDoc
+                        const roomData = await window.FB.checkRoomExists(roomCode);
+                        if(roomData) {
                             let currentPlayers = roomData.players || [];
                             
-                            // Bloqueio de Segurança: Nome Duplicado
                             if(currentPlayers.some(p => p.name.toLowerCase() === localProfile.name.toLowerCase())) {
-                                alert("Este nome já está em uso nesta sala! Mude seu nome no menu.");
+                                alert("Este nome já está em uso nesta sala! Mude seu nome no menu anterior.");
                                 return;
                             }
 
-                            // Bloqueio de Segurança: Jogo em Andamento
                             if(roomData.gameState !== 'lobby') {
                                 alert("Esta partida já começou! Aguarde até que ela termine.");
                                 return;
@@ -537,8 +539,7 @@
                     });
                 }
             } catch (error) {
-                alert("Erro de Conexão/Permissão Firebase: " + error.message);
-                console.error(error);
+                alert("Erro de Conexão Firebase: " + error.message);
             }
         }
 
